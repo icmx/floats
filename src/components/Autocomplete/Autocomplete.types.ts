@@ -9,6 +9,10 @@ export type AutocompleteOptionsFilter = (
   inputValue: string
 ) => AutocompleteOption[];
 
+export type AutocompleteHandle = {
+  reset: () => void;
+};
+
 export type AutocompleteProps = {
   options: AutocompleteOption[];
   value?: AutocompleteOption | null;
