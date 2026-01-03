@@ -50,7 +50,7 @@ export const Autocomplete = forwardRef<
     const [hightlightedIndex, setHighlightedIndex] = useState(-1);
     const filteredOptions: AutocompleteOption[] = useMemo(() => {
       return optionsFilter(options, inputValue);
-    }, [options, inputValue]);
+    }, [options, optionsFilter, inputValue]);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -108,16 +108,13 @@ export const Autocomplete = forwardRef<
     }, [value]);
 
     const handleChange: ChangeEventHandler<HTMLInputElement> =
-      useCallback(
-        (event) => {
-          const { value } = event.target;
+      useCallback((event) => {
+        const { value } = event.target;
 
-          setInputValue(value);
-          setIsOpen(true);
-          setHighlightedIndex(-1);
-        },
-        [onTextChange]
-      );
+        setInputValue(value);
+        setIsOpen(true);
+        setHighlightedIndex(-1);
+      }, []);
 
     const handleSelect: (option: AutocompleteOption) => void =
       useCallback(
