@@ -1,0 +1,8 @@
+.PairCard {
+  padding: 0.5rem;
+  background-color: darkblue;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
