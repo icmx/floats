@@ -1,7 +1,9 @@
 .PairCard {
   padding: 0.5rem;
   background-color: darkblue;
+}
 
+.CardRow {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

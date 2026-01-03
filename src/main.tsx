@@ -3,8 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { Layout } from './layouts/Layout';
-import { NotFoundPage } from './pages/NotFoundPage';
+import { ChartPage } from './pages/ChartPage';
+import { DataPage } from './pages/DataPage';
 import { HomePage } from './pages/HomePage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import './index.css';
 
 const root = document.querySelector('#root');
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage />,
+      },
+      {
+        path: '/chart',
+        element: <ChartPage />,
+      },
+      {
+        path: '/data',
+        element: <DataPage />,
       },
       {
         path: '*',

@@ -11,6 +11,7 @@ import {
   type AutocompleteOption,
 } from '../../components/Autocomplete';
 import { PairCard, type PairCardData } from '../../components/PairCard';
+import { BASE_URL } from '../../constants/baseUrl';
 
 export const HomePage: FunctionComponent = () => {
   const [pairCards, setPairCards] = useReducer<
@@ -45,10 +46,10 @@ export const HomePage: FunctionComponent = () => {
     ]
   );
 
-  const currencyPairs: AutocompleteOption[] = useMemo(() => {
-    const selected = pairCards.map((c) => c.value);
+  const currencyPairsOptions: AutocompleteOption[] = useMemo(() => {
+    const pairCardsValues = pairCards.map((pairCard) => pairCard.value);
 
-    return PAIRS.filter((pair) => !selected.includes(pair)).map(
+    return PAIRS.filter((pair) => !pairCardsValues.includes(pair)).map(
       (pair) => {
         return {
           id: `option-${pair}`.toLowerCase(),
@@ -61,12 +62,22 @@ export const HomePage: FunctionComponent = () => {
 
   const ref = useRef<AutocompleteHandle>(null);
 
+  const dataPairs = pairCards
+    .filter((pairCard) => pairCard.checked)
+    .map((pairCard) => pairCard.value)
+    .join(',');
+
+  const dataHref = dataPairs
+    ? `${BASE_URL}/data?by=${dataPairs}`
+    : null;
+
   return (
     <>
       <title>floats</title>
       <Autocomplete
         ref={ref}
-        options={currencyPairs}
+        options={currencyPairsOptions}
+        placeholder="Type here to add a new pair"
         onOptionChange={(option) => {
           setPairCards({
             type: 'add',
@@ -103,7 +114,11 @@ export const HomePage: FunctionComponent = () => {
           );
         })}
       </div>
-      <pre>{JSON.stringify(pairCards, null, 2)}</pre>
+
+      {dataHref && <a href={dataHref}>Explore data</a>}
+
+      <pre>data = {JSON.stringify(dataPairs)}</pre>
+      <pre>cards = {JSON.stringify(pairCards, null, 2)}</pre>
     </>
   );
 };

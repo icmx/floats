@@ -4,6 +4,7 @@ import type {
   MouseEventHandler,
 } from 'react';
 import type { PairCardProps } from './PairCard.types';
+import { BASE_URL } from '../../constants/baseUrl';
 import styles from './PairCard.module.css';
 
 export const PairCard: FunctionComponent<PairCardProps> = ({
@@ -12,6 +13,7 @@ export const PairCard: FunctionComponent<PairCardProps> = ({
   onRemove,
 }) => {
   const id = `pair-card-${data.value}-checkbox`.toLowerCase();
+  const href = `${BASE_URL}/chart?by=${data.value}`;
 
   const handleCheck: ChangeEventHandler<HTMLInputElement> = (event) => {
     onCheck?.(event.target.checked);
@@ -23,14 +25,19 @@ export const PairCard: FunctionComponent<PairCardProps> = ({
 
   return (
     <div className={styles.PairCard}>
-      <input
-        id={id}
-        type="checkbox"
-        checked={data.checked}
-        onChange={handleCheck}
-      />
-      <label htmlFor={id}>{data.value}</label>
-      <button onClick={handleRemove}>remove</button>
+      <div className={styles.CardRow}>
+        <input
+          id={id}
+          type="checkbox"
+          checked={data.checked}
+          onChange={handleCheck}
+        />
+        <label htmlFor={id}>{data.value}</label>
+        <button onClick={handleRemove}>remove</button>
+      </div>
+      <div className={styles.CardRow}>
+        <a href={href}>Explore chart</a>
+      </div>
     </div>
   );
 };
