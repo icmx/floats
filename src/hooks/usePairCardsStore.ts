@@ -4,43 +4,41 @@ import type { PairCardData } from '../components/PairCard';
 import { useShallow } from 'zustand/shallow';
 
 export type PairCardsStore = {
-  pairCards: PairCardData[];
-  addPairCard: (value: string) => void;
-  checkPairCard: (checked: boolean, value: string) => void;
-  removePairCard: (value: string) => void;
+  entries: PairCardData[];
+  add: (value: string) => void;
+  check: (checked: boolean, value: string) => void;
+  remove: (value: string) => void;
 };
 
-export const usePairCardsStore = create<PairCardsStore>()(
+const usePairCardsStore = create<PairCardsStore>()(
   persist(
     (set, get) => {
       return {
-        pairCards: [
+        entries: [
           { checked: false, value: 'USDRUB' },
           { checked: true, value: 'KGSAMD' },
         ],
-        addPairCard: (value) => {
-          const pairCards = [
-            ...get().pairCards,
+        add: (value) => {
+          const entries = [
+            ...get().entries,
             { checked: false, value: value },
           ];
 
-          set({ pairCards });
+          set({ entries });
         },
-        checkPairCard: (checked, value) => {
-          const pairCards = get().pairCards.map((pairCard) => {
-            return pairCard.value === value
-              ? { checked, value }
-              : pairCard;
+        check: (checked, value) => {
+          const entries = get().entries.map((entry) => {
+            return entry.value === value ? { checked, value } : entry;
           });
 
-          set({ pairCards });
+          set({ entries });
         },
-        removePairCard: (value) => {
-          const pairCards = get().pairCards.filter((pairCard) => {
-            return pairCard.value !== value;
+        remove: (value) => {
+          const entries = get().entries.filter((entry) => {
+            return entry.value !== value;
           });
 
-          set({ pairCards });
+          set({ entries });
         },
       };
     },
@@ -54,7 +52,7 @@ export const usePairCardsStore = create<PairCardsStore>()(
 
 export const usePairCards = () => {
   return usePairCardsStore((state) => {
-    return state.pairCards;
+    return state.entries;
   });
 };
 
@@ -62,9 +60,9 @@ export const usePairCardsActions = () => {
   return usePairCardsStore(
     useShallow((state) => {
       return {
-        addPairCard: state.addPairCard,
-        checkPairCard: state.checkPairCard,
-        removePairCard: state.removePairCard,
+        add: state.add,
+        check: state.check,
+        remove: state.remove,
       };
     })
   );

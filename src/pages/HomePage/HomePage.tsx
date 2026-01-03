@@ -14,9 +14,7 @@ import {
 
 export const HomePage: FunctionComponent = () => {
   const pairCards = usePairCards();
-
-  const { addPairCard, checkPairCard, removePairCard } =
-    usePairCardsActions();
+  const pairCardsActions = usePairCardsActions();
 
   const currencyPairsOptions: AutocompleteOption[] = useMemo(() => {
     const pairCardsValues = pairCards.map((pairCard) => pairCard.value);
@@ -51,7 +49,7 @@ export const HomePage: FunctionComponent = () => {
         options={currencyPairsOptions}
         placeholder="Type here to add a new pair"
         onOptionChange={(option) => {
-          addPairCard(option?.value || '');
+          pairCardsActions.add(option?.value || '');
           ref.current?.reset();
         }}
       />
@@ -70,10 +68,10 @@ export const HomePage: FunctionComponent = () => {
               key={pairCard.value}
               data={pairCard}
               onCheck={(checked) => {
-                checkPairCard(checked, pairCard.value);
+                pairCardsActions.check(checked, pairCard.value);
               }}
               onRemove={() => {
-                removePairCard(pairCard.value);
+                pairCardsActions.remove(pairCard.value);
               }}
             />
           );
