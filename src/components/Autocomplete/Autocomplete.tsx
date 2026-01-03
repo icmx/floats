@@ -18,7 +18,7 @@ import type {
 } from './Autocomplete.types';
 import styles from './Autocomplete.module.css';
 
-const OPTIONS_HARD_LIMIT = 500;
+const OPTIONS_HARD_LIMIT = 200;
 
 export const Autocomplete = forwardRef<
   AutocompleteHandle,

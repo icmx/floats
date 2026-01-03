@@ -1,6 +1,7 @@
 .PairCard {
   padding: 0.5rem;
-  background-color: darkblue;
+  color: #111111;
+  background-color: darkgray;
 }
 
 .CardRow {
