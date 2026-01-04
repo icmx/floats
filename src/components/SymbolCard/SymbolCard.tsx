@@ -11,8 +11,8 @@ export const SymbolCard: FunctionComponent<SymbolCardProps> = ({
   onCheck,
   onRemove,
 }) => {
-  const id = `symbol-card-${data.value.toLowerCase()}-checkbox`;
-  const href = `/chart?by=${data.value}`;
+  const id = `symbol-card-${data.symbol.toLowerCase()}-checkbox`;
+  const href = `/chart?by=${data.symbol}`;
 
   const handleCheck: ChangeEventHandler<HTMLInputElement> = (event) => {
     onCheck?.(event.target.checked);
@@ -31,7 +31,7 @@ export const SymbolCard: FunctionComponent<SymbolCardProps> = ({
           checked={data.checked}
           onChange={handleCheck}
         />
-        <label htmlFor={id}>{data.value}</label>
+        <label htmlFor={id}>{data.symbol}</label>
         <button onClick={handleRemove}>remove</button>
       </div>
       <div className={styles.CardRow}>

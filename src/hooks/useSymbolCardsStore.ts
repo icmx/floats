@@ -2,12 +2,13 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
 import type { SymbolCardData } from '../components/SymbolCard';
+import type { SymbolString } from '../types/currency';
 
 export type SymbolCardsStore = {
   entries: SymbolCardData[];
-  add: (value: string) => void;
-  check: (checked: boolean, value: string) => void;
-  remove: (value: string) => void;
+  add: (symbol: SymbolString) => void;
+  check: (checked: boolean, symbol: SymbolString) => void;
+  remove: (symbol: SymbolString) => void;
 };
 
 const useSymbolCardsStore = create<SymbolCardsStore>()(
@@ -15,27 +16,29 @@ const useSymbolCardsStore = create<SymbolCardsStore>()(
     (set, get) => {
       return {
         entries: [
-          { checked: false, value: 'USDRUB' },
-          { checked: true, value: 'KGSAMD' },
+          { checked: false, symbol: 'USDRUB' },
+          { checked: true, symbol: 'KGSAMD' },
         ],
-        add: (value) => {
+        add: (symbol) => {
           const entries = [
             ...get().entries,
-            { checked: false, value: value },
+            { checked: false, symbol },
           ];
 
           set({ entries });
         },
-        check: (checked, value) => {
+        check: (checked, symbol) => {
           const entries = get().entries.map((entry) => {
-            return entry.value === value ? { checked, value } : entry;
+            return entry.symbol === symbol
+              ? { checked, symbol }
+              : entry;
           });
 
           set({ entries });
         },
         remove: (value) => {
           const entries = get().entries.filter((entry) => {
-            return entry.value !== value;
+            return entry.symbol !== value;
           });
 
           set({ entries });

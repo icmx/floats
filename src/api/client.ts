@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { SYMBOLS } from '../constants/currency';
+import type { CodeString, SymbolString } from '../types/currency';
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
 export const API_PIVOT_CURRENCY = import.meta.env
   .BUNDLE_API_PIVOT_CURRENCY;
 
-export const PIVOT_CURRENCY_CODE = API_PIVOT_CURRENCY;
+export const PIVOT_CURRENCY_CODE = API_PIVOT_CURRENCY as CodeString;
 
 export const fetchCSV = async (url: string): Promise<string> => {
   const response = await fetch(
@@ -20,13 +21,13 @@ export const fetchCSV = async (url: string): Promise<string> => {
 };
 
 export class Currency {
-  baseCode: string;
+  baseCode: CodeString;
 
-  quoteCode: string;
+  quoteCode: CodeString;
 
   rates: { date: string; rate: number }[];
 
-  constructor(baseCode: string, quoteCode: string) {
+  constructor(baseCode: CodeString, quoteCode: CodeString) {
     this.baseCode = baseCode;
     this.quoteCode = quoteCode;
     this.rates = [];
@@ -113,7 +114,7 @@ export class Currency {
 }
 
 export const fetchCurrencyByCode = async (
-  сode: string
+  сode: CodeString
 ): Promise<Currency> => {
   if (сode === PIVOT_CURRENCY_CODE) {
     return new Currency(PIVOT_CURRENCY_CODE, PIVOT_CURRENCY_CODE);
@@ -130,8 +131,8 @@ export const fetchCurrencyByCode = async (
 };
 
 export const fetchCurrencyBySymbol = async (
-  baseCode: string,
-  quoteCode: string
+  baseCode: CodeString,
+  quoteCode: CodeString
 ): Promise<Currency> => {
   const [baseCurrency, quoteCurrency] = await Promise.all([
     fetchCurrencyByCode(baseCode),
@@ -142,7 +143,7 @@ export const fetchCurrencyBySymbol = async (
 };
 
 export const fetchCurrenciesBySymbols = async (
-  symbols: [string, string][]
+  symbols: [CodeString, CodeString][]
 ): Promise<Currency[]> => {
   // @todo: Temporary limit
   const SYMBOLS_HARD_LIMIT = 5;
@@ -165,15 +166,15 @@ export const useCurrencies = (): string => {
   const codesPairs = notation
     .toUpperCase()
     .split(',')
-    .map((pair) => {
-      if (!SYMBOLS.includes(pair)) {
-        throw new Error(`No such pair: "${pair}"`);
+    .map((symbol) => {
+      if (!SYMBOLS.includes(symbol as SymbolString)) {
+        throw new Error(`No such symbol: "${symbol}"`);
       }
 
-      const base = pair.substring(0, 3);
-      const quote = pair.substring(3, 6);
+      const base = symbol.substring(0, 3);
+      const quote = symbol.substring(3, 6);
 
-      return [base, quote] satisfies [string, string];
+      return [base, quote] as [CodeString, CodeString];
     });
 
   const [report, setReport] = useState('[loading...]');

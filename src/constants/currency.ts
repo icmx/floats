@@ -1,3 +1,5 @@
+import type { SymbolString } from '../types/currency';
+
 export const CODES = [
   'AED',
   'AFN',
@@ -141,6 +143,6 @@ export const SYMBOLS = CODES.map((baseCode) => {
   return CODES.filter((code) => {
     return code !== baseCode;
   }).map((quoteCode) => {
-    return `${baseCode}${quoteCode}`;
+    return `${baseCode}${quoteCode}` satisfies SymbolString;
   });
 }).flat();

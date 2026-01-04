@@ -1,6 +1,8 @@
+import type { SymbolString } from '../../types/currency';
+
 export type SymbolCardData = {
   checked: boolean;
-  value: string;
+  symbol: SymbolString;
 };
 
 export type SymbolCardProps = {

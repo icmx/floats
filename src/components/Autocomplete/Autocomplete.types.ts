@@ -1,23 +1,26 @@
-export type AutocompleteOption = {
+import type { Ref } from 'react';
+
+export type AutocompleteOption<T extends string> = {
   id: string;
-  value: string;
+  value: T;
   text: string;
 };
 
-export type AutocompleteOptionsFilter = (
-  options: AutocompleteOption[],
+export type AutocompleteOptionsFilter<T extends string> = (
+  options: AutocompleteOption<T>[],
   inputValue: string
-) => AutocompleteOption[];
+) => AutocompleteOption<T>[];
 
 export type AutocompleteHandle = {
   reset: () => void;
 };
 
-export type AutocompleteProps = {
-  options: AutocompleteOption[];
-  value?: AutocompleteOption | null;
+export type AutocompleteProps<T extends string> = {
+  options: AutocompleteOption<T>[];
+  value?: AutocompleteOption<T> | null;
   placeholder?: string;
+  ref?: Ref<AutocompleteHandle>;
   onTextChange?: (text: string) => void;
-  onOptionChange?: (option: AutocompleteOption | null) => void;
-  optionsFilter?: AutocompleteOptionsFilter;
+  onOptionChange?: (option: AutocompleteOption<T> | null) => void;
+  optionsFilter?: AutocompleteOptionsFilter<T>;
 };
