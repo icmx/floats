@@ -1,12 +1,12 @@
 import { useMemo, useRef, type FunctionComponent } from 'react';
-import { PAIRS } from '../../constants/pairs';
 import {
   Autocomplete,
   type AutocompleteHandle,
   type AutocompleteOption,
 } from '../../components/Autocomplete';
 import { PairCard } from '../../components/PairCard';
-import { BASE_URL } from '../../constants/baseUrl';
+import { PAIRS } from '../../constants/pairs';
+import { BASE_HREF } from '../../constants/baseHref';
 import {
   usePairCards,
   usePairCardsActions,
@@ -38,12 +38,13 @@ export const HomePage: FunctionComponent = () => {
     .join(',');
 
   const dataHref = dataPairs
-    ? `${BASE_URL}/data?by=${dataPairs}`
+    ? `${BASE_HREF}/data?by=${dataPairs}`
     : null;
 
   return (
     <>
       <title>floats</title>
+
       <Autocomplete
         ref={ref}
         options={currencyPairsOptions}
