@@ -4,22 +4,24 @@ import {
   type AutocompleteHandle,
   type AutocompleteOption,
 } from '../../components/Autocomplete';
-import { PairCard } from '../../components/PairCard';
+import { SymbolCard } from '../../components/SymbolCard';
 import { SYMBOLS } from '../../constants/currency';
 import {
-  usePairCards,
-  usePairCardsActions,
-} from '../../hooks/usePairCardsStore';
+  useSymbolCards,
+  useSymbolCardsActions,
+} from '../../hooks/useSymbolCardsStore';
 
 export const HomePage: FunctionComponent = () => {
-  const pairCards = usePairCards();
-  const pairCardsActions = usePairCardsActions();
+  const symbolCards = useSymbolCards();
+  const symbolCardsActions = useSymbolCardsActions();
 
-  const currencyPairsOptions: AutocompleteOption[] = useMemo(() => {
-    const pairCardsValues = pairCards.map((pairCard) => pairCard.value);
+  const symbolsOptions: AutocompleteOption[] = useMemo(() => {
+    const symbolCardsValues = symbolCards.map(
+      (symbolCard) => symbolCard.value
+    );
 
     return SYMBOLS.filter(
-      (symbol) => !pairCardsValues.includes(symbol)
+      (symbol) => !symbolCardsValues.includes(symbol)
     ).map((symbol) => {
       return {
         id: `option-${symbol}`.toLowerCase(),
@@ -27,16 +29,16 @@ export const HomePage: FunctionComponent = () => {
         value: symbol,
       };
     });
-  }, [pairCards]);
+  }, [symbolCards]);
 
   const ref = useRef<AutocompleteHandle>(null);
 
-  const dataPairs = pairCards
-    .filter((pairCard) => pairCard.checked)
-    .map((pairCard) => pairCard.value)
+  const dataSymbols = symbolCards
+    .filter((symbolCard) => symbolCard.checked)
+    .map((symbolCard) => symbolCard.value)
     .join(',');
 
-  const dataHref = dataPairs ? `/data?by=${dataPairs}` : null;
+  const dataHref = dataSymbols ? `/data?by=${dataSymbols}` : null;
 
   return (
     <>
@@ -44,10 +46,10 @@ export const HomePage: FunctionComponent = () => {
 
       <Autocomplete
         ref={ref}
-        options={currencyPairsOptions}
-        placeholder="Type here to add a new pair"
+        options={symbolsOptions}
+        placeholder="Type here to add a new symbol"
         onOptionChange={(option) => {
-          pairCardsActions.add(option?.value || '');
+          symbolCardsActions.add(option?.value || '');
           ref.current?.reset();
         }}
       />
@@ -60,16 +62,16 @@ export const HomePage: FunctionComponent = () => {
           gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
         }}
       >
-        {pairCards.map((pairCard) => {
+        {symbolCards.map((symbolCard) => {
           return (
-            <PairCard
-              key={pairCard.value}
-              data={pairCard}
+            <SymbolCard
+              key={symbolCard.value}
+              data={symbolCard}
               onCheck={(checked) => {
-                pairCardsActions.check(checked, pairCard.value);
+                symbolCardsActions.check(checked, symbolCard.value);
               }}
               onRemove={() => {
-                pairCardsActions.remove(pairCard.value);
+                symbolCardsActions.remove(symbolCard.value);
               }}
             />
           );
@@ -78,8 +80,8 @@ export const HomePage: FunctionComponent = () => {
 
       {dataHref && <a href={dataHref}>Explore data</a>}
 
-      <pre>data = {JSON.stringify(dataPairs)}</pre>
-      <pre>cards = {JSON.stringify(pairCards, null, 2)}</pre>
+      <pre>data = {JSON.stringify(dataSymbols)}</pre>
+      <pre>cards = {JSON.stringify(symbolCards, null, 2)}</pre>
     </>
   );
 };

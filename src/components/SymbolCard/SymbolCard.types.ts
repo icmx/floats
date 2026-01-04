@@ -1,10 +1,10 @@
-export type PairCardData = {
+export type SymbolCardData = {
   checked: boolean;
   value: string;
 };
 
-export type PairCardProps = {
-  data: PairCardData;
+export type SymbolCardProps = {
+  data: SymbolCardData;
   onCheck?: (checked: boolean) => void;
   onRemove?: () => void;
 };

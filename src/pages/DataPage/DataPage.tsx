@@ -1,17 +1,17 @@
 import type { FunctionComponent } from 'react';
 import { useCurrencies } from '../../api/client';
-import { usePairCards } from '../../hooks/usePairCardsStore';
+import { useSymbolCards } from '../../hooks/useSymbolCardsStore';
 
 export const DataPage: FunctionComponent = () => {
   const report = useCurrencies();
-  const pairCards = usePairCards();
+  const symbolCards = useSymbolCards();
 
   return (
     <>
       <title>floats - Data</title>
       <p>Data Page</p>
       <pre>{report}</pre>
-      <pre>data = {JSON.stringify(pairCards, null, 2)}</pre>
+      <pre>data = {JSON.stringify(symbolCards, null, 2)}</pre>
     </>
   );
 };

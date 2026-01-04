@@ -3,15 +3,15 @@ import type {
   FunctionComponent,
   MouseEventHandler,
 } from 'react';
-import type { PairCardProps } from './PairCard.types';
-import styles from './PairCard.module.css';
+import type { SymbolCardProps } from './SymbolCard.types';
+import styles from './SymbolCard.module.css';
 
-export const PairCard: FunctionComponent<PairCardProps> = ({
+export const SymbolCard: FunctionComponent<SymbolCardProps> = ({
   data,
   onCheck,
   onRemove,
 }) => {
-  const id = `pair-card-${data.value}-checkbox`.toLowerCase();
+  const id = `symbol-card-${data.value.toLowerCase()}-checkbox`;
   const href = `/chart?by=${data.value}`;
 
   const handleCheck: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -23,7 +23,7 @@ export const PairCard: FunctionComponent<PairCardProps> = ({
   };
 
   return (
-    <div className={styles.PairCard}>
+    <div className={styles.SymbolCard}>
       <div className={styles.CardRow}>
         <input
           id={id}

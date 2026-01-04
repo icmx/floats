@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { PairCardData } from '../components/PairCard';
 import { useShallow } from 'zustand/shallow';
+import type { SymbolCardData } from '../components/SymbolCard';
 
-export type PairCardsStore = {
-  entries: PairCardData[];
+export type SymbolCardsStore = {
+  entries: SymbolCardData[];
   add: (value: string) => void;
   check: (checked: boolean, value: string) => void;
   remove: (value: string) => void;
 };
 
-const usePairCardsStore = create<PairCardsStore>()(
+const useSymbolCardsStore = create<SymbolCardsStore>()(
   persist(
     (set, get) => {
       return {
@@ -43,21 +43,21 @@ const usePairCardsStore = create<PairCardsStore>()(
       };
     },
     {
-      name: 'floats/pairCards',
+      name: 'floats/symbolCards',
       storage: createJSONStorage(() => localStorage),
       version: 0,
     }
   )
 );
 
-export const usePairCards = () => {
-  return usePairCardsStore((state) => {
+export const useSymbolCards = () => {
+  return useSymbolCardsStore((state) => {
     return state.entries;
   });
 };
 
-export const usePairCardsActions = () => {
-  return usePairCardsStore(
+export const useSymbolCardsActions = () => {
+  return useSymbolCardsStore(
     useShallow((state) => {
       return {
         add: state.add,
