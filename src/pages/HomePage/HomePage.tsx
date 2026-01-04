@@ -6,7 +6,6 @@ import {
 } from '../../components/Autocomplete';
 import { PairCard } from '../../components/PairCard';
 import { PAIRS } from '../../constants/pairs';
-import { BASE_HREF } from '../../constants/baseHref';
 import {
   usePairCards,
   usePairCardsActions,
@@ -37,9 +36,7 @@ export const HomePage: FunctionComponent = () => {
     .map((pairCard) => pairCard.value)
     .join(',');
 
-  const dataHref = dataPairs
-    ? `${BASE_HREF}/data?by=${dataPairs}`
-    : null;
+  const dataHref = dataPairs ? `/data?by=${dataPairs}` : null;
 
   return (
     <>

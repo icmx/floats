@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { PAIRS } from '../constants/pairs';
-import { useEffect, useState } from 'react';
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
@@ -18,7 +18,6 @@ export const fetchCSV = async (url: string): Promise<string> => {
 
   return text;
 };
-
 
 export class Currency {
   baseCode: string;

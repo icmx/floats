@@ -3,7 +3,6 @@ import type {
   FunctionComponent,
   MouseEventHandler,
 } from 'react';
-import { BASE_HREF } from '../../constants/baseHref';
 import type { PairCardProps } from './PairCard.types';
 import styles from './PairCard.module.css';
 
@@ -13,7 +12,7 @@ export const PairCard: FunctionComponent<PairCardProps> = ({
   onRemove,
 }) => {
   const id = `pair-card-${data.value}-checkbox`.toLowerCase();
-  const href = `${BASE_HREF}/chart?by=${data.value}`;
+  const href = `/chart?by=${data.value}`;
 
   const handleCheck: ChangeEventHandler<HTMLInputElement> = (event) => {
     onCheck?.(event.target.checked);
