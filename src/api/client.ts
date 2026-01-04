@@ -25,7 +25,7 @@ export class Currency {
 
   quoteCode: CodeString;
 
-  rates: { date: string; rate: number }[];
+  rates: { date: number; rate: number }[];
 
   constructor(baseCode: CodeString, quoteCode: CodeString) {
     this.baseCode = baseCode;
@@ -52,7 +52,7 @@ export class Currency {
         const [dateText, rateText] = line.split(',');
 
         this.rates.push({
-          date: dateText,
+          date: new Date(dateText).getTime(),
           rate: Number.parseFloat(rateText),
         });
       });
@@ -63,7 +63,7 @@ export class Currency {
   rateBy(that: Currency): Currency {
     if (this.baseCode !== that.baseCode) {
       throw new Error(
-        `Base codes must be the same. Now: ${this.baseCode}/*, ${that.baseCode}/*`
+        `Base codes must be the same. Now: "${this.baseCode}/*", "${that.baseCode}/*"`
       );
     }
 
@@ -75,37 +75,36 @@ export class Currency {
       return this;
     }
 
-    // @todo: own structure
-    const ratesByDates: {
-      [key: string]: { left?: number; right?: number };
-    } = {};
+    const ratesByDates = new Map<
+      number,
+      { left?: number; right?: number }
+    >();
 
     this.rates.forEach(({ date, rate }) => {
-      ratesByDates[date] = { ...ratesByDates[date], left: rate };
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || {}),
+        left: rate,
+      });
     });
 
     that.rates.forEach(({ date, rate }) => {
-      ratesByDates[date] = { ...ratesByDates[date], right: rate };
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || {}),
+        right: rate,
+      });
     });
 
     const currency = new Currency(this.quoteCode, that.quoteCode);
 
-    Object.entries(ratesByDates)
+    Array.from(ratesByDates.entries())
       .sort(([prev], [next]) => {
-        // @todo: Data must have own structure?
-        const prevValue = new Date(prev).valueOf();
-        const nextValue = new Date(next).valueOf();
-
-        return prevValue - nextValue;
+        return prev - next;
       })
-      .filter(
-        (
-          rate
-        ): rate is [string, Required<(typeof ratesByDates)[1]>] => {
-          return 'left' in rate[1] && 'right' in rate[1];
-        }
-      )
       .forEach(([date, { left, right }]) => {
+        if (!left || !right) {
+          return;
+        }
+
         currency.rates.push({ date, rate: right / left });
       });
 
