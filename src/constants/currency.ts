@@ -1,4 +1,4 @@
-export const CURRENCIES = [
+export const CODES = [
   'AED',
   'AFN',
   'ALL',
@@ -135,4 +135,12 @@ export const CURRENCIES = [
   'YER',
   'ZAR',
   'ZMW',
-];
+] as const;
+
+export const SYMBOLS = CODES.map((baseCode) => {
+  return CODES.filter((code) => {
+    return code !== baseCode;
+  }).map((quoteCode) => {
+    return `${baseCode}${quoteCode}`;
+  });
+}).flat();

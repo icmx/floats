@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { PAIRS } from '../constants/pairs';
+import { SYMBOLS } from '../constants/currency';
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
@@ -112,45 +112,46 @@ export class Currency {
   }
 }
 
-export const fetchCurrency = async (
-  currencyCode: string
+export const fetchCurrencyByCode = async (
+  сode: string
 ): Promise<Currency> => {
-  if (currencyCode === PIVOT_CURRENCY_CODE) {
+  if (сode === PIVOT_CURRENCY_CODE) {
     return new Currency(PIVOT_CURRENCY_CODE, PIVOT_CURRENCY_CODE);
   }
 
   const [csv, latestCsv] = await Promise.all([
-    fetchCSV(`/${currencyCode}.csv`),
-    fetchCSV(`/${currencyCode}.latest.csv`),
+    fetchCSV(`/${сode}.csv`),
+    fetchCSV(`/${сode}.latest.csv`),
   ]);
 
-  return new Currency(PIVOT_CURRENCY_CODE, currencyCode)
+  return new Currency(PIVOT_CURRENCY_CODE, сode)
     .appendWith(csv)
     .appendWith(latestCsv);
 };
 
-export const fetchCurrencyPair = async (
-  baseCurrencyCode: string,
-  quoteCurrencyCode: string
+export const fetchCurrencyBySymbol = async (
+  baseCode: string,
+  quoteCode: string
 ): Promise<Currency> => {
   const [baseCurrency, quoteCurrency] = await Promise.all([
-    fetchCurrency(baseCurrencyCode),
-    fetchCurrency(quoteCurrencyCode),
+    fetchCurrencyByCode(baseCode),
+    fetchCurrencyByCode(quoteCode),
   ]);
 
   return baseCurrency.rateBy(quoteCurrency);
 };
 
-export const fetchCurrencyPairs = async (
-  codesPairs: [string, string][]
+export const fetchCurrenciesBySymbols = async (
+  symbols: [string, string][]
 ): Promise<Currency[]> => {
-  const PAIRS_HARD_LIMIT = 5;
+  // @todo: Temporary limit
+  const SYMBOLS_HARD_LIMIT = 5;
 
   const currencies = await Promise.all(
-    codesPairs
-      .slice(0, PAIRS_HARD_LIMIT)
-      .map(([baseCurrencyCode, quoteCurrencyCode]) => {
-        return fetchCurrencyPair(baseCurrencyCode, quoteCurrencyCode);
+    symbols
+      .slice(0, SYMBOLS_HARD_LIMIT)
+      .map(([baseCode, quoteCode]) => {
+        return fetchCurrencyBySymbol(baseCode, quoteCode);
       })
   );
 
@@ -165,7 +166,7 @@ export const useCurrencies = (): string => {
     .toUpperCase()
     .split(',')
     .map((pair) => {
-      if (!PAIRS.includes(pair)) {
+      if (!SYMBOLS.includes(pair)) {
         throw new Error(`No such pair: "${pair}"`);
       }
 
@@ -180,7 +181,7 @@ export const useCurrencies = (): string => {
   useEffect(() => {
     const load = async () => {
       const lines: string[] = [];
-      const currencies = await fetchCurrencyPairs(codesPairs);
+      const currencies = await fetchCurrenciesBySymbols(codesPairs);
 
       currencies.forEach((currency) => {
         const first = JSON.stringify(currency.rates.at(0));

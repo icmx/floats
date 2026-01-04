@@ -5,7 +5,7 @@ import {
   type AutocompleteOption,
 } from '../../components/Autocomplete';
 import { PairCard } from '../../components/PairCard';
-import { PAIRS } from '../../constants/pairs';
+import { SYMBOLS } from '../../constants/currency';
 import {
   usePairCards,
   usePairCardsActions,
@@ -18,15 +18,15 @@ export const HomePage: FunctionComponent = () => {
   const currencyPairsOptions: AutocompleteOption[] = useMemo(() => {
     const pairCardsValues = pairCards.map((pairCard) => pairCard.value);
 
-    return PAIRS.filter((pair) => !pairCardsValues.includes(pair)).map(
-      (pair) => {
-        return {
-          id: `option-${pair}`.toLowerCase(),
-          text: pair,
-          value: pair,
-        };
-      }
-    );
+    return SYMBOLS.filter(
+      (symbol) => !pairCardsValues.includes(symbol)
+    ).map((symbol) => {
+      return {
+        id: `option-${symbol}`.toLowerCase(),
+        text: symbol,
+        value: symbol,
+      };
+    });
   }, [pairCards]);
 
   const ref = useRef<AutocompleteHandle>(null);
