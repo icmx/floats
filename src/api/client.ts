@@ -158,7 +158,6 @@ export const fetchCurrenciesBySymbols = async (
   return currencies;
 };
 
-// @todo: This is a temporary test hook
 export const useCurrencies = (): Currency[] => {
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
@@ -194,7 +193,7 @@ export const useCurrencies = (): Currency[] => {
   return currencies;
 };
 
-export const useCurrencyChartData = (): {
+export const useChartPageData = (): {
   name: string;
   data: [number, number][];
 } | null => {
@@ -215,7 +214,7 @@ export const useCurrencyChartData = (): {
   }, [currency]);
 };
 
-export const useCurrencyTableData = (): {
+export const useDataPageData = (): {
   head: string[];
   body: { date: number; rates: (number | null)[] }[];
 } => {

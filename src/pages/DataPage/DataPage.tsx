@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import { useCurrencyTableData } from '../../api/client';
+import { useDataPageData } from '../../api/client';
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
   value,
@@ -18,12 +18,11 @@ export const FloatValue: FunctionComponent<{
   return <data value={value ?? undefined}>{text}</data>;
 };
 
-// @todo: rename to table
 export const DataPage: FunctionComponent = () => {
   // @todo: mini cards
   // const symbolCards = useSymbolCards();
 
-  const { head, body } = useCurrencyTableData();
+  const { head, body } = useDataPageData();
 
   return (
     <>

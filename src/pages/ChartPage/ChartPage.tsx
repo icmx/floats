@@ -1,11 +1,11 @@
 import { type FunctionComponent } from 'react';
 import { StockChart } from '@highcharts/react/stock';
-import { useCurrencyChartData } from '../../api/client';
+import { useChartPageData } from '../../api/client';
 
 export const ChartPage: FunctionComponent = () => {
   // @todo: make small links to other charts
   // const symbolCards = useSymbolCards();
-  const currencyChartData = useCurrencyChartData();
+  const currencyChartData = useChartPageData();
 
   const { name, data } = currencyChartData || {};
 
