@@ -235,3 +235,44 @@ export const useCurrencyChartData = (): {
     return { name, data };
   }, [currency]);
 };
+
+export const useCurrencyTableData = (): {
+  head: string[];
+  body: { date: number; rates: (number | null)[] }[];
+} => {
+  const { currencies } = useCurrencies();
+
+  return useMemo(() => {
+    const symbols = currencies.map((currency) => {
+      return `${currency.baseCode}${currency.quoteCode}`;
+    });
+
+    const head = ['date', ...symbols];
+
+    const ratesByDates = new Map<number, (number | null)[]>();
+    const SIZE = currencies.length;
+
+    currencies.forEach((currency, index) => {
+      currency.rates.forEach(({ date, rate }) => {
+        const ratesByDate =
+          ratesByDates.get(date) || new Array(SIZE).fill(null);
+
+        ratesByDate[index] = rate;
+
+        ratesByDates.set(date, ratesByDate);
+      });
+    });
+
+    const body: { date: number; rates: (number | null)[] }[] = [];
+
+    Array.from(ratesByDates.entries())
+      .sort(([prev], [next]) => {
+        return prev - next;
+      })
+      .forEach(([date, rates]) => {
+        body.push({ date, rates });
+      });
+
+    return { head, body };
+  }, [currencies]);
+};

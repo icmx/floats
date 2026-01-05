@@ -1,17 +1,64 @@
 import type { FunctionComponent } from 'react';
-import { useCurrencies } from '../../api/client';
+import { useCurrencyTableData } from '../../api/client';
 import { useSymbolCards } from '../../hooks/useSymbolCardsStore';
 
+export const DateValue: FunctionComponent<{ value: number }> = ({
+  value,
+}) => {
+  const dateTime = new Date(value).toJSON().substring(0, 10);
+
+  return <time dateTime={dateTime}>{dateTime}</time>;
+};
+
+export const FloatValue: FunctionComponent<{
+  value: number | null;
+  fraction: number;
+}> = ({ value, fraction }) => {
+  const text = value === null ? '' : value.toFixed(fraction);
+
+  return <data value={value ?? undefined}>{text}</data>;
+};
+
+// @todo: rename to table
 export const DataPage: FunctionComponent = () => {
-  const { report } = useCurrencies();
   const symbolCards = useSymbolCards();
+
+  const { head, body } = useCurrencyTableData();
 
   return (
     <>
       <title>floats - Data</title>
       <p>Data Page</p>
-      <pre>{report}</pre>
-      <pre>data = {JSON.stringify(symbolCards, null, 2)}</pre>
+
+      <table>
+        <thead>
+          <tr>
+            {head.map((cell) => {
+              return <th key={cell}>{cell}</th>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {body.map((row) => {
+            return (
+              <tr key={row.date}>
+                <th>
+                  <DateValue value={row.date} />
+                </th>
+                {row.rates.map((rate, index) => {
+                  const key = `${row.date}_${head.at(index + 1)}`;
+
+                  return (
+                    <td key={key}>
+                      <FloatValue value={rate} fraction={6} />
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </>
   );
 };

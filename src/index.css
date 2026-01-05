@@ -5,3 +5,20 @@ body {
   color: #eeeeee;
   background-color: #111111;
 }
+
+table {
+  border: double 3px;
+  border-collapse: collapse;
+}
+
+th {
+  padding: 4px;
+  text-align: left;
+  border: solid 1px;
+}
+
+td {
+  padding: 4px;
+  text-align: left;
+  border: solid 1px;
+}
