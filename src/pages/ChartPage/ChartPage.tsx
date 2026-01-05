@@ -27,6 +27,10 @@ export const ChartPage: FunctionComponent = () => {
                 type: 'area',
                 color: '#2962FF',
                 animation: false,
+                tooltip: {
+                  valueDecimals: 2,
+                  pointFormat: '{series.name}: {point.y}',
+                },
               },
             ],
             plotOptions: {
