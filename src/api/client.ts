@@ -159,7 +159,7 @@ export const fetchCurrenciesBySymbols = async (
 };
 
 // @todo: This is a temporary test hook
-export const useCurrencies = () => {
+export const useCurrencies = (): Currency[] => {
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
 
@@ -180,46 +180,25 @@ export const useCurrencies = () => {
   }, [notation]);
 
   const [currencies, setCurrencies] = useState<Currency[]>([]);
-  const [report, setReport] = useState('[loading...]');
 
   useEffect(() => {
     const load = async () => {
-      const lines: string[] = [];
       const items = await fetchCurrenciesBySymbols(codesPairs);
 
-      items.forEach((currency) => {
-        const first = JSON.stringify(currency.rates.at(0));
-        const middle = `[${currency.rates.length - 2} items]`;
-        const last = JSON.stringify(currency.rates.at(-1));
-
-        lines.push(
-          `
-            # Currency: ${currency.baseCode}/${currency.quoteCode}:
-            - first: ${first}
-            - ${middle}
-            - last: ${last}
-            ---
-          `
-            .trim()
-            .replace(/^\s+/gm, '')
-        );
-      });
-
       setCurrencies(items);
-      setReport(lines.join('\n\n'));
     };
 
     load();
   }, [codesPairs]);
 
-  return { currencies, report };
+  return currencies;
 };
 
 export const useCurrencyChartData = (): {
   name: string;
   data: [number, number][];
 } | null => {
-  const { currencies } = useCurrencies();
+  const currencies = useCurrencies();
   const currency = currencies.at(0) || null;
 
   return useMemo(() => {
@@ -240,7 +219,7 @@ export const useCurrencyTableData = (): {
   head: string[];
   body: { date: number; rates: (number | null)[] }[];
 } => {
-  const { currencies } = useCurrencies();
+  const currencies = useCurrencies();
 
   return useMemo(() => {
     const symbols = currencies.map((currency) => {
