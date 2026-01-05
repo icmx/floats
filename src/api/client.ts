@@ -214,3 +214,24 @@ export const useCurrencies = () => {
 
   return { currencies, report };
 };
+
+export const useCurrencyChartData = (): {
+  name: string;
+  data: [number, number][];
+} | null => {
+  const { currencies } = useCurrencies();
+  const currency = currencies.at(0) || null;
+
+  return useMemo(() => {
+    if (!currency) {
+      return null;
+    }
+
+    const name: string = `${currency.baseCode}${currency.quoteCode}`;
+    const data: [number, number][] = currency.rates.map(
+      ({ date, rate }) => [date, rate]
+    );
+
+    return { name, data };
+  }, [currency]);
+};
