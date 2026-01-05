@@ -158,7 +158,8 @@ export const fetchCurrenciesBySymbols = async (
   return currencies;
 };
 
-export const useCurrencies = (): string => {
+// @todo: This is a temporary test hook
+export const useCurrencies = () => {
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
 
@@ -176,14 +177,15 @@ export const useCurrencies = (): string => {
       return [base, quote] as [CodeString, CodeString];
     });
 
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [report, setReport] = useState('[loading...]');
 
   useEffect(() => {
     const load = async () => {
       const lines: string[] = [];
-      const currencies = await fetchCurrenciesBySymbols(codesPairs);
+      const items = await fetchCurrenciesBySymbols(codesPairs);
 
-      currencies.forEach((currency) => {
+      items.forEach((currency) => {
         const first = JSON.stringify(currency.rates.at(0));
         const middle = `[${currency.rates.length - 2} items]`;
         const last = JSON.stringify(currency.rates.at(-1));
@@ -201,11 +203,12 @@ export const useCurrencies = (): string => {
         );
       });
 
+      setCurrencies(items);
       setReport(lines.join('\n\n'));
     };
 
     load();
   }, [searchParams, codesPairs]);
 
-  return report;
+  return { currencies, report };
 };

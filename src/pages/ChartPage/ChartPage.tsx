@@ -3,7 +3,7 @@ import { useCurrencies } from '../../api/client';
 import { useSymbolCards } from '../../hooks/useSymbolCardsStore';
 
 export const ChartPage: FunctionComponent = () => {
-  const report = useCurrencies();
+  const { report } = useCurrencies();
   const symbolCards = useSymbolCards();
 
   return (
