@@ -1,6 +1,5 @@
 import type { FunctionComponent } from 'react';
 import { useCurrencyTableData } from '../../api/client';
-import { useSymbolCards } from '../../hooks/useSymbolCardsStore';
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
   value,
@@ -21,7 +20,8 @@ export const FloatValue: FunctionComponent<{
 
 // @todo: rename to table
 export const DataPage: FunctionComponent = () => {
-  const symbolCards = useSymbolCards();
+  // @todo: mini cards
+  // const symbolCards = useSymbolCards();
 
   const { head, body } = useCurrencyTableData();
 
