@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { SYMBOLS } from '../constants/currency';
 import type { CodeString, SymbolString } from '../types/currency';
@@ -163,19 +163,21 @@ export const useCurrencies = () => {
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
 
-  const codesPairs = notation
-    .toUpperCase()
-    .split(',')
-    .map((symbol) => {
-      if (!SYMBOLS.includes(symbol as SymbolString)) {
-        throw new Error(`No such symbol: "${symbol}"`);
-      }
+  const codesPairs = useMemo(() => {
+    return notation
+      .toUpperCase()
+      .split(',')
+      .map((symbol) => {
+        if (!SYMBOLS.includes(symbol as SymbolString)) {
+          throw new Error(`No such symbol: "${symbol}"`);
+        }
 
-      const base = symbol.substring(0, 3);
-      const quote = symbol.substring(3, 6);
+        const base = symbol.substring(0, 3);
+        const quote = symbol.substring(3, 6);
 
-      return [base, quote] as [CodeString, CodeString];
-    });
+        return [base, quote] as [CodeString, CodeString];
+      });
+  }, [notation]);
 
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [report, setReport] = useState('[loading...]');
@@ -208,7 +210,7 @@ export const useCurrencies = () => {
     };
 
     load();
-  }, [searchParams, codesPairs]);
+  }, [codesPairs]);
 
   return { currencies, report };
 };
