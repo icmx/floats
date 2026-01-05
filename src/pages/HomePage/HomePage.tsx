@@ -46,7 +46,6 @@ export const HomePage: FunctionComponent = () => {
     <>
       <title>floats</title>
 
-      {/* @todo: bug with reset */}
       <Autocomplete<SymbolString>
         ref={ref}
         options={symbolsOptions}

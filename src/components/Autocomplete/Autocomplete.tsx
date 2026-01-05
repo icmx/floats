@@ -12,7 +12,6 @@ import {
 } from 'react';
 import { classNames } from '../../utils/classNames';
 import type {
-  AutocompleteHandle,
   AutocompleteOption,
   AutocompleteProps,
 } from './Autocomplete.types';
@@ -24,6 +23,7 @@ export const Autocomplete = <T extends string>({
   options,
   value = null,
   placeholder,
+  ref,
   onTextChange,
   onOptionChange,
   optionsFilter = (options, inputValue) => {
@@ -45,7 +45,6 @@ export const Autocomplete = <T extends string>({
     return optionsFilter(options, inputValue);
   }, [options, optionsFilter, inputValue]);
 
-  const ref = useRef<AutocompleteHandle | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const uListRef = useRef<HTMLUListElement>(null);
