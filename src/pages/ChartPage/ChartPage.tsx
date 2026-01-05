@@ -17,16 +17,23 @@ export const ChartPage: FunctionComponent = () => {
       {currencyChartData && (
         <StockChart
           options={{
+            credits: {
+              enabled: false,
+            },
             series: [
               {
-                type: 'area',
                 name: name,
                 data: data,
+                type: 'area',
                 color: '#2962FF',
-                lineWidth: 2,
                 animation: false,
               },
             ],
+            plotOptions: {
+              area: {
+                threshold: null,
+              },
+            },
           }}
         ></StockChart>
       )}

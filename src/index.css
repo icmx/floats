@@ -11,8 +11,15 @@ table {
   border-collapse: collapse;
 }
 
+thead {
+  position: sticky;
+  left: 0;
+  top: -2px;
+  background-color: #111111;
+}
+
 th {
-  padding: 4px;
+  padding: 6px 4px 4px;
   text-align: left;
   border: solid 1px;
 }

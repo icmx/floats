@@ -85,9 +85,6 @@ export const HomePage: FunctionComponent = () => {
       </div>
 
       {dataHref && <a href={dataHref}>Explore data</a>}
-
-      <pre>data = {JSON.stringify(dataSymbols)}</pre>
-      <pre>cards = {JSON.stringify(symbolCards, null, 2)}</pre>
     </>
   );
 };
