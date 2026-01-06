@@ -17,8 +17,6 @@ import type {
 } from './Autocomplete.types';
 import styles from './Autocomplete.module.css';
 
-const OPTIONS_HARD_LIMIT = 250;
-
 export const Autocomplete = <T extends string>({
   options,
   value = null,
@@ -27,7 +25,8 @@ export const Autocomplete = <T extends string>({
   onTextChange,
   onOptionChange,
   optionsFilter = (options, inputValue) => {
-    const pattern = inputValue?.trim().toLowerCase() || '';
+    const OPTIONS_HARD_LIMIT = 150;
+    const pattern = inputValue.toLowerCase();
 
     if (!pattern) {
       return options.slice(0, OPTIONS_HARD_LIMIT);
@@ -47,7 +46,7 @@ export const Autocomplete = <T extends string>({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const uListRef = useRef<HTMLUListElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
 
   useImperativeHandle(ref, () => {
     return {
@@ -85,8 +84,8 @@ export const Autocomplete = <T extends string>({
   }, [value]);
 
   useEffect(() => {
-    if (hightlightedIndex >= 0 && uListRef.current) {
-      const highlightedElement = uListRef.current.children[
+    if (hightlightedIndex >= 0 && listRef.current) {
+      const highlightedElement = listRef.current.children[
         hightlightedIndex
       ] as HTMLElement;
 
@@ -187,10 +186,10 @@ export const Autocomplete = <T extends string>({
     }, []);
 
   return (
-    <div ref={containerRef} className={styles.container}>
+    <div className={styles.Autocomplete} ref={containerRef}>
       <input
-        ref={inputRef}
         className={styles.input}
+        ref={inputRef}
         type="text"
         value={inputValue}
         autoComplete="off"
@@ -201,10 +200,9 @@ export const Autocomplete = <T extends string>({
       />
 
       {isOpen && (
-        <ul ref={uListRef} className={styles.list}>
+        <ul ref={listRef} className={styles.list}>
           {filteredOptions.map((option, index) => {
             const isHighlighted = index === hightlightedIndex;
-            const isSelected = value?.id === option.id;
 
             return (
               <li
@@ -212,7 +210,6 @@ export const Autocomplete = <T extends string>({
                 className={classNames([
                   styles.option,
                   isHighlighted && styles.isHighlighted,
-                  isSelected && styles.isSelected,
                 ])}
                 onClick={() => handleSelect(option)}
                 onMouseEnter={() => setHighlightedIndex(index)}

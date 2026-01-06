@@ -3,7 +3,7 @@ import { useConvertPageData } from '../../api/client';
 
 export const ConvertPage: FunctionComponent = () => {
   const convertPageData = useConvertPageData();
-  const { symbol, date, rate } = convertPageData || {};
+  const { symbol, rate } = convertPageData || {};
 
   const [baseValue, setBaseValue] = useState('1');
   const [quoteValue, setQuoteValue] = useState('0');

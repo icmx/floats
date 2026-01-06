@@ -3,6 +3,7 @@ import type { Ref } from 'react';
 export type AutocompleteOption<T extends string> = {
   id: string;
   value: T;
+  pattern: string;
   text: string;
 };
 

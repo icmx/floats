@@ -29,3 +29,10 @@ td {
   text-align: left;
   border: solid 1px;
 }
+
+#root {
+  outline: solid 1px #eeeeee;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}

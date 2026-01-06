@@ -1,6 +1,16 @@
-.container {
+.Autocomplete {
+  display: block;
+
   position: relative;
   width: 100%;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 6px 4px;
 }
 
 .list {
@@ -20,11 +30,11 @@
   z-index: 1000;
 
   list-style: none;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .option {
-  padding: 10px 12px;
+  padding: 6px 4px;
   cursor: pointer;
 }
 

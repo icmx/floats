@@ -25,10 +25,13 @@ export const HomePage: FunctionComponent = () => {
       return SYMBOLS.filter(
         (symbol) => !symbolCardsValues.includes(symbol)
       ).map((symbol) => {
+        const pattern = symbol.toLowerCase();
+
         return {
-          id: `option-${symbol}`.toLowerCase(),
-          text: symbol,
+          id: `option-${pattern}`,
           value: symbol,
+          pattern,
+          text: symbol,
         };
       });
     }, [symbolCards]);
@@ -49,7 +52,7 @@ export const HomePage: FunctionComponent = () => {
       <Autocomplete<SymbolString>
         ref={ref}
         options={symbolsOptions}
-        placeholder="Type here to add a new symbol"
+        placeholder="Search symbols like USDEUR"
         onOptionChange={(option) => {
           if (option) {
             symbolCardsActions.add(option?.value);
