@@ -1,0 +1,9 @@
+.CardRow {
+  margin: 6px 0;
+  padding: 0 4px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+}

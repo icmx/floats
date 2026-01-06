@@ -4,7 +4,8 @@ import {
   type AutocompleteHandle,
   type AutocompleteOption,
 } from '../../components/Autocomplete';
-import { SymbolCard } from '../../components/SymbolCard';
+import { Card } from '../../components/Card';
+import { CardRow } from '../../components/CardRow';
 import { SYMBOLS } from '../../constants/currency';
 import {
   useSymbolCards,
@@ -71,17 +72,39 @@ export const HomePage: FunctionComponent = () => {
         }}
       >
         {symbolCards.map((symbolCard) => {
+          const id = `symbol-card-${symbolCard.symbol.toLowerCase()}-checkbox`;
+          const chartHref = `/chart?by=${symbolCard.symbol}`;
+          const convertHref = `/convert?by=${symbolCard.symbol}`;
+
           return (
-            <SymbolCard
-              key={symbolCard.symbol}
-              data={symbolCard}
-              onCheck={(checked) => {
-                symbolCardsActions.check(checked, symbolCard.symbol);
-              }}
-              onRemove={() => {
-                symbolCardsActions.remove(symbolCard.symbol);
-              }}
-            />
+            <Card key={symbolCard.symbol}>
+              <CardRow>
+                <input
+                  id={id}
+                  type="checkbox"
+                  checked={symbolCard.checked}
+                  onChange={(event) => {
+                    symbolCardsActions.check(
+                      event.target.checked,
+                      symbolCard.symbol
+                    );
+                  }}
+                />
+                <label htmlFor={id}>{symbolCard.symbol}</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    symbolCardsActions.remove(symbolCard.symbol);
+                  }}
+                >
+                  x
+                </button>
+              </CardRow>
+              <CardRow>
+                <a href={chartHref}>Chart</a>
+                <a href={convertHref}>Convert</a>
+              </CardRow>
+            </Card>
           );
         })}
       </div>
