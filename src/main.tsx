@@ -8,6 +8,7 @@ import { DataPage } from './pages/DataPage';
 import { HomePage } from './pages/HomePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import './index.css';
+import { ConvertPage } from './pages/ConvertPage';
 
 const root = document.querySelector('#root');
 
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: '/data',
         element: <DataPage />,
+      },
+      {
+        path: '/convert',
+        element: <ConvertPage />,
       },
       {
         path: '*',
