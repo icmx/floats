@@ -214,6 +214,30 @@ export const useChartPageData = (): {
   }, [currency]);
 };
 
+export const useConvertPageData = (): {
+  symbol: SymbolString;
+  date: number;
+  rate: number;
+} | null => {
+  const currencies = useCurrencies();
+  const currency = currencies.at(0);
+
+  return useMemo(() => {
+    if (!currency) {
+      return null;
+    }
+
+    const symbol =
+      `${currency.baseCode}${currency.quoteCode}` satisfies SymbolString;
+    const { date, rate } = currency.rates.at(-1) || {
+      date: 0,
+      rate: 0,
+    };
+
+    return { symbol, date, rate };
+  }, [currency]);
+};
+
 export const useDataPageData = (): {
   head: string[];
   body: { date: number; rates: (number | null)[] }[];

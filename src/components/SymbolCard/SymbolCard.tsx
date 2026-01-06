@@ -12,7 +12,8 @@ export const SymbolCard: FunctionComponent<SymbolCardProps> = ({
   onRemove,
 }) => {
   const id = `symbol-card-${data.symbol.toLowerCase()}-checkbox`;
-  const href = `/chart?by=${data.symbol}`;
+  const chartHref = `/chart?by=${data.symbol}`;
+  const convertHref = `/convert?by=${data.symbol}`;
 
   const handleCheck: ChangeEventHandler<HTMLInputElement> = (event) => {
     onCheck?.(event.target.checked);
@@ -35,7 +36,8 @@ export const SymbolCard: FunctionComponent<SymbolCardProps> = ({
         <button onClick={handleRemove}>remove</button>
       </div>
       <div className={styles.CardRow}>
-        <a href={href}>Explore chart</a>
+        <a href={chartHref}>Chart</a>
+        <a href={convertHref}>Convert</a>
       </div>
     </div>
   );
