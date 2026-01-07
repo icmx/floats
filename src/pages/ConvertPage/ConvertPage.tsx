@@ -1,5 +1,6 @@
 import { useState, type FunctionComponent } from 'react';
 import { useConvertPageData } from '../../api/client';
+import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 
 export const ConvertPage: FunctionComponent = () => {
@@ -14,6 +15,8 @@ export const ConvertPage: FunctionComponent = () => {
   return (
     <>
       <title>floats - Convert</title>
+
+      <SymbolChips href={(id) => `/convert?by=${id}`} />
 
       <p>
         {symbol}: {rate?.toFixed(fractionDigits)}

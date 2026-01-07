@@ -1,6 +1,7 @@
 import { type FunctionComponent } from 'react';
 import { StockChart } from '@highcharts/react/stock';
 import { useChartPageData } from '../../api/client';
+import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 
 export const ChartPage: FunctionComponent = () => {
@@ -13,6 +14,8 @@ export const ChartPage: FunctionComponent = () => {
     <>
       <title>floats - Chart</title>
       <p>Chart Page</p>
+
+      <SymbolChips href={(id) => `/chart?by=${id}`} />
 
       {currencyChartData && (
         <StockChart

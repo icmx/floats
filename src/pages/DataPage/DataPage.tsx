@@ -1,5 +1,6 @@
 import type { FunctionComponent } from 'react';
 import { useDataPageData } from '../../api/client';
+import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
@@ -20,9 +21,6 @@ export const FloatValue: FunctionComponent<{
 };
 
 export const DataPage: FunctionComponent = () => {
-  // @todo: mini cards
-  // const symbolCards = useSymbolCards();
-
   const [fractionDigits] = useFractionDigits();
   const { head, body } = useDataPageData();
 
@@ -30,6 +28,8 @@ export const DataPage: FunctionComponent = () => {
     <>
       <title>floats - Data</title>
       <p>Data Page</p>
+
+      <SymbolChips href={(id) => `/data?by=${id}`} />
 
       <table>
         <thead>
