@@ -1,7 +1,10 @@
 import { useState, type FunctionComponent } from 'react';
 import { useConvertPageData } from '../../api/client';
+import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 
 export const ConvertPage: FunctionComponent = () => {
+  const [fractionDigits] = useFractionDigits();
+
   const convertPageData = useConvertPageData();
   const { symbol, rate } = convertPageData || {};
 
@@ -13,7 +16,7 @@ export const ConvertPage: FunctionComponent = () => {
       <title>floats - Convert</title>
 
       <p>
-        {symbol}: {rate?.toFixed(2)}
+        {symbol}: {rate?.toFixed(fractionDigits)}
       </p>
 
       {rate && (

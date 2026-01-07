@@ -1,5 +1,6 @@
 import type { FunctionComponent } from 'react';
 import { useDataPageData } from '../../api/client';
+import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
   value,
@@ -22,6 +23,7 @@ export const DataPage: FunctionComponent = () => {
   // @todo: mini cards
   // const symbolCards = useSymbolCards();
 
+  const [fractionDigits] = useFractionDigits();
   const { head, body } = useDataPageData();
 
   return (
@@ -49,7 +51,10 @@ export const DataPage: FunctionComponent = () => {
 
                   return (
                     <td key={key}>
-                      <FloatValue value={rate} fraction={6} />
+                      <FloatValue
+                        value={rate}
+                        fraction={fractionDigits}
+                      />
                     </td>
                   );
                 })}

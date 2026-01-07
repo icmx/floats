@@ -1,10 +1,10 @@
 import { type FunctionComponent } from 'react';
 import { StockChart } from '@highcharts/react/stock';
 import { useChartPageData } from '../../api/client';
+import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 
 export const ChartPage: FunctionComponent = () => {
-  // @todo: make small links to other charts
-  // const symbolCards = useSymbolCards();
+  const [fractionDigits] = useFractionDigits();
   const currencyChartData = useChartPageData();
 
   const { name, data } = currencyChartData || {};
@@ -28,7 +28,7 @@ export const ChartPage: FunctionComponent = () => {
                 color: '#2962FF',
                 animation: false,
                 tooltip: {
-                  valueDecimals: 2,
+                  valueDecimals: fractionDigits,
                   pointFormat: '{series.name}: {point.y}',
                 },
               },
