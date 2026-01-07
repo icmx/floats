@@ -3,9 +3,9 @@ import {
   Autocomplete,
   type AutocompleteHandle,
   type AutocompleteOption,
-} from '../../components/Autocomplete';
-import { Card } from '../../components/Card';
-import { CardRow } from '../../components/CardRow';
+} from '../../components/common/Autocomplete';
+import { Card } from '../../components/common/Card';
+import { CardRow } from '../../components/common/CardRow';
 import { SYMBOLS } from '../../constants/currency';
 import {
   useSymbolsStoreEntries,

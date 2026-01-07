@@ -10,7 +10,7 @@ import {
   type KeyboardEventHandler,
   type ReactElement,
 } from 'react';
-import { classNames } from '../../utils/classNames';
+import { classNames } from '../../../utils/classNames';
 import type {
   AutocompleteOption,
   AutocompleteProps,
