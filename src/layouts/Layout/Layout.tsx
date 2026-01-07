@@ -11,7 +11,9 @@ export const Layout: FunctionComponent = () => {
           alignItems: 'center',
         }}
       >
-        <h1>floats</h1>
+        <a href="/">
+          <h1>floats</h1>
+        </a>
         <p>
           <a href="/settings">Settings</a>
         </p>
@@ -19,8 +21,10 @@ export const Layout: FunctionComponent = () => {
       <main>
         <Outlet />
       </main>
-      <footer>
-        <p>floats</p>
+      <footer
+        style={{ margin: '1rem 0 0', borderTop: 'solid 1px #eeeeee' }}
+      >
+        <p>floats - currencies explorer</p>
       </footer>
     </>
   );
