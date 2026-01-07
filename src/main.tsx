@@ -4,11 +4,12 @@ import { createBrowserRouter } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { Layout } from './layouts/Layout';
 import { ChartPage } from './pages/ChartPage';
+import { ConvertPage } from './pages/ConvertPage';
 import { DataPage } from './pages/DataPage';
 import { HomePage } from './pages/HomePage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { SettingsPage } from './pages/SettingsPage';
 import './index.css';
-import { ConvertPage } from './pages/ConvertPage';
 
 const root = document.querySelector('#root');
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/convert',
         element: <ConvertPage />,
+      },
+      {
+        path: '/settings',
+        element: <SettingsPage />,
       },
       {
         path: '*',
