@@ -8,40 +8,40 @@ import { Card } from '../../components/Card';
 import { CardRow } from '../../components/CardRow';
 import { SYMBOLS } from '../../constants/currency';
 import {
-  useSymbolCards,
-  useSymbolCardsActions,
-} from '../../hooks/useSymbolCardsStore';
+  useSymbolsStoreEntries,
+  useSymbolsStoreActions,
+} from '../../hooks/useSymbolsStore';
 import type { SymbolString } from '../../types/currency';
 
 export const HomePage: FunctionComponent = () => {
-  const symbolCards = useSymbolCards();
-  const symbolCardsActions = useSymbolCardsActions();
+  const symbolsEntries = useSymbolsStoreEntries();
+  const symbolsActions = useSymbolsStoreActions();
 
   const symbolsOptions: AutocompleteOption<SymbolString>[] =
     useMemo(() => {
-      const symbolCardsValues = symbolCards.map(
-        (symbolCard) => symbolCard.symbol
+      const symbols = symbolsEntries.map(
+        (symbolEntry) => symbolEntry.id
       );
 
-      return SYMBOLS.filter(
-        (symbol) => !symbolCardsValues.includes(symbol)
-      ).map((symbol) => {
-        const pattern = symbol.toLowerCase();
+      return SYMBOLS.filter((symbol) => !symbols.includes(symbol)).map(
+        (symbol) => {
+          const pattern = symbol.toLowerCase();
 
-        return {
-          id: `option-${pattern}`,
-          value: symbol,
-          pattern,
-          text: symbol,
-        };
-      });
-    }, [symbolCards]);
+          return {
+            id: `option-${pattern}`,
+            value: symbol,
+            pattern,
+            text: symbol,
+          };
+        }
+      );
+    }, [symbolsEntries]);
 
   const ref = useRef<AutocompleteHandle>(null);
 
-  const dataSymbols = symbolCards
-    .filter((symbolCard) => symbolCard.checked)
-    .map((symbolCard) => symbolCard.symbol)
+  const dataSymbols = symbolsEntries
+    .filter((symbolEntry) => symbolEntry.checked)
+    .map((symbolEntry) => symbolEntry.id)
     .join(',');
 
   const dataHref = dataSymbols ? `/data?by=${dataSymbols}` : null;
@@ -56,7 +56,7 @@ export const HomePage: FunctionComponent = () => {
         placeholder="Search symbols like USDEUR"
         onOptionChange={(option) => {
           if (option) {
-            symbolCardsActions.add(option?.value);
+            symbolsActions.add(option?.value);
           }
 
           ref.current?.reset();
@@ -71,30 +71,30 @@ export const HomePage: FunctionComponent = () => {
           gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
         }}
       >
-        {symbolCards.map((symbolCard) => {
-          const id = `symbol-card-${symbolCard.symbol.toLowerCase()}-checkbox`;
-          const chartHref = `/chart?by=${symbolCard.symbol}`;
-          const convertHref = `/convert?by=${symbolCard.symbol}`;
+        {symbolsEntries.map((symbolEntry) => {
+          const id = `symbol-card-${symbolEntry.id.toLowerCase()}-checkbox`;
+          const chartHref = `/chart?by=${symbolEntry.id}`;
+          const convertHref = `/convert?by=${symbolEntry.id}`;
 
           return (
-            <Card key={symbolCard.symbol}>
+            <Card key={symbolEntry.id}>
               <CardRow>
                 <input
                   id={id}
                   type="checkbox"
-                  checked={symbolCard.checked}
+                  checked={symbolEntry.checked}
                   onChange={(event) => {
-                    symbolCardsActions.check(
-                      event.target.checked,
-                      symbolCard.symbol
+                    symbolsActions.check(
+                      symbolEntry.id,
+                      event.target.checked
                     );
                   }}
                 />
-                <label htmlFor={id}>{symbolCard.symbol}</label>
+                <label htmlFor={id}>{symbolEntry.id}</label>
                 <button
                   type="button"
                   onClick={() => {
-                    symbolCardsActions.remove(symbolCard.symbol);
+                    symbolsActions.remove(symbolEntry.id);
                   }}
                 >
                   x
