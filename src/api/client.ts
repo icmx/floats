@@ -127,10 +127,10 @@ export const fetchCurrencyByCode = async (
     .appendWith(latestCsv);
 };
 
-export const fetchCurrencyBySymbol = async (
-  baseCode: CodeString,
-  quoteCode: CodeString
-): Promise<Currency> => {
+export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
+  CodeString,
+  CodeString
+]): Promise<Currency> => {
   const [baseCurrency, quoteCurrency] = await Promise.all([
     fetchCurrencyByCode(baseCode),
     fetchCurrencyByCode(quoteCode),
@@ -143,8 +143,8 @@ export const fetchCurrenciesBySymbols = async (
   symbols: [CodeString, CodeString][]
 ): Promise<Currency[]> => {
   const currencies = await Promise.all(
-    symbols.map(([baseCode, quoteCode]) => {
-      return fetchCurrencyBySymbol(baseCode, quoteCode);
+    symbols.map((symbol) => {
+      return fetchCurrencyBySymbol(symbol);
     })
   );
 
