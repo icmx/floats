@@ -2,11 +2,11 @@ import { useEffect, useState, type FunctionComponent } from 'react';
 import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
 import { fetchCurrenciesByNotation } from '../../api/client';
+import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import { type AsyncPayload } from '../../types/common';
 import type { SymbolString } from '../../types/currency';
-import { asError } from '../../utils/common';
 
 type Data = {
   symbol: SymbolString | '';
@@ -38,7 +38,7 @@ const usePageStore = create<
 
         set({ error: null, data });
       } catch (error) {
-        set({ error: asError(error) });
+        set({ error });
       } finally {
         set({ isLoading: false });
       }
@@ -71,11 +71,7 @@ export const ConvertPage: FunctionComponent = () => {
 
       <SymbolChips href={(id) => `/convert?by=${id}`} />
 
-      {error && (
-        <p>
-          Error: <code>{JSON.stringify(error.message, null, 2)}</code>
-        </p>
-      )}
+      {error && <ErrorCallout error={error} />}
 
       <p>
         {symbol}: {rate?.toFixed(fractionDigits)}

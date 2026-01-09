@@ -3,9 +3,9 @@ import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
 import { fetchCurrenciesByNotation } from '../../api/client';
 import { SymbolChips } from '../../components/currency/SymbolChips';
+import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import { type AsyncPayload } from '../../types/common';
-import { asError } from '../../utils/common';
 
 type Data = {
   head: string[];
@@ -70,7 +70,7 @@ const usePageStore = create<
 
         set({ error: null, data });
       } catch (error) {
-        set({ error: asError(error) });
+        set({ error });
       } finally {
         set({ isLoading: false });
       }
@@ -117,11 +117,7 @@ export const DataPage: FunctionComponent = () => {
 
       <SymbolChips href={(id) => `/data?by=${id}`} />
 
-      {error && (
-        <p>
-          Error: <code>{JSON.stringify(error.message, null, 2)}</code>
-        </p>
-      )}
+      {error && <ErrorCallout error={error} />}
 
       <table>
         <thead>

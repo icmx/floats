@@ -3,10 +3,10 @@ import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
 import { StockChart } from '@highcharts/react/stock';
 import { fetchCurrenciesByNotation } from '../../api/client';
+import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import type { AsyncPayload } from '../../types/common';
-import { asError } from '../../utils/common';
 
 type Data = {
   name: string;
@@ -38,7 +38,7 @@ const usePageStore = create<
 
         set({ error: null, data });
       } catch (error) {
-        set({ error: asError(error) });
+        set({ error });
       } finally {
         set({ isLoading: false });
       }
@@ -66,11 +66,7 @@ export const ChartPage: FunctionComponent = () => {
 
       <SymbolChips href={(id) => `/chart?by=${id}`} />
 
-      {error && (
-        <p>
-          Error: <code>{JSON.stringify(error.message, null, 2)}</code>
-        </p>
-      )}
+      {error && <ErrorCallout error={error} />}
 
       <StockChart
         options={{

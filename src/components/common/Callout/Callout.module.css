@@ -1,0 +1,10 @@
+.Callout {
+  margin: 1rem 0;
+  padding: 0 1rem;
+
+  border: double 3px;
+}
+
+.Callout.isFalure {
+  background-color: red;
+}
