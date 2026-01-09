@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router';
 import { SYMBOLS } from '../constants/currency';
 import type { CodeString, SymbolString } from '../types/currency';
 
@@ -144,137 +142,45 @@ export const fetchCurrencyBySymbol = async (
 export const fetchCurrenciesBySymbols = async (
   symbols: [CodeString, CodeString][]
 ): Promise<Currency[]> => {
-  // @todo: Temporary limit
-  const SYMBOLS_HARD_LIMIT = 5;
-
   const currencies = await Promise.all(
-    symbols
-      .slice(0, SYMBOLS_HARD_LIMIT)
-      .map(([baseCode, quoteCode]) => {
-        return fetchCurrencyBySymbol(baseCode, quoteCode);
-      })
+    symbols.map(([baseCode, quoteCode]) => {
+      return fetchCurrencyBySymbol(baseCode, quoteCode);
+    })
   );
 
   return currencies;
 };
 
-export const useCurrencies = (): Currency[] => {
-  const [searchParams] = useSearchParams();
-  const notation = searchParams.get('by') || '';
+export const fetchCurrenciesByNotation = async (
+  source: unknown
+): Promise<Currency[]> => {
+  if (!source || typeof source !== 'string') {
+    throw new Error('Unable to fetch currencies: Invalid notation');
+  }
 
-  const codesPairs = useMemo(() => {
-    return notation
-      .toUpperCase()
-      .split(',')
-      .map((symbol) => {
-        if (!SYMBOLS.includes(symbol as SymbolString)) {
-          throw new Error(`No such symbol: "${symbol}"`);
-        }
+  const symbols = source
+    .toUpperCase()
+    .split(',')
+    .map((symbol) => {
+      if (!SYMBOLS.includes(symbol as SymbolString)) {
+        throw new Error(`No such symbol: "${symbol}"`);
+      }
 
-        const base = symbol.substring(0, 3);
-        const quote = symbol.substring(3, 6);
+      const base = symbol.substring(0, 3);
+      const quote = symbol.substring(3, 6);
 
-        return [base, quote] as [CodeString, CodeString];
-      });
-  }, [notation]);
+      return [base, quote] as [CodeString, CodeString];
+    });
 
-  const [currencies, setCurrencies] = useState<Currency[]>([]);
+  const TODO_HARD_LIMIT = 5;
 
-  useEffect(() => {
-    const load = async () => {
-      const items = await fetchCurrenciesBySymbols(codesPairs);
+  if (symbols.length > TODO_HARD_LIMIT) {
+    throw new Error(
+      `Too many symbols: ${symbols.length} (max ${TODO_HARD_LIMIT})`
+    );
+  }
 
-      setCurrencies(items);
-    };
-
-    load();
-  }, [codesPairs]);
+  const currencies = await fetchCurrenciesBySymbols(symbols);
 
   return currencies;
-};
-
-export const useChartPageData = (): {
-  name: string;
-  data: [number, number][];
-} | null => {
-  const currencies = useCurrencies();
-  const currency = currencies.at(0) || null;
-
-  return useMemo(() => {
-    if (!currency) {
-      return null;
-    }
-
-    const name: string = `${currency.baseCode}${currency.quoteCode}`;
-    const data: [number, number][] = currency.rates.map(
-      ({ date, rate }) => [date, rate]
-    );
-
-    return { name, data };
-  }, [currency]);
-};
-
-export const useConvertPageData = (): {
-  symbol: SymbolString;
-  date: number;
-  rate: number;
-} | null => {
-  const currencies = useCurrencies();
-  const currency = currencies.at(0);
-
-  return useMemo(() => {
-    if (!currency) {
-      return null;
-    }
-
-    const symbol =
-      `${currency.baseCode}${currency.quoteCode}` satisfies SymbolString;
-    const { date, rate } = currency.rates.at(-1) || {
-      date: 0,
-      rate: 0,
-    };
-
-    return { symbol, date, rate };
-  }, [currency]);
-};
-
-export const useDataPageData = (): {
-  head: string[];
-  body: { date: number; rates: (number | null)[] }[];
-} => {
-  const currencies = useCurrencies();
-
-  return useMemo(() => {
-    const symbols = currencies.map((currency) => {
-      return `${currency.baseCode}${currency.quoteCode}`;
-    });
-
-    const head = ['date', ...symbols];
-
-    const ratesByDates = new Map<number, (number | null)[]>();
-    const SIZE = currencies.length;
-
-    currencies.forEach((currency, index) => {
-      currency.rates.forEach(({ date, rate }) => {
-        const ratesByDate =
-          ratesByDates.get(date) || new Array(SIZE).fill(null);
-
-        ratesByDate[index] = rate;
-
-        ratesByDates.set(date, ratesByDate);
-      });
-    });
-
-    const body: { date: number; rates: (number | null)[] }[] = [];
-
-    Array.from(ratesByDates.entries())
-      .sort(([prev], [next]) => {
-        return prev - next;
-      })
-      .forEach(([date, rates]) => {
-        body.push({ date, rates });
-      });
-
-    return { head, body };
-  }, [currencies]);
 };
