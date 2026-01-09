@@ -4,55 +4,41 @@ import { create } from 'zustand';
 import { fetchCurrenciesByNotation } from '../../api/client';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
+import { type AsyncPayload } from '../../types/common';
 import type { SymbolString } from '../../types/currency';
+import { asError } from '../../utils/common';
 
 type Data = {
-  symbol: SymbolString;
+  symbol: SymbolString | '';
   rate: number;
 };
 
-const fetchConvertPageData = async (
-  notation: string
-): Promise<Data> => {
-  const currencies = await fetchCurrenciesByNotation(notation);
-  const currency = currencies.at(0);
-
-  if (!currency) {
-    throw new Error('No currency available');
-  }
-
-  const symbol =
-    `${currency.baseCode}${currency.quoteCode}` satisfies SymbolString;
-
-  const { rate } = currency.rates.at(-1) || {
-    date: 0,
-    rate: 0,
-  };
-
-  return { symbol, rate };
-};
-
-type ConvertPageState = {
-  isLoading: boolean;
-  error: Error | null;
-  data: Data;
-  load: (notation: string) => Promise<void>;
-};
-
-const useConvertPageStore = create<ConvertPageState>()((set) => {
+const usePageStore = create<
+  AsyncPayload<Data> & { load: (notation: string) => Promise<void> }
+>()((set) => {
   return {
     isLoading: false,
     error: null,
-    data: { symbol: 'USDUSD', date: 0, rate: 0 },
+    data: { symbol: '', rate: 0 },
     load: async (notation) => {
-      set({ isLoading: true, error: null });
+      set({ isLoading: true });
 
       try {
-        const data = await fetchConvertPageData(notation);
+        const currencies = await fetchCurrenciesByNotation(notation);
+        const currency = currencies.at(0);
 
-        set({ isLoading: false, error: null, data });
-      } catch (cause) {
-        set({ error: cause instanceof Error ? cause : new Error() });
+        if (!currency) {
+          throw new Error('No currencies');
+        }
+
+        const data: Data = {
+          symbol: `${currency.baseCode}${currency.quoteCode}`,
+          rate: currency.rates.at(-1)?.rate || 0,
+        };
+
+        set({ error: null, data });
+      } catch (error) {
+        set({ error: asError(error) });
       } finally {
         set({ isLoading: false });
       }
@@ -69,8 +55,8 @@ export const ConvertPage: FunctionComponent = () => {
   const {
     error,
     data: { symbol, rate },
-  } = useConvertPageStore();
-  const load = useConvertPageStore((state) => state.load);
+  } = usePageStore();
+  const load = usePageStore((state) => state.load);
 
   useEffect(() => {
     load(notation);

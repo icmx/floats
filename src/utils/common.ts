@@ -1,3 +1,9 @@
+export const asError = (error: unknown): Error => {
+  return error instanceof Error
+    ? error
+    : new Error(`Unknown error: "${error}"`, { cause: error });
+};
+
 export const classNames = (
   init: string | (false | string)[] | Record<string, boolean>
 ): string => {

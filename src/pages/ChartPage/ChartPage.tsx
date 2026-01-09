@@ -5,46 +5,40 @@ import { StockChart } from '@highcharts/react/stock';
 import { fetchCurrenciesByNotation } from '../../api/client';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
+import type { AsyncPayload } from '../../types/common';
+import { asError } from '../../utils/common';
 
-type Data = { name: string; data: [number, number][] };
-
-const fetchChartPageData = async (notation: string): Promise<Data> => {
-  const currencies = await fetchCurrenciesByNotation(notation);
-  const currency = currencies.at(0);
-
-  if (!currency) {
-    throw new Error('No currencies');
-  }
-
-  const name: string = `${currency.baseCode}${currency.quoteCode}`;
-  const data: [number, number][] = currency.rates.map(
-    ({ date, rate }) => [date, rate]
-  );
-
-  return { name, data };
+type Data = {
+  name: string;
+  data: [number, number][];
 };
 
-type ChartPageState = {
-  isLoading: boolean;
-  error: Error | null;
-  data: Data;
-  load: (notation: string) => Promise<void>;
-};
-
-const useChartPageStore = create<ChartPageState>()((set) => {
+const usePageStore = create<
+  AsyncPayload<Data> & { load: (notation: string) => Promise<void> }
+>()((set) => {
   return {
     isLoading: false,
     error: null,
     data: { name: '', data: [] },
     load: async (notation) => {
-      set({ isLoading: true, error: null });
+      set({ isLoading: true });
 
       try {
-        const data = await fetchChartPageData(notation);
+        const currencies = await fetchCurrenciesByNotation(notation);
+        const currency = currencies.at(0);
 
-        set({ isLoading: false, error: null, data });
-      } catch (cause) {
-        set({ error: cause instanceof Error ? cause : new Error() });
+        if (!currency) {
+          throw new Error('No currencies');
+        }
+
+        const data: Data = {
+          name: `${currency.baseCode}${currency.quoteCode}`,
+          data: currency.rates.map(({ date, rate }) => [date, rate]),
+        };
+
+        set({ error: null, data });
+      } catch (error) {
+        set({ error: asError(error) });
       } finally {
         set({ isLoading: false });
       }
@@ -58,8 +52,8 @@ export const ChartPage: FunctionComponent = () => {
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
 
-  const { error, data } = useChartPageStore();
-  const load = useChartPageStore((state) => state.load);
+  const { error, data } = usePageStore();
+  const load = usePageStore((state) => state.load);
 
   useEffect(() => {
     load(notation);

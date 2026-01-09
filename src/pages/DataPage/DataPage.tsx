@@ -4,6 +4,8 @@ import { create } from 'zustand';
 import { fetchCurrenciesByNotation } from '../../api/client';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
+import { type AsyncPayload } from '../../types/common';
+import { asError } from '../../utils/common';
 
 type Data = {
   head: string[];
@@ -13,68 +15,62 @@ type Data = {
   }[];
 };
 
-const fetchDataPageData = async (notation: string): Promise<Data> => {
-  const currencies = await fetchCurrenciesByNotation(notation);
-  const currency = currencies.at(0);
-
-  if (!currency) {
-    throw new Error('No currency available');
-  }
-
-  const symbols = currencies.map((currency) => {
-    return `${currency.baseCode}${currency.quoteCode}`;
-  });
-
-  const head = ['date', ...symbols];
-
-  const ratesByDates = new Map<number, (number | null)[]>();
-  const SIZE = currencies.length;
-
-  currencies.forEach((currency, index) => {
-    currency.rates.forEach(({ date, rate }) => {
-      const ratesByDate =
-        ratesByDates.get(date) || new Array(SIZE).fill(null);
-
-      ratesByDate[index] = rate;
-
-      ratesByDates.set(date, ratesByDate);
-    });
-  });
-
-  const body: { date: number; rates: (number | null)[] }[] = [];
-
-  Array.from(ratesByDates.entries())
-    .sort(([prev], [next]) => {
-      return prev - next;
-    })
-    .forEach(([date, rates]) => {
-      body.push({ date, rates });
-    });
-
-  return { head, body };
-};
-
-type DataPageState = {
-  isLoading: boolean;
-  error: Error | null;
-  data: Data;
-  load: (notation: string) => Promise<void>;
-};
-
-const useDataPageStore = create<DataPageState>()((set) => {
+const usePageStore = create<
+  AsyncPayload<Data> & { load: (notation: string) => Promise<void> }
+>()((set) => {
   return {
     isLoading: false,
     error: null,
     data: { head: [], body: [] },
     load: async (notation) => {
-      set({ isLoading: true, error: null });
+      set({ isLoading: true });
 
       try {
-        const data = await fetchDataPageData(notation);
+        const currencies = await fetchCurrenciesByNotation(notation);
+        const currency = currencies.at(0);
 
-        set({ isLoading: false, error: null, data });
-      } catch (cause) {
-        set({ error: cause instanceof Error ? cause : new Error() });
+        if (!currency) {
+          throw new Error('No currencies');
+        }
+
+        const symbols = currencies.map((currency) => {
+          return `${currency.baseCode}${currency.quoteCode}`;
+        });
+
+        const head = ['date', ...symbols];
+
+        const ratesByDates = new Map<number, (number | null)[]>();
+        const SIZE = currencies.length;
+
+        currencies.forEach((currency, index) => {
+          currency.rates.forEach(({ date, rate }) => {
+            const ratesByDate =
+              ratesByDates.get(date) || new Array(SIZE).fill(null);
+
+            ratesByDate[index] = rate;
+
+            ratesByDates.set(date, ratesByDate);
+          });
+        });
+
+        const body: { date: number; rates: (number | null)[] }[] = [];
+
+        Array.from(ratesByDates.entries())
+          .sort(([prev], [next]) => {
+            return prev - next;
+          })
+          .forEach(([date, rates]) => {
+            body.push({ date, rates });
+          });
+
+        const data: Data = {
+          head,
+          body,
+        };
+
+        set({ error: null, data });
+      } catch (error) {
+        set({ error: asError(error) });
       } finally {
         set({ isLoading: false });
       }
@@ -105,8 +101,8 @@ export const DataPage: FunctionComponent = () => {
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
 
-  const { error, data } = useDataPageStore();
-  const load = useDataPageStore((state) => state.load);
+  const { error, data } = usePageStore();
+  const load = usePageStore((state) => state.load);
 
   const { head, body } = data;
 
