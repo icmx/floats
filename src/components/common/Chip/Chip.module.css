@@ -1,9 +1,11 @@
 .Chip {
   display: inline-flex;
 
-  background-color: #eeeeee;
   border-radius: 0.125rem;
+  background-color: var(--color-chip);
 
-  padding: 4px 6px;
-  font-size: 0.8rem;
+  padding: 8px 8px;
+  font-size: 12px;
+
+  text-decoration: none;
 }

@@ -1,0 +1,13 @@
+.LayoutHeader {
+  margin: 0 0 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.LayoutFooter {
+  margin: 1rem 0 0;
+
+  border-top: solid 1px var(--color-line);
+}

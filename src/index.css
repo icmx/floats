@@ -1,9 +1,29 @@
+:root {
+  --color-text: oklch(93% 0.011 275);
+  --color-link: oklch(96% 0.02 280);
+  --color-line: oklch(32% 0.005 250);
+  --color-page: oklch(24% 0.012 272);
+  --color-card: oklch(28% 0.02 272);
+  --color-chip: oklch(28% 0.02 272);
+}
+
 body {
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 1024px;
 
-  color: #eeeeee;
-  background-color: #111111;
+  color: var(--color-text);
+  background-color: var(--color-page);
+
+  font-family: sans-serif;
+}
+
+a {
+  color: var(--color-link);
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.2rem;
 }
 
 table {
@@ -15,7 +35,7 @@ thead {
   position: sticky;
   left: 0;
   top: -2px;
-  background-color: #111111;
+  background-color: var(--color-page);
 }
 
 th {
@@ -31,8 +51,13 @@ td {
 }
 
 #root {
-  outline: solid 1px #eeeeee;
-  border-radius: 1rem;
-  padding: 1rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: calc(100vh - 4rem);
+
   margin: 1rem 0;
+  padding: 1rem;
+
+  outline: solid 1px var(--color-line);
+  border-radius: 1rem;
 }

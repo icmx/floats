@@ -1,16 +1,11 @@
 import type { FunctionComponent } from 'react';
 import { Outlet } from 'react-router';
+import styles from './Layout.module.css';
 
 export const Layout: FunctionComponent = () => {
   return (
     <>
-      <header
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
+      <header className={styles.LayoutHeader}>
         <a href="/">
           <h1>floats</h1>
         </a>
@@ -21,9 +16,7 @@ export const Layout: FunctionComponent = () => {
       <main>
         <Outlet />
       </main>
-      <footer
-        style={{ margin: '1rem 0 0', borderTop: 'solid 1px #eeeeee' }}
-      >
+      <footer className={styles.LayoutFooter}>
         <p>floats - currencies explorer</p>
       </footer>
     </>
