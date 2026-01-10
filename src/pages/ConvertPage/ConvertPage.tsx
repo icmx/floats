@@ -67,8 +67,6 @@ export const ConvertPage: FunctionComponent = () => {
 
   return (
     <>
-      <title>floats - Convert</title>
-
       <SymbolChips href={(id) => `/convert?by=${id}`} />
 
       {error && <ErrorCallout error={error} />}

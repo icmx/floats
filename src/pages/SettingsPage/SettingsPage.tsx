@@ -7,16 +7,12 @@ export const SettingsPage: FunctionComponent = () => {
 
   useEffect(() => {
     setReultDigit(
-      'Will show: ' + (500.12345678).toFixed(fractionDigits)
+      'Will show: ' + (1000.12345678).toFixed(fractionDigits)
     );
   }, [fractionDigits]);
 
   return (
     <>
-      <title>floats - Settings</title>
-
-      <p>Settings Page</p>
-
       <form>
         <output style={{ fontFamily: 'monospace' }}>
           {resultDigit}

@@ -61,9 +61,6 @@ export const ChartPage: FunctionComponent = () => {
 
   return (
     <>
-      <title>floats - Chart</title>
-      <p>Chart Page</p>
-
       <SymbolChips href={(id) => `/chart?by=${id}`} />
 
       {error && <ErrorCallout error={error} />}

@@ -20,6 +20,9 @@ if (!root) {
 const router = createBrowserRouter([
   {
     element: <Layout />,
+    handle: {
+      title: 'floats',
+    },
     children: [
       {
         path: '/',
@@ -28,22 +31,37 @@ const router = createBrowserRouter([
       {
         path: '/chart',
         element: <ChartPage />,
+        handle: {
+          title: 'Chart',
+        },
       },
       {
         path: '/data',
         element: <DataPage />,
+        handle: {
+          title: 'Data',
+        },
       },
       {
         path: '/convert',
         element: <ConvertPage />,
+        handle: {
+          title: 'Convert',
+        },
       },
       {
         path: '/settings',
         element: <SettingsPage />,
+        handle: {
+          title: 'Settings',
+        },
       },
       {
         path: '*',
         element: <NotFoundPage />,
+        handle: {
+          title: 'Not Found',
+        },
       },
     ],
   },
