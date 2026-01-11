@@ -2,9 +2,10 @@
   margin: 1rem 0;
   padding: 0 1rem;
 
-  border: double 3px;
+  border: solid 1px var(--color-line);
+  border-radius: 12px;
 }
 
 .Callout.isFalure {
-  background-color: red;
+  color: red;
 }

@@ -1,0 +1,18 @@
+.Loading {
+
+  margin: 1rem 0;
+  padding: 0 1rem;
+
+  border: solid 1px var(--color-line);
+  border-radius: 12px;
+}
+
+.Blinking {
+  animation: blinking 0.5s infinite;
+}
+
+@keyframes blinking {
+  50% {
+    opacity: 0;
+  }
+}

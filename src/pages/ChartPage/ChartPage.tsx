@@ -8,7 +8,6 @@ import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import type { AsyncPayload } from '../../types/common';
 
-
 type Data = {
   series: {
     name: string;

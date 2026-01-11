@@ -4,6 +4,7 @@ import { create } from 'zustand';
 import { fetchCurrenciesByNotation } from '../../api/client';
 import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
+import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { type AsyncPayload } from '../../types/common';
 import type { CodeString } from '../../types/currency';
@@ -52,6 +53,7 @@ export const ConvertPage: FunctionComponent = () => {
   const notation = searchParams.get('by') || '';
 
   const {
+    isLoading,
     error,
     data: { rates },
   } = usePageStore();
@@ -64,6 +66,8 @@ export const ConvertPage: FunctionComponent = () => {
   return (
     <>
       <SymbolChips href={(id) => `/convert?by=${id}`} />
+
+      {isLoading && <Loading />}
 
       {error && <ErrorCallout error={error} />}
 
