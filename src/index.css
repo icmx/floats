@@ -62,10 +62,10 @@ td {
 #root {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  min-height: calc(100vh - 4rem);
+  min-height: calc(100vh - 2rem);
 
   margin: 1rem;
-  padding: 1rem;
+  padding: 0 1rem;
 
   outline: solid 1px var(--color-line);
   border-radius: 1rem;
