@@ -1,8 +1,21 @@
 import { useEffect, useState, type FunctionComponent } from 'react';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
+import {
+  useThemeValue,
+  type ThemeValue,
+} from '../../hooks/useThemeValueStore';
+
+const THEMES: { value: ThemeValue; children: string }[] = [
+  { value: 'system', children: 'System' },
+  { value: 'light', children: 'Light' },
+  { value: 'dark', children: 'Dark' },
+];
 
 export const SettingsPage: FunctionComponent = () => {
+  const [themeValue, setThemeValue] = useThemeValue();
+
   const [fractionDigits, setFractionDigits] = useFractionDigits();
+
   const [resultDigit, setReultDigit] = useState('');
 
   useEffect(() => {
@@ -14,6 +27,27 @@ export const SettingsPage: FunctionComponent = () => {
   return (
     <>
       <form>
+        <div>
+          {THEMES.map((theme) => {
+            const id = `input-theme-${theme.value}`;
+
+            return (
+              <div key={id}>
+                <input
+                  id={id}
+                  type="radio"
+                  checked={theme.value === themeValue}
+                  value={theme.value}
+                  onChange={() => {
+                    setThemeValue(theme.value);
+                  }}
+                />
+                <label htmlFor={id}>{theme.children}</label>
+              </div>
+            );
+          })}
+        </div>
+
         <output style={{ fontFamily: 'monospace' }}>
           {resultDigit}
         </output>

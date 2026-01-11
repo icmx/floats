@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-export type FractionDigitsStore = {
+export type FractionDigitsState = {
   fractionDigits: number;
   setFractionDigits: (fractionDigits: number) => void;
 };
 
-export const useFractionDigitsStore = create<FractionDigitsStore>()(
+export const useFractionDigitsStore = create<FractionDigitsState>()(
   persist(
     (set) => {
       return {

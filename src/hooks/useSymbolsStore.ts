@@ -8,14 +8,14 @@ export type SymbolEntry = {
   checked: boolean;
 };
 
-export type SymbolsStore = {
+export type SymbolsState = {
   entries: SymbolEntry[];
   add: (id: SymbolString) => void;
   check: (id: SymbolString, checked: boolean) => void;
   remove: (id: SymbolString) => void;
 };
 
-export const useSymbolsStore = create<SymbolsStore>()(
+export const useSymbolsStore = create<SymbolsState>()(
   persist(
     (set, get) => {
       return {

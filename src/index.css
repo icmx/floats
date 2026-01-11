@@ -1,4 +1,13 @@
-:root {
+:root[data-theme='light'] {
+  --color-text: oklch(22% 0.012 275);
+  --color-link: oklch(28% 0.02 280);
+  --color-line: oklch(80% 0.006 250);
+  --color-page: oklch(98% 0.005 272);
+  --color-card: oklch(94% 0.01 272);
+  --color-chip: oklch(90% 0.015 272);
+}
+
+:root[data-theme='dark'] {
   --color-text: oklch(93% 0.011 275);
   --color-link: oklch(96% 0.02 280);
   --color-line: oklch(32% 0.005 250);
@@ -55,7 +64,7 @@ td {
   grid-template-rows: auto 1fr auto;
   min-height: calc(100vh - 4rem);
 
-  margin: 1rem 0;
+  margin: 1rem;
   padding: 1rem;
 
   outline: solid 1px var(--color-line);
