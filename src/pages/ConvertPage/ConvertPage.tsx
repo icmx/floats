@@ -1,12 +1,12 @@
-import { useEffect, useState, type FunctionComponent } from 'react';
+import { useEffect, type FunctionComponent } from 'react';
 import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
 import { fetchCurrenciesByNotation } from '../../api/client';
+import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import { type AsyncPayload } from '../../types/common';
-import type { SymbolString } from '../../types/currency';
+import type { CodeString, SymbolString } from '../../types/currency';
 
 type Data = {
   symbol: SymbolString | '';
@@ -47,8 +47,6 @@ const usePageStore = create<
 });
 
 export const ConvertPage: FunctionComponent = () => {
-  const [fractionDigits] = useFractionDigits();
-
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
 
@@ -62,61 +60,19 @@ export const ConvertPage: FunctionComponent = () => {
     load(notation);
   }, [notation, load]);
 
-  const [baseValue, setBaseValue] = useState('1');
-  const [quoteValue, setQuoteValue] = useState('0');
-
   return (
     <>
       <SymbolChips href={(id) => `/convert?by=${id}`} />
 
       {error && <ErrorCallout error={error} />}
 
-      <p>
-        {symbol}: {rate?.toFixed(fractionDigits)}
-      </p>
-
       {rate && (
         <form>
-          <input
-            type="number"
-            min={0}
-            step={0.01}
-            value={baseValue}
-            onChange={(event) => {
-              const { value } = event.target;
-
-              const baseValue = Number.parseFloat(value);
-
-              if (Number.isNaN(baseValue)) {
-                return;
-              }
-
-              const quoteValue = baseValue * rate;
-
-              setBaseValue(baseValue.toFixed(2));
-              setQuoteValue(quoteValue.toFixed(2));
-            }}
-          />
-
-          <input
-            type="number"
-            min={0}
-            step={0.01}
-            value={quoteValue}
-            onChange={(event) => {
-              const { value } = event.target;
-
-              const quoteValue = Number.parseFloat(value);
-
-              if (Number.isNaN(quoteValue)) {
-                return;
-              }
-
-              const baseValue = quoteValue / rate;
-
-              setBaseValue(baseValue.toFixed(2));
-              setQuoteValue(quoteValue.toFixed(2));
-            }}
+          <Converter
+            baseAmount={1}
+            baseCode={symbol.substring(0, 3) as CodeString}
+            quoteCode={symbol.substring(3, 6) as CodeString}
+            rate={rate}
           />
         </form>
       )}
