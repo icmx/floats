@@ -91,6 +91,11 @@ export const ChartPage: FunctionComponent = () => {
             gridLineColor: 'var(--color-line)',
           },
           yAxis: {
+            labels: {
+              style: {
+                color: 'var(--color-text)',
+              },
+            },
             gridLineColor: 'var(--color-line)',
           },
           tooltip: {
@@ -100,6 +105,46 @@ export const ChartPage: FunctionComponent = () => {
             backgroundColor: 'var(--color-chip)',
           },
 
+          rangeSelector: {
+            buttons: [
+              {
+                type: 'month',
+                count: 1,
+              },
+              {
+                type: 'month',
+                count: 3,
+              },
+              {
+                type: 'month',
+                count: 6,
+              },
+              {
+                type: 'ytd',
+                count: 1,
+              },
+              {
+                type: 'year',
+                count: 1,
+              },
+              {
+                type: 'year',
+                count: 5,
+              },
+              {
+                type: 'year',
+                count: 10,
+              },
+              {
+                type: 'all',
+                text: 'All',
+              },
+            ],
+          },
+
+          accessibility: {
+            enabled: false,
+          },
           credits: {
             enabled: false,
           },
