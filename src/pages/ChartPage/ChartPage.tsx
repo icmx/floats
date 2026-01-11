@@ -8,9 +8,12 @@ import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import type { AsyncPayload } from '../../types/common';
 
+
 type Data = {
-  name: string;
-  data: [number, number][];
+  series: {
+    name: string;
+    data: [number, number][];
+  }[];
 };
 
 const usePageStore = create<
@@ -19,22 +22,20 @@ const usePageStore = create<
   return {
     isLoading: false,
     error: null,
-    data: { name: '', data: [] },
+    data: { series: [] },
     load: async (notation) => {
       set({ isLoading: true });
 
       try {
+        const data: Data = { series: [] };
         const currencies = await fetchCurrenciesByNotation(notation);
-        const currency = currencies.at(0);
 
-        if (!currency) {
-          throw new Error('No currencies');
-        }
-
-        const data: Data = {
-          name: `${currency.baseCode}${currency.quoteCode}`,
-          data: currency.rates.map(({ date, rate }) => [date, rate]),
-        };
+        currencies.forEach((currency) => {
+          data.series.push({
+            name: `${currency.baseCode}${currency.quoteCode}`,
+            data: currency.rates.map(({ date, rate }) => [date, rate]),
+          });
+        });
 
         set({ error: null, data });
       } catch (error) {
@@ -45,6 +46,21 @@ const usePageStore = create<
     },
   };
 });
+
+// Standard Highcharts colors
+const CHART_COLORS = [
+  '#2962ff',
+  '#2caffe',
+  '#544fc5',
+  '#00e272',
+  '#fe6a35',
+  '#6b8abc',
+  '#d568fb',
+  '#2ee0ca',
+  '#fa4b42',
+  '#feb56a',
+  '#91e8e1',
+];
 
 export const ChartPage: FunctionComponent = () => {
   const [fractionDigits] = useFractionDigits();
@@ -70,19 +86,22 @@ export const ChartPage: FunctionComponent = () => {
           credits: {
             enabled: false,
           },
-          series: [
-            {
-              name: data.name,
-              data: data.data,
-              type: 'area',
-              color: '#2962FF',
+          series: data.series.map((series, index) => {
+            const isSingleSeries = data.series.length === 1;
+            const type = isSingleSeries ? 'area' : 'line';
+            const color = CHART_COLORS[index];
+
+            return {
+              ...series,
+              type,
+              color,
               animation: true,
               tooltip: {
                 valueDecimals: fractionDigits,
                 pointFormat: '{series.name}: {point.y}',
               },
-            },
-          ],
+            };
+          }),
           plotOptions: {
             area: {
               threshold: null,
