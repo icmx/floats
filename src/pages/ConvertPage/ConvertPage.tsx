@@ -6,11 +6,13 @@ import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { type AsyncPayload } from '../../types/common';
-import type { CodeString, SymbolString } from '../../types/currency';
+import type { CodeString } from '../../types/currency';
 
 type Data = {
-  symbol: SymbolString | '';
-  rate: number;
+  rates: {
+    symbol: [CodeString, CodeString];
+    rate: number;
+  }[];
 };
 
 const usePageStore = create<
@@ -19,21 +21,20 @@ const usePageStore = create<
   return {
     isLoading: false,
     error: null,
-    data: { symbol: '', rate: 0 },
+    data: { rates: [] },
     load: async (notation) => {
       set({ isLoading: true });
 
       try {
         const currencies = await fetchCurrenciesByNotation(notation);
-        const currency = currencies.at(0);
-
-        if (!currency) {
-          throw new Error('No currencies');
-        }
 
         const data: Data = {
-          symbol: `${currency.baseCode}${currency.quoteCode}`,
-          rate: currency.rates.at(-1)?.rate || 0,
+          rates: currencies.map((currency) => {
+            return {
+              symbol: [currency.baseCode, currency.quoteCode],
+              rate: currency.rates.at(-1)?.rate || 0,
+            };
+          }),
         };
 
         set({ error: null, data });
@@ -52,7 +53,7 @@ export const ConvertPage: FunctionComponent = () => {
 
   const {
     error,
-    data: { symbol, rate },
+    data: { rates },
   } = usePageStore();
   const load = usePageStore((state) => state.load);
 
@@ -66,16 +67,19 @@ export const ConvertPage: FunctionComponent = () => {
 
       {error && <ErrorCallout error={error} />}
 
-      {rate && (
-        <form>
-          <Converter
-            baseAmount={1}
-            baseCode={symbol.substring(0, 3) as CodeString}
-            quoteCode={symbol.substring(3, 6) as CodeString}
-            rate={rate}
-          />
-        </form>
-      )}
+      <form>
+        {rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
+          return (
+            <Converter
+              key={`${baseCode}${quoteCode}`}
+              baseAmount={1}
+              baseCode={baseCode}
+              quoteCode={quoteCode}
+              rate={rate}
+            />
+          );
+        })}
+      </form>
     </>
   );
 };
