@@ -46,19 +46,13 @@ const usePageStore = create<
   };
 });
 
-// Standard Highcharts colors
 const CHART_COLORS = [
-  '#2962ff',
-  '#2caffe',
-  '#544fc5',
-  '#00e272',
-  '#fe6a35',
-  '#6b8abc',
-  '#d568fb',
-  '#2ee0ca',
-  '#fa4b42',
-  '#feb56a',
-  '#91e8e1',
+  '#6366f1', // indigo
+  '#22c55e', // green
+  '#f59e0b', // amber
+  '#ec4899', // pink
+  '#06b6d4', // cyan
+  '#f97316', // orange
 ];
 
 export const ChartPage: FunctionComponent = () => {
@@ -82,6 +76,30 @@ export const ChartPage: FunctionComponent = () => {
 
       <StockChart
         options={{
+          chart: {
+            style: {
+              color: 'var(--color-text)',
+            },
+            backgroundColor: 'var(--color-page)',
+          },
+          xAxis: {
+            labels: {
+              style: {
+                color: 'var(--color-text)',
+              },
+            },
+            gridLineColor: 'var(--color-line)',
+          },
+          yAxis: {
+            gridLineColor: 'var(--color-line)',
+          },
+          tooltip: {
+            style: {
+              color: 'var(--color-text)',
+            },
+            backgroundColor: 'var(--color-chip)',
+          },
+
           credits: {
             enabled: false,
           },
