@@ -1,18 +1,14 @@
 import { useEffect, type FunctionComponent } from 'react';
 import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
-import { StockChart } from '@highcharts/react/stock';
 import { fetchCurrenciesByNotation } from '../../api/client';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
+import { Plotter, type Series } from '../../components/currency/Plotter';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import type { AsyncPayload } from '../../types/common';
 
 type Data = {
-  series: {
-    name: string;
-    data: [number, number][];
-  }[];
+  series: Series;
 };
 
 const usePageStore = create<
@@ -46,18 +42,7 @@ const usePageStore = create<
   };
 });
 
-const CHART_COLORS = [
-  '#6366f1', // indigo
-  '#22c55e', // green
-  '#f59e0b', // amber
-  '#ec4899', // pink
-  '#06b6d4', // cyan
-  '#f97316', // orange
-];
-
 export const ChartPage: FunctionComponent = () => {
-  const [fractionDigits] = useFractionDigits();
-
   const [searchParams] = useSearchParams();
   const notation = searchParams.get('by') || '';
 
@@ -74,103 +59,7 @@ export const ChartPage: FunctionComponent = () => {
 
       {error && <ErrorCallout error={error} />}
 
-      <StockChart
-        options={{
-          chart: {
-            style: {
-              color: 'var(--color-text)',
-            },
-            backgroundColor: 'var(--color-page)',
-          },
-          xAxis: {
-            labels: {
-              style: {
-                color: 'var(--color-text)',
-              },
-            },
-            gridLineColor: 'var(--color-line)',
-          },
-          yAxis: {
-            labels: {
-              style: {
-                color: 'var(--color-text)',
-              },
-            },
-            gridLineColor: 'var(--color-line)',
-          },
-          tooltip: {
-            style: {
-              color: 'var(--color-text)',
-            },
-            backgroundColor: 'var(--color-chip)',
-          },
-
-          rangeSelector: {
-            buttons: [
-              {
-                type: 'month',
-                count: 1,
-              },
-              {
-                type: 'month',
-                count: 3,
-              },
-              {
-                type: 'month',
-                count: 6,
-              },
-              {
-                type: 'ytd',
-                count: 1,
-              },
-              {
-                type: 'year',
-                count: 1,
-              },
-              {
-                type: 'year',
-                count: 5,
-              },
-              {
-                type: 'year',
-                count: 10,
-              },
-              {
-                type: 'all',
-                text: 'All',
-              },
-            ],
-          },
-
-          accessibility: {
-            enabled: false,
-          },
-          credits: {
-            enabled: false,
-          },
-          series: data.series.map((series, index) => {
-            const isSingleSeries = data.series.length === 1;
-            const type = isSingleSeries ? 'area' : 'line';
-            const color = CHART_COLORS[index];
-
-            return {
-              ...series,
-              type,
-              color,
-              animation: true,
-              tooltip: {
-                valueDecimals: fractionDigits,
-                pointFormat: '{series.name}: {point.y}',
-              },
-            };
-          }),
-          plotOptions: {
-            area: {
-              threshold: null,
-            },
-          },
-        }}
-      ></StockChart>
+      <Plotter series={data.series} />
     </>
   );
 };
