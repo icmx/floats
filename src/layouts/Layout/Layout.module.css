@@ -9,7 +9,7 @@
 .LayoutFooter {
   margin: 1rem 0 0;
 
-  font-size: 14px;
+  font-size: var(--font-size-s);
 
   border-top: solid 1px var(--color-line);
 }

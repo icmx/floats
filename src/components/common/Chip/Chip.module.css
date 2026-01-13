@@ -5,7 +5,7 @@
   background-color: var(--color-chip);
 
   padding: 8px 8px;
-  font-size: 12px;
+  font-size: var(--font-size-s);
 
   text-decoration: none;
 }
