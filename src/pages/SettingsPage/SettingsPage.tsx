@@ -5,6 +5,7 @@ import {
   useThemeValue,
   type ThemeValue,
 } from '../../hooks/useThemeValueStore';
+import { BoxField } from '../../components/common/BoxField';
 
 const THEMES: { value: ThemeValue; children: string }[] = [
   { value: 'system', children: 'System' },
@@ -33,18 +34,17 @@ export const SettingsPage: FunctionComponent = () => {
             const id = `input-theme-${theme.value}`;
 
             return (
-              <div key={id}>
-                <input
-                  id={id}
-                  type="radio"
-                  checked={theme.value === themeValue}
-                  value={theme.value}
-                  onChange={() => {
-                    setThemeValue(theme.value);
-                  }}
-                />
-                <label htmlFor={id}>{theme.children}</label>
-              </div>
+              <BoxField
+                key={id}
+                id={id}
+                label={theme.children}
+                type="radio"
+                checked={theme.value === themeValue}
+                value={theme.value}
+                onChange={() => {
+                  setThemeValue(theme.value);
+                }}
+              />
             );
           })}
         </div>
