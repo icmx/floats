@@ -1,4 +1,5 @@
 import { useState, type FunctionComponent } from 'react';
+import { LineField } from '../../common/LineField';
 import type { ConverterProps } from './Converter.types';
 import styles from './Converter.module.css';
 
@@ -19,51 +20,41 @@ export const Converter: FunctionComponent<ConverterProps> = ({
 
   return (
     <div className={styles.Converter}>
-      <div>
-        <label className={styles.FieldLabel} htmlFor={baseId}>
-          {baseCode}
-        </label>
-        <input
-          id={baseId}
-          type="number"
-          min={0}
-          step={0.01}
-          value={baseValue.toFixed(FRACTION_DIGITS)}
-          onChange={(event) => {
-            const nextBaseValue =
-              Number.parseFloat(event.target.value) || 0;
+      <LineField
+        id={baseId}
+        label={baseCode}
+        type="number"
+        min={0}
+        step={0.01}
+        value={baseValue.toFixed(FRACTION_DIGITS)}
+        onChange={(event) => {
+          const nextBaseValue =
+            Number.parseFloat(event.target.value) || 0;
 
-            const nextQuoteValue = nextBaseValue * rate;
+          const nextQuoteValue = nextBaseValue * rate;
 
-            setBaseValue(nextBaseValue);
-            setQuoteValue(nextQuoteValue);
-          }}
-        />
-      </div>
-      <div>
-        <label
-          style={{ display: 'block', width: '100%' }}
-          htmlFor={quoteId}
-        >
-          {quoteCode}
-        </label>
-        <input
-          id={quoteId}
-          type="number"
-          min={0}
-          step={0.01}
-          value={quoteValue.toFixed(FRACTION_DIGITS)}
-          onChange={(event) => {
-            const nextQuoteValue =
-              Number.parseFloat(event.target.value) || 0;
+          setBaseValue(nextBaseValue);
+          setQuoteValue(nextQuoteValue);
+        }}
+      />
 
-            const nextBaseValue = nextQuoteValue / rate;
+      <LineField
+        id={quoteId}
+        label={quoteCode}
+        type="number"
+        min={0}
+        step={0.01}
+        value={quoteValue.toFixed(FRACTION_DIGITS)}
+        onChange={(event) => {
+          const nextQuoteValue =
+            Number.parseFloat(event.target.value) || 0;
 
-            setBaseValue(nextBaseValue);
-            setQuoteValue(nextQuoteValue);
-          }}
-        />
-      </div>
+          const nextBaseValue = nextQuoteValue / rate;
+
+          setBaseValue(nextBaseValue);
+          setQuoteValue(nextQuoteValue);
+        }}
+      />
     </div>
   );
 };

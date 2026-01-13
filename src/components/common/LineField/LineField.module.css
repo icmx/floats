@@ -1,0 +1,20 @@
+.LineField {
+  display: block;
+
+  margin: 1rem 0;
+}
+
+.LineFieldLabel {
+  display: block;
+
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+}
+
+.LineFieldInput {
+  display: block;
+
+  margin: 0.25rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}

@@ -1,4 +1,5 @@
 import { useEffect, useState, type FunctionComponent } from 'react';
+import { LineField } from '../../components/common/LineField';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import {
   useThemeValue,
@@ -48,26 +49,32 @@ export const SettingsPage: FunctionComponent = () => {
           })}
         </div>
 
-        <output style={{ fontFamily: 'monospace' }}>
+        <LineField
+          id="fraction-digit"
+          label="Fraction Digits"
+          type="number"
+          min={0}
+          max={8}
+          step={1}
+          value={fractionDigits}
+          onChange={(event) => {
+            const text = event.target.value;
+            const int = Number.parseInt(text, 10);
+
+            setFractionDigits(int);
+          }}
+        />
+
+        <output
+          style={{
+            fontFamily: 'monospace',
+            backgroundColor: 'gray',
+            display: 'block',
+            padding: '1rem',
+          }}
+        >
           {resultDigit}
         </output>
-        <div>
-          <label htmlFor="fraction-gigit">Fraction Digits</label>
-          <input
-            id="fraction-gigits"
-            type="number"
-            min={0}
-            max={8}
-            step={1}
-            value={fractionDigits}
-            onChange={(event) => {
-              const text = event.target.value;
-              const int = Number.parseInt(text, 10);
-
-              setFractionDigits(int);
-            }}
-          />
-        </div>
       </form>
     </>
   );
