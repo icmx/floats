@@ -40,7 +40,7 @@ export const Layout: FunctionComponent = () => {
         <Outlet />
       </main>
       <footer className={styles.LayoutFooter}>
-        <p>floats - currencies explorer</p>
+        <p>floats - currency explorer app (WIP)</p>
       </footer>
     </>
   );
