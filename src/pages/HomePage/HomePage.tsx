@@ -39,12 +39,14 @@ export const HomePage: FunctionComponent = () => {
 
   const ref = useRef<AutocompleteHandle>(null);
 
-  const dataSymbols = symbolsEntries
+  const notation = symbolsEntries
     .filter((symbolEntry) => symbolEntry.checked)
     .map((symbolEntry) => symbolEntry.id)
     .join(',');
 
-  const dataHref = dataSymbols ? `/data?by=${dataSymbols}` : null;
+  const chartHref = `/chart` + (notation ? `?by=${notation}` : '');
+  const convertHref = `/convert` + (notation ? `?by=${notation}` : '');
+  const dataHref = `/data` + (notation ? `?by=${notation}` : '');
 
   return (
     <>
@@ -73,8 +75,6 @@ export const HomePage: FunctionComponent = () => {
       >
         {symbolsEntries.map((symbolEntry) => {
           const id = `symbol-card-${symbolEntry.id.toLowerCase()}-checkbox`;
-          const chartHref = `/chart?by=${symbolEntry.id}`;
-          const convertHref = `/convert?by=${symbolEntry.id}`;
 
           return (
             <Card key={symbolEntry.id}>
@@ -100,16 +100,16 @@ export const HomePage: FunctionComponent = () => {
                   x
                 </button>
               </CardRow>
-              <CardRow>
-                <a href={chartHref}>Chart</a>
-                <a href={convertHref}>Convert</a>
-              </CardRow>
             </Card>
           );
         })}
       </div>
 
-      {dataHref && <a href={dataHref}>Explore data</a>}
+      <nav style={{ margin: '1rem 0', display: 'flex', gap: '0.5rem' }}>
+        <a href={chartHref}>Chart</a>
+        <a href={convertHref}>Convert</a>
+        <a href={dataHref}>Data</a>
+      </nav>
     </>
   );
 };
