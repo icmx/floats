@@ -112,7 +112,7 @@ export const DataPage: FunctionComponent = () => {
 
   return (
     <>
-      <SymbolChips href={(id) => `/data?by=${id}`} />
+      <SymbolChips />
 
       {error && <ErrorCallout error={error} />}
 

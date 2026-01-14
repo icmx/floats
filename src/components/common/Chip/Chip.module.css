@@ -1,11 +1,28 @@
 .Chip {
   display: inline-flex;
 
+  border: none;
   border-radius: 0.125rem;
+
+  color: var(--color-link);
   background-color: var(--color-chip);
 
   padding: 8px 8px;
   font-size: var(--font-size-s);
 
   text-decoration: none;
+}
+
+.Chip.isDisabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.Chip.isSelected {
+  background-color: color-mix(
+    in srgb,
+    var(--color-chip) 20%,
+    dodgerblue 80%
+  );
 }

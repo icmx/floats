@@ -3,7 +3,10 @@ import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
 import { fetchCurrenciesByNotation } from '../../api/client';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import { Plotter, type Series } from '../../components/currency/Plotter';
+import {
+  Plotter,
+  type Series,
+} from '../../components/currency/Plotter';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import type { AsyncPayload } from '../../types/common';
 
@@ -55,7 +58,7 @@ export const ChartPage: FunctionComponent = () => {
 
   return (
     <>
-      <SymbolChips href={(id) => `/chart?by=${id}`} />
+      <SymbolChips />
 
       {error && <ErrorCallout error={error} />}
 

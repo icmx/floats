@@ -65,7 +65,7 @@ export const ConvertPage: FunctionComponent = () => {
 
   return (
     <>
-      <SymbolChips href={(id) => `/convert?by=${id}`} />
+      <SymbolChips />
 
       {isLoading && <Loading />}
 
