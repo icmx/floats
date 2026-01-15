@@ -120,8 +120,15 @@ export const DataPage: FunctionComponent = () => {
       <table>
         <thead>
           <tr>
-            {head.map((cell) => {
-              return <th key={cell}>{cell}</th>;
+            {head.map((cell, index) => {
+              return (
+                <th
+                  key={cell}
+                  className={index === 0 ? 'align-left' : 'align-right'}
+                >
+                  {cell}
+                </th>
+              );
             })}
           </tr>
         </thead>
@@ -129,14 +136,14 @@ export const DataPage: FunctionComponent = () => {
           {body.map((row) => {
             return (
               <tr key={row.date}>
-                <th>
+                <th className="align-left">
                   <DateValue value={row.date} />
                 </th>
                 {row.rates.map((rate, index) => {
                   const key = `${row.date}_${head.at(index + 1)}`;
 
                   return (
-                    <td key={key}>
+                    <td key={key} className="align-right">
                       <FloatValue
                         value={rate}
                         fraction={fractionDigits}

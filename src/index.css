@@ -49,6 +49,14 @@ h1 {
 table {
   margin: 1rem 0;
   border-collapse: collapse;
+
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  table {
+    width: unset;
+  }
 }
 
 thead {
@@ -60,7 +68,6 @@ thead {
 
 th {
   padding: 6px 12px 6px;
-  text-align: left;
 
   border-top: solid 1px var(--color-line);
   border-bottom: solid 1px var(--color-line);
@@ -68,20 +75,33 @@ th {
 
 td {
   padding: 6px 12px;
-  text-align: right;
 
   border-top: solid 1px var(--color-line);
   border-bottom: solid 1px var(--color-line);
 }
 
+th.align-left,
+td.align-left {
+  text-align: left;
+}
+
+th.align-right,
+td.align-right {
+  text-align: right;
+}
+
 #root {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  min-height: calc(100vh - 2rem);
+  min-height: calc(100vh - 0rem);
 
-  margin: 1rem;
-  padding: 0 1rem;
+  margin: 0 1rem;
+}
 
-  outline: solid 1px var(--color-line);
-  border-radius: 1rem;
+@media (min-width: 1024px) {
+  #root {
+    min-height: calc(100vh - 2rem);
+
+    margin: 1rem 1rem;
+  }
 }
