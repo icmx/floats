@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react';
 import { useSymbolsStoreEntries } from '../../../hooks/useSymbolsStore';
-import { useRawSearchParams } from '../../../hooks/useRawSearchParams';
+import { useSymbolsQueryParam } from '../../../hooks/useSymbolsQueryParam';
 import type { SymbolString } from '../../../types/currency';
 import { Chip } from '../../common/Chip';
 import styles from './SymbolChip.module.css';
@@ -17,9 +17,7 @@ const useSymbolChipsEntries = (): [
 ] => {
   const storeEntries = useSymbolsStoreEntries();
 
-  const [searchParams, setSearchParams] = useRawSearchParams();
-  const notation = searchParams.get('by') || '';
-  const selectedSymbols = notation.split(',') || [];
+  const [selectedSymbols, setSelectedSymbols] = useSymbolsQueryParam();
 
   const onlyOneSelected = selectedSymbols.length === 1;
   const tooManySelected = selectedSymbols.length > 2;
@@ -52,16 +50,7 @@ const useSymbolChipsEntries = (): [
         )
       : [...selectedSymbols, target.id];
 
-    const nextNotation = values.join(',');
-
-    setSearchParams(
-      (nextSearchParams) => {
-        nextSearchParams.set('by', nextNotation);
-
-        return nextSearchParams;
-      },
-      { replace: true }
-    );
+    setSelectedSymbols(values);
   };
 
   return [chipEntries, toggleChipEntry];

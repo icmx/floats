@@ -1,11 +1,12 @@
 import { useEffect, type FunctionComponent } from 'react';
-import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
-import { fetchCurrenciesByNotation } from '../../api/client';
+import { fetchCurrenciesBySymbols } from '../../api/client';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
+import { useSymbolsQueryParam } from '../../hooks/useSymbolsQueryParam';
 import { type AsyncPayload } from '../../types/common';
+import { parseSymbolStringsToTuples } from '../../utils/currency';
 
 type Data = {
   head: string[];
@@ -16,28 +17,29 @@ type Data = {
 };
 
 const usePageStore = create<
-  AsyncPayload<Data> & { load: (notation: string) => Promise<void> }
+  AsyncPayload<Data> & { load: (symbols: string[]) => Promise<void> }
 >()((set) => {
   return {
     isLoading: false,
     error: null,
     data: { head: [], body: [] },
-    load: async (notation) => {
+    load: async (symbols) => {
       set({ isLoading: true });
 
       try {
-        const currencies = await fetchCurrenciesByNotation(notation);
+        const tuples = parseSymbolStringsToTuples(symbols);
+        const currencies = await fetchCurrenciesBySymbols(tuples);
         const currency = currencies.at(0);
 
         if (!currency) {
           throw new Error('No currencies');
         }
 
-        const symbols = currencies.map((currency) => {
+        const headers = currencies.map((currency) => {
           return `${currency.baseCode}${currency.quoteCode}`;
         });
 
-        const head = ['date', ...symbols];
+        const head = ['date', ...headers];
 
         const ratesByDates = new Map<number, (number | null)[]>();
         const SIZE = currencies.length;
@@ -98,8 +100,7 @@ export const FloatValue: FunctionComponent<{
 export const DataPage: FunctionComponent = () => {
   const [fractionDigits] = useFractionDigits();
 
-  const [searchParams] = useSearchParams();
-  const notation = searchParams.get('by') || '';
+  const [symbols] = useSymbolsQueryParam();
 
   const { error, data } = usePageStore();
   const load = usePageStore((state) => state.load);
@@ -107,8 +108,8 @@ export const DataPage: FunctionComponent = () => {
   const { head, body } = data;
 
   useEffect(() => {
-    load(notation);
-  }, [notation, load]);
+    load(symbols);
+  }, [load, symbols]);
 
   return (
     <>

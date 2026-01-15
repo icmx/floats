@@ -1,13 +1,14 @@
 import { useEffect, type FunctionComponent } from 'react';
-import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
-import { fetchCurrenciesByNotation } from '../../api/client';
+import { fetchCurrenciesBySymbols } from '../../api/client';
 import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
+import { useSymbolsQueryParam } from '../../hooks/useSymbolsQueryParam';
 import { type AsyncPayload } from '../../types/common';
 import type { CodeString } from '../../types/currency';
+import { parseSymbolStringsToTuples } from '../../utils/currency';
 
 type Data = {
   rates: {
@@ -17,17 +18,18 @@ type Data = {
 };
 
 const usePageStore = create<
-  AsyncPayload<Data> & { load: (notation: string) => Promise<void> }
+  AsyncPayload<Data> & { load: (symbols: string[]) => Promise<void> }
 >()((set) => {
   return {
     isLoading: false,
     error: null,
     data: { rates: [] },
-    load: async (notation) => {
+    load: async (symbols) => {
       set({ isLoading: true });
 
       try {
-        const currencies = await fetchCurrenciesByNotation(notation);
+        const tuples = parseSymbolStringsToTuples(symbols);
+        const currencies = await fetchCurrenciesBySymbols(tuples);
 
         const data: Data = {
           rates: currencies.map((currency) => {
@@ -49,8 +51,7 @@ const usePageStore = create<
 });
 
 export const ConvertPage: FunctionComponent = () => {
-  const [searchParams] = useSearchParams();
-  const notation = searchParams.get('by') || '';
+  const [symbols] = useSymbolsQueryParam();
 
   const {
     isLoading,
@@ -60,8 +61,8 @@ export const ConvertPage: FunctionComponent = () => {
   const load = usePageStore((state) => state.load);
 
   useEffect(() => {
-    load(notation);
-  }, [notation, load]);
+    load(symbols);
+  }, [load, symbols]);
 
   return (
     <>

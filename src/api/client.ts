@@ -1,5 +1,4 @@
-import { SYMBOLS } from '../constants/currency';
-import type { CodeString, SymbolString } from '../types/currency';
+import type { CodeString } from '../types/currency';
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
@@ -61,7 +60,7 @@ export class Currency {
   rateBy(that: Currency): Currency {
     if (this.baseCode !== that.baseCode) {
       throw new Error(
-        `Base codes must be the same. Now: "${this.baseCode}/*", "${that.baseCode}/*"`
+        `Base codes must be the same. Now: "${this.baseCode}*", "${that.baseCode}*"`
       );
     }
 
@@ -147,40 +146,6 @@ export const fetchCurrenciesBySymbols = async (
       return fetchCurrencyBySymbol(symbol);
     })
   );
-
-  return currencies;
-};
-
-export const fetchCurrenciesByNotation = async (
-  source: unknown
-): Promise<Currency[]> => {
-  if (!source || typeof source !== 'string') {
-    throw new Error('Unable to fetch currencies: Invalid notation');
-  }
-
-  const symbols = source
-    .toUpperCase()
-    .split(',')
-    .map((symbol) => {
-      if (!SYMBOLS.includes(symbol as SymbolString)) {
-        throw new Error(`No such symbol: "${symbol}"`);
-      }
-
-      const base = symbol.substring(0, 3);
-      const quote = symbol.substring(3, 6);
-
-      return [base, quote] as [CodeString, CodeString];
-    });
-
-  const TODO_HARD_LIMIT = 5;
-
-  if (symbols.length > TODO_HARD_LIMIT) {
-    throw new Error(
-      `Too many symbols: ${symbols.length} (max ${TODO_HARD_LIMIT})`
-    );
-  }
-
-  const currencies = await fetchCurrenciesBySymbols(symbols);
 
   return currencies;
 };

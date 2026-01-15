@@ -1,32 +1,35 @@
 import { useEffect, type FunctionComponent } from 'react';
-import { useSearchParams } from 'react-router';
 import { create } from 'zustand';
-import { fetchCurrenciesByNotation } from '../../api/client';
+import { fetchCurrenciesBySymbols } from '../../api/client';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import {
   Plotter,
   type Series,
 } from '../../components/currency/Plotter';
 import { SymbolChips } from '../../components/currency/SymbolChips';
+import { useSymbolsQueryParam } from '../../hooks/useSymbolsQueryParam';
 import type { AsyncPayload } from '../../types/common';
+import { parseSymbolStringsToTuples } from '../../utils/currency';
 
 type Data = {
   series: Series;
 };
 
 const usePageStore = create<
-  AsyncPayload<Data> & { load: (notation: string) => Promise<void> }
+  AsyncPayload<Data> & { load: (symbols: string[]) => Promise<void> }
 >()((set) => {
   return {
     isLoading: false,
     error: null,
     data: { series: [] },
-    load: async (notation) => {
+    load: async (symbols) => {
       set({ isLoading: true });
 
       try {
         const data: Data = { series: [] };
-        const currencies = await fetchCurrenciesByNotation(notation);
+
+        const tuples = parseSymbolStringsToTuples(symbols);
+        const currencies = await fetchCurrenciesBySymbols(tuples);
 
         currencies.forEach((currency) => {
           data.series.push({
@@ -46,15 +49,14 @@ const usePageStore = create<
 });
 
 export const ChartPage: FunctionComponent = () => {
-  const [searchParams] = useSearchParams();
-  const notation = searchParams.get('by') || '';
+  const [symbols] = useSymbolsQueryParam();
 
   const { error, data } = usePageStore();
   const load = usePageStore((state) => state.load);
 
   useEffect(() => {
-    load(notation);
-  }, [notation, load]);
+    load(symbols);
+  }, [load, symbols]);
 
   return (
     <>
