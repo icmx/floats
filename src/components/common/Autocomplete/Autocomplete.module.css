@@ -5,15 +5,17 @@
   width: 100%;
 }
 
-.input {
+.AutocompleteInput {
   display: block;
+
+  padding: 4px;
   width: 100%;
   box-sizing: border-box;
 
-  padding: 6px 4px;
+  font-size: var(--font-size-m);
 }
 
-.list {
+.AutocompleteList {
   position: absolute;
 
   left: 0;
@@ -33,11 +35,11 @@
   overflow-y: scroll;
 }
 
-.option {
+.AutocompleteOption {
   padding: 6px 4px;
   cursor: pointer;
 }
 
-.option.isHighlighted {
+.AutocompleteOption.isHighlighted {
   color: red;
 }

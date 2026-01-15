@@ -188,7 +188,7 @@ export const Autocomplete = <T extends string>({
   return (
     <div className={styles.Autocomplete} ref={containerRef}>
       <input
-        className={styles.input}
+        className={styles.AutocompleteInput}
         ref={inputRef}
         type="text"
         value={inputValue}
@@ -200,7 +200,7 @@ export const Autocomplete = <T extends string>({
       />
 
       {isOpen && (
-        <ul ref={listRef} className={styles.list}>
+        <ul ref={listRef} className={styles.AutocompleteList}>
           {filteredOptions.map((option, index) => {
             const isHighlighted = index === hightlightedIndex;
 
@@ -208,7 +208,7 @@ export const Autocomplete = <T extends string>({
               <li
                 key={option.id}
                 className={classNames([
-                  styles.option,
+                  styles.AutocompleteOption,
                   isHighlighted && styles.isHighlighted,
                 ])}
                 onClick={() => handleSelect(option)}
