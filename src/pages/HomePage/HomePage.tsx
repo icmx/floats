@@ -1,43 +1,14 @@
-import { useMemo, useRef, type FunctionComponent } from 'react';
-import {
-  Autocomplete,
-  type AutocompleteHandle,
-  type AutocompleteOption,
-} from '../../components/common/Autocomplete';
+import { type FunctionComponent } from 'react';
 import { Card } from '../../components/common/Card';
 import { CardRow } from '../../components/common/CardRow';
-import { SYMBOLS } from '../../constants/currency';
 import {
   useSymbolsStoreEntries,
   useSymbolsStoreActions,
 } from '../../hooks/useSymbolsStore';
-import type { SymbolString } from '../../types/currency';
 
 export const HomePage: FunctionComponent = () => {
   const symbolsEntries = useSymbolsStoreEntries();
   const symbolsActions = useSymbolsStoreActions();
-
-  const symbolsOptions: AutocompleteOption<SymbolString>[] =
-    useMemo(() => {
-      const symbols = symbolsEntries.map(
-        (symbolEntry) => symbolEntry.id
-      );
-
-      return SYMBOLS.filter((symbol) => !symbols.includes(symbol)).map(
-        (symbol) => {
-          const pattern = symbol.toLowerCase();
-
-          return {
-            id: `option-${pattern}`,
-            value: symbol,
-            pattern,
-            text: symbol,
-          };
-        }
-      );
-    }, [symbolsEntries]);
-
-  const ref = useRef<AutocompleteHandle>(null);
 
   const notation = symbolsEntries
     .filter((symbolEntry) => symbolEntry.checked)
@@ -51,19 +22,6 @@ export const HomePage: FunctionComponent = () => {
   return (
     <>
       <title>floats</title>
-
-      <Autocomplete<SymbolString>
-        ref={ref}
-        options={symbolsOptions}
-        placeholder="Search symbols like USDEUR"
-        onOptionChange={(option) => {
-          if (option) {
-            symbolsActions.add(option?.value);
-          }
-
-          ref.current?.reset();
-        }}
-      />
 
       <div
         style={{
