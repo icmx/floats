@@ -1,7 +1,13 @@
 import { type FunctionComponent } from 'react';
-import { Outlet, useMatches, type UIMatch } from 'react-router';
-import { Breadcrumbs } from '../../components/common/Breadcrumbs';
+import {
+  NavLink,
+  Outlet,
+  useMatches,
+  type NavLinkRenderProps,
+  type UIMatch,
+} from 'react-router';
 import { useThemeValueEffect } from '../../hooks/useThemeValueEffect';
+import { classNames } from '../../utils/common';
 import styles from './Layout.module.css';
 
 export const Layout: FunctionComponent = () => {
@@ -26,15 +32,36 @@ export const Layout: FunctionComponent = () => {
 
   const title = breadcrumbs.map((crumb) => crumb.children).join(' - ');
 
+  const handleClassName = ({
+    isActive,
+  }: NavLinkRenderProps): string => {
+    return classNames({
+      [styles.HeaderLink]: true,
+      [styles.isActive]: isActive,
+    });
+  };
+
   return (
     <>
       <title>{title}</title>
 
       <header className={styles.LayoutHeader}>
-        <Breadcrumbs breadcrumbs={breadcrumbs} />
-        <p>
-          <a href="/settings">Settings</a>
-        </p>
+        <div className="" style={{ display: 'flex', gap: '1rem' }}>
+          <NavLink className={handleClassName} to="/chart">
+            Chart
+          </NavLink>
+          <NavLink className={handleClassName} to="/convert">
+            Convert
+          </NavLink>
+          <NavLink className={handleClassName} to="/data">
+            Data
+          </NavLink>
+        </div>
+        <div className="">
+          <NavLink className={handleClassName} to="/settings">
+            Settings
+          </NavLink>
+        </div>
       </header>
       <main>
         <Outlet />

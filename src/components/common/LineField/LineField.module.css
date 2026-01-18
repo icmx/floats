@@ -19,5 +19,8 @@
   width: 100%;
   box-sizing: border-box;
 
+  border: solid 1px var(--color-line);
+  border-radius: 0.25rem;
+
   font-size: var(--font-size-m);
 }

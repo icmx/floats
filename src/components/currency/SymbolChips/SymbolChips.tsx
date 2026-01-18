@@ -1,81 +1,55 @@
-import type { FunctionComponent } from 'react';
-import { useSymbolsStoreEntries } from '../../../hooks/useSymbolsStore';
+import { useCallback, useMemo, type FunctionComponent } from 'react';
 import { useSymbolsQueryParam } from '../../../hooks/useSymbolsQueryParam';
-import type { SymbolString } from '../../../types/currency';
-import { Chip } from '../../common/Chip';
-import styles from './SymbolChip.module.css';
-
-type SymbolChipEntry = {
-  id: SymbolString;
-  selected: boolean;
-  disabled: boolean;
-};
-
-const useSymbolChipsEntries = (): [
-  SymbolChipEntry[],
-  (id: SymbolString) => void
-] => {
-  const storeEntries = useSymbolsStoreEntries();
-
-  const [selectedSymbols, setSelectedSymbols] = useSymbolsQueryParam();
-
-  const onlyOneSelected = selectedSymbols.length === 1;
-  const tooManySelected = selectedSymbols.length > 2;
-
-  const chipEntries: SymbolChipEntry[] = storeEntries.map((entry) => {
-    const id = entry.id;
-    const thisOneSelected = selectedSymbols.includes(id);
-
-    const disabled =
-      (onlyOneSelected && thisOneSelected) ||
-      (tooManySelected && !thisOneSelected);
-
-    return {
-      id,
-      selected: thisOneSelected,
-      disabled,
-    };
-  });
-
-  const toggleChipEntry = (id: SymbolString) => {
-    const target = chipEntries.find((chipEntry) => chipEntry.id === id);
-
-    if (!target) {
-      return;
-    }
-
-    const values = target.selected
-      ? selectedSymbols.filter(
-          (selectedSymbol) => selectedSymbol !== target.id
-        )
-      : [...selectedSymbols, target.id];
-
-    setSelectedSymbols(values);
-  };
-
-  return [chipEntries, toggleChipEntry];
-};
+import { SYMBOLS } from '../../../constants/currency';
+import {
+  ChipSelect,
+  type ChipSelectOption,
+} from '../../common/ChipSelect';
 
 export const SymbolChips: FunctionComponent = () => {
-  const [entries, toggleEntry] = useSymbolChipsEntries();
+  const symbolOptions: ChipSelectOption[] = useMemo(() => {
+    return SYMBOLS.map((symbol) => {
+      return {
+        id: `symbol-${symbol}`,
+        value: symbol,
+        pattern: symbol.toLowerCase(),
+        children: symbol,
+      };
+    });
+  }, []);
+
+  const [symbols, setSymbols] = useSymbolsQueryParam();
+
+  const selectedSymbolOptions = useMemo<ChipSelectOption[]>(() => {
+    return symbols.map((symbol) => {
+      return {
+        id: `symbol-${symbol}`,
+        value: symbol,
+        pattern: symbol.toLowerCase(),
+        children: symbol,
+      };
+    });
+  }, [symbols]);
+
+  const setSelectedSymbolOptions = useCallback<
+    (options: ChipSelectOption[]) => void
+  >(
+    (options) => {
+      setSymbols(options.map((option) => option.value));
+    },
+    [setSymbols]
+  );
 
   return (
-    <div className={styles.SymbolChips}>
-      {entries.map((entry) => {
-        return (
-          <Chip
-            key={entry.id}
-            type="button"
-            disabled={entry.disabled}
-            selected={entry.selected}
-            onClick={() => {
-              toggleEntry(entry.id);
-            }}
-          >
-            {entry.id}
-          </Chip>
-        );
-      })}
-    </div>
+    <>
+      <ChipSelect
+        options={symbolOptions}
+        selectedOptions={selectedSymbolOptions}
+        placeholder="Type symbols like USDEUR"
+        onChange={(options) => {
+          setSelectedSymbolOptions(options);
+        }}
+      />
+    </>
   );
 };

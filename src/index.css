@@ -1,9 +1,10 @@
 :root {
   --font-size-l: 1.2rem;
   --font-size-m: 1rem;
-  --font-size-s: 0.85rem;
+  --font-size-s: 0.8rem;
 
   &[data-theme='light'] {
+    --color-main: oklch(66% 0.2 250);
     --color-text: oklch(22% 0.012 275);
     --color-link: oklch(28% 0.02 280);
     --color-line: oklch(80% 0.006 250);
@@ -13,6 +14,7 @@
   }
 
   &[data-theme='dark'] {
+    --color-main: oklch(66% 0.2 250);
     --color-text: oklch(93% 0.011 275);
     --color-link: oklch(96% 0.02 280);
     --color-line: oklch(32% 0.005 250);

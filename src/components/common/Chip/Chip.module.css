@@ -1,16 +1,17 @@
 .Chip {
   display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem;
 
-  border: none;
-  border-radius: 0.125rem;
+  border-radius: 0.25rem;
 
-  color: var(--color-link);
   background-color: var(--color-chip);
-
-  padding: 8px 8px;
   font-size: var(--font-size-s);
+}
 
-  text-decoration: none;
+.Chip.isSelected {
+  background-color: var(--color-main);
 }
 
 .Chip.isDisabled {
@@ -19,10 +20,37 @@
   cursor: not-allowed;
 }
 
-.Chip.isSelected {
-  background-color: color-mix(
-    in srgb,
-    var(--color-chip) 20%,
-    dodgerblue 80%
-  );
+.ChipClickable {
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  background: none;
+  border: none;
+
+  height: 24px;
+  line-height: 24px;
+}
+
+.ChipLabel {
+  margin-left: 6px;
+
+  color: var(--color-text);
+}
+
+.ChipButton {
+  width: 22px;
+
+  border-radius: 0.25rem;
+
+  color: var(--color-text);
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.ChipButton:hover {
+  /* todo: palette */
+  background-color: oklch(66% 0.2 25);
 }
