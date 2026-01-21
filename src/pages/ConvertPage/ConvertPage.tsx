@@ -5,7 +5,7 @@ import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useSymbolsQueryParam } from '../../hooks/useSymbolsQueryParam';
+import { useQueryParams } from '../../hooks/useQueryParams';
 import { type AsyncPayload } from '../../types/common';
 import type { CodeString } from '../../types/currency';
 import { parseSymbolStringsToTuples } from '../../utils/currency';
@@ -51,7 +51,7 @@ const usePageStore = create<
 });
 
 export const ConvertPage: FunctionComponent = () => {
-  const [symbols] = useSymbolsQueryParam();
+  const { by: symbols } = useQueryParams();
 
   const {
     isLoading,

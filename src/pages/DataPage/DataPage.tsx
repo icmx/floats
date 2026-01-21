@@ -4,7 +4,7 @@ import { fetchCurrenciesBySymbols } from '../../api/client';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
-import { useSymbolsQueryParam } from '../../hooks/useSymbolsQueryParam';
+import { useQueryParams } from '../../hooks/useQueryParams';
 import { type AsyncPayload } from '../../types/common';
 import { parseSymbolStringsToTuples } from '../../utils/currency';
 
@@ -100,7 +100,7 @@ export const FloatValue: FunctionComponent<{
 export const DataPage: FunctionComponent = () => {
   const [fractionDigits] = useFractionDigits();
 
-  const [symbols] = useSymbolsQueryParam();
+  const { by: symbols } = useQueryParams();
 
   const { error, data } = usePageStore();
   const load = usePageStore((state) => state.load);

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, type FunctionComponent } from 'react';
-import { useSymbolsQueryParam } from '../../../hooks/useSymbolsQueryParam';
 import { SYMBOLS } from '../../../constants/currency';
+import { useQueryParams } from '../../../hooks/useQueryParams';
 import {
   ChipSelect,
   type ChipSelectOption,
@@ -18,7 +18,7 @@ export const SymbolChips: FunctionComponent = () => {
     });
   }, []);
 
-  const [symbols, setSymbols] = useSymbolsQueryParam();
+  const { by: symbols, setBy: setSymbols } = useQueryParams();
 
   const selectedSymbolOptions = useMemo<ChipSelectOption[]>(() => {
     return symbols.map((symbol) => {

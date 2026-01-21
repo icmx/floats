@@ -7,7 +7,7 @@ import {
   type Series,
 } from '../../components/currency/Plotter';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useSymbolsQueryParam } from '../../hooks/useSymbolsQueryParam';
+import { useQueryParams } from '../../hooks/useQueryParams';
 import type { AsyncPayload } from '../../types/common';
 import { parseSymbolStringsToTuples } from '../../utils/currency';
 
@@ -49,7 +49,7 @@ const usePageStore = create<
 });
 
 export const ChartPage: FunctionComponent = () => {
-  const [symbols] = useSymbolsQueryParam();
+  const { by: symbols } = useQueryParams();
 
   const { error, data } = usePageStore();
   const load = usePageStore((state) => state.load);
