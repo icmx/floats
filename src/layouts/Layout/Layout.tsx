@@ -7,11 +7,14 @@ import {
   type UIMatch,
 } from 'react-router';
 import { useThemeValueEffect } from '../../hooks/useThemeValueEffect';
+import { useRoutesUrls } from '../../hooks/useRoutesUrls';
 import { classNames } from '../../utils/common';
 import styles from './Layout.module.css';
 
 export const Layout: FunctionComponent = () => {
   useThemeValueEffect();
+
+  const urls = useRoutesUrls();
 
   const matches = useMatches() as UIMatch<
     unknown,
@@ -47,13 +50,13 @@ export const Layout: FunctionComponent = () => {
 
       <header className={styles.LayoutHeader}>
         <div className="" style={{ display: 'flex', gap: '1rem' }}>
-          <NavLink className={handleClassName} to="/chart">
+          <NavLink className={handleClassName} to={urls.chart}>
             Chart
           </NavLink>
-          <NavLink className={handleClassName} to="/convert">
+          <NavLink className={handleClassName} to={urls.convert}>
             Convert
           </NavLink>
-          <NavLink className={handleClassName} to="/data">
+          <NavLink className={handleClassName} to={urls.data}>
             Data
           </NavLink>
         </div>

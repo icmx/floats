@@ -3,3 +3,7 @@ export type AsyncPayload<TData> = {
   error: unknown;
   data: TData;
 };
+
+export type QueryParams = {
+  by: string[];
+};
