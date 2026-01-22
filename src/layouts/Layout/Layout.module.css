@@ -14,6 +14,11 @@
   border-top: solid 1px var(--color-line);
 }
 
+.HeaderGroup {
+  display: flex;
+  gap: 1rem;
+}
+
 .HeaderLink {
   display: inline-block;
 

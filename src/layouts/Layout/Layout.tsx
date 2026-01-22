@@ -26,7 +26,7 @@ export const Layout: FunctionComponent = () => {
       <title>{title}</title>
 
       <header className={styles.LayoutHeader}>
-        <div className="" style={{ display: 'flex', gap: '1rem' }}>
+        <div className={styles.HeaderGroup}>
           <NavLink className={handleClassName} to={urls.chart}>
             Chart
           </NavLink>
@@ -37,7 +37,7 @@ export const Layout: FunctionComponent = () => {
             Data
           </NavLink>
         </div>
-        <div className="">
+        <div className={styles.HeaderGroup}>
           <NavLink className={handleClassName} to="/settings">
             Settings
           </NavLink>
