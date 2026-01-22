@@ -1,39 +1,16 @@
 import { type FunctionComponent } from 'react';
-import {
-  NavLink,
-  Outlet,
-  useMatches,
-  type NavLinkRenderProps,
-  type UIMatch,
-} from 'react-router';
+import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
 import { useThemeValueEffect } from '../../hooks/useThemeValueEffect';
 import { useRoutesUrls } from '../../hooks/useRoutesUrls';
+import { useTitle } from '../../hooks/useTitle';
 import { classNames } from '../../utils/common';
 import styles from './Layout.module.css';
 
 export const Layout: FunctionComponent = () => {
   useThemeValueEffect();
 
+  const title = useTitle();
   const urls = useRoutesUrls();
-
-  const matches = useMatches() as UIMatch<
-    unknown,
-    { title?: string }
-  >[];
-
-  const breadcrumbs = matches
-    .filter((match): match is UIMatch<unknown, { title: string }> => {
-      return !!match.handle?.title;
-    })
-    .map((match) => {
-      return {
-        id: match.id,
-        href: match.pathname,
-        children: match.handle.title,
-      };
-    });
-
-  const title = breadcrumbs.map((crumb) => crumb.children).join(' - ');
 
   const handleClassName = ({
     isActive,
