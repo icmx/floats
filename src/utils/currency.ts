@@ -1,15 +1,34 @@
-import { SYMBOLS } from '../constants/currency';
+import {
+  CODE_LENGTH,
+  CODES,
+  SYMBOL_LENGTH,
+  SYMBOLS,
+} from '../constants/currency';
 import type { CodeString, SymbolString } from '../types/currency';
+
+export const validateCodeString = (source: unknown): CodeString => {
+  if (!source || typeof source !== 'string') {
+    throw new Error('Invalid currency code.');
+  }
+
+  const code = source as CodeString;
+
+  if (code.length !== CODE_LENGTH || !CODES.includes(code)) {
+    throw new Error(`No such currency code: "${code}".`);
+  }
+
+  return code;
+};
 
 export const validateSymbolString = (source: unknown): SymbolString => {
   if (!source || typeof source !== 'string') {
-    throw new Error('Invalid symbol.');
+    throw new Error('Invalid currency symbol.');
   }
 
   const symbol = source as SymbolString;
 
-  if (symbol.length !== 6 || !SYMBOLS.includes(symbol)) {
-    throw new Error(`No such symbol: "${symbol}".`);
+  if (symbol.length !== SYMBOL_LENGTH || !SYMBOLS.includes(symbol)) {
+    throw new Error(`No such currency symbol: "${symbol}".`);
   }
 
   return symbol;

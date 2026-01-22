@@ -6,6 +6,6 @@
   border-radius: 12px;
 }
 
-.Callout.isFalure {
+.Callout.isFailure {
   color: red;
 }

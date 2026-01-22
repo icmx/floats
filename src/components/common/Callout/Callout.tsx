@@ -11,7 +11,7 @@ export const Callout: FunctionComponent<CalloutProps> = ({
     <div
       className={classNames([
         styles.Callout,
-        appearance === 'failure' && styles.isFalure,
+        appearance === 'failure' && styles.isFailure,
       ])}
     >
       {children}

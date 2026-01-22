@@ -5,18 +5,20 @@ import {
   ChipSelect,
   type ChipSelectOption,
 } from '../../common/ChipSelect';
+import type { SymbolString } from '../../../types/currency';
 
 export const SymbolChips: FunctionComponent = () => {
-  const symbolOptions: ChipSelectOption[] = useMemo(() => {
-    return SYMBOLS.map((symbol) => {
-      return {
-        id: `symbol-${symbol}`,
-        value: symbol,
-        pattern: symbol.toLowerCase(),
-        children: symbol,
-      };
-    });
-  }, []);
+  const symbolOptions: ChipSelectOption<SymbolString>[] =
+    useMemo(() => {
+      return SYMBOLS.map((symbol) => {
+        return {
+          id: `symbol-${symbol}`,
+          value: symbol,
+          pattern: symbol.toLowerCase(),
+          children: symbol,
+        };
+      });
+    }, []);
 
   const { by: symbols, setBy: setSymbols } = useQueryParams();
 
@@ -31,7 +33,7 @@ export const SymbolChips: FunctionComponent = () => {
     });
   }, [symbols]);
 
-  const setSelectedSymbolOptions = useCallback<
+  const handleChange = useCallback<
     (options: ChipSelectOption[]) => void
   >(
     (options) => {
@@ -46,9 +48,7 @@ export const SymbolChips: FunctionComponent = () => {
         options={symbolOptions}
         selectedOptions={selectedSymbolOptions}
         placeholder="Type symbols like USDEUR"
-        onChange={(options) => {
-          setSelectedSymbolOptions(options);
-        }}
+        onChange={handleChange}
       />
     </>
   );

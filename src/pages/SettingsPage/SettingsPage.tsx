@@ -61,6 +61,10 @@ export const SettingsPage: FunctionComponent = () => {
             const text = event.target.value;
             const int = Number.parseInt(text, 10);
 
+            if (int < 0 || int > 8) {
+              return;
+            }
+
             setFractionDigits(int);
           }}
         />

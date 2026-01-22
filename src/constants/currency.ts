@@ -1,5 +1,7 @@
 import type { SymbolString } from '../types/currency';
 
+export const CODE_LENGTH = 3;
+
 export const CODES = [
   'AED',
   'AFN',
@@ -138,6 +140,8 @@ export const CODES = [
   'ZAR',
   'ZMW',
 ] as const;
+
+export const SYMBOL_LENGTH = 6;
 
 export const SYMBOLS = CODES.map((baseCode) => {
   return CODES.filter((code) => {

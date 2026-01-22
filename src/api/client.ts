@@ -1,16 +1,24 @@
 import type { CodeString } from '../types/currency';
+import { validateCodeString } from '../utils/currency';
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
 export const API_PIVOT_CURRENCY = import.meta.env
   .BUNDLE_API_PIVOT_CURRENCY;
 
-export const PIVOT_CURRENCY_CODE = API_PIVOT_CURRENCY as CodeString;
+export const PIVOT_CURRENCY_CODE =
+  validateCodeString(API_PIVOT_CURRENCY);
 
 export const fetchCSV = async (url: string): Promise<string> => {
   const response = await fetch(
     `${API_BASE_URL}/${API_PIVOT_CURRENCY}/${url}`
   );
+
+  if (!response.ok) {
+    throw new Error(
+      `Unable to fetch "${url}": ${response.status}/${response.statusText}`
+    );
+  }
 
   const text = await response.text();
 
