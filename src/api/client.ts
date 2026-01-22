@@ -118,18 +118,18 @@ export class Currency {
 }
 
 export const fetchCurrencyByCode = async (
-  сode: CodeString
+  code: CodeString
 ): Promise<Currency> => {
-  if (сode === PIVOT_CURRENCY_CODE) {
+  if (code === PIVOT_CURRENCY_CODE) {
     return new Currency(PIVOT_CURRENCY_CODE, PIVOT_CURRENCY_CODE);
   }
 
   const [csv, latestCsv] = await Promise.all([
-    fetchCSV(`/${сode}.csv`),
-    fetchCSV(`/${сode}.latest.csv`),
+    fetchCSV(`/${code}.csv`),
+    fetchCSV(`/${code}.latest.csv`),
   ]);
 
-  return new Currency(PIVOT_CURRENCY_CODE, сode)
+  return new Currency(PIVOT_CURRENCY_CODE, code)
     .appendWith(csv)
     .appendWith(latestCsv);
 };

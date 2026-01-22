@@ -18,10 +18,10 @@ export const SettingsPage: FunctionComponent = () => {
 
   const [fractionDigits, setFractionDigits] = useFractionDigits();
 
-  const [resultDigit, setReultDigit] = useState('');
+  const [resultDigit, setResultDigit] = useState('');
 
   useEffect(() => {
-    setReultDigit(
+    setResultDigit(
       'Will show: ' + (1000.12345678).toFixed(fractionDigits)
     );
   }, [fractionDigits]);
