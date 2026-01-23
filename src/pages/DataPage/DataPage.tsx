@@ -45,7 +45,7 @@ const usePageStore = create<
         const SIZE = currencies.length;
 
         currencies.forEach((currency, index) => {
-          currency.rates.forEach(({ date, rate }) => {
+          currency.data.forEach(([date, rate]) => {
             const ratesByDate =
               ratesByDates.get(date) || new Array(SIZE).fill(null);
 

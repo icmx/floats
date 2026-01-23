@@ -34,7 +34,7 @@ const usePageStore = create<
         currencies.forEach((currency) => {
           data.series.push({
             name: `${currency.baseCode}${currency.quoteCode}`,
-            data: currency.rates.map(({ date, rate }) => [date, rate]),
+            data: [...currency.data],
           });
         });
 

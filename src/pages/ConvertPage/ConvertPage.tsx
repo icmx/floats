@@ -35,7 +35,7 @@ const usePageStore = create<
           rates: currencies.map((currency) => {
             return {
               symbol: [currency.baseCode, currency.quoteCode],
-              rate: currency.rates.at(-1)?.rate || 0,
+              rate: currency.data.at(-1)?.[1] || 0,
             };
           }),
         };
