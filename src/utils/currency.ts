@@ -4,7 +4,12 @@ import {
   SYMBOL_LENGTH,
   SYMBOLS,
 } from '../constants/currency';
-import type { CodeString, SymbolString } from '../types/currency';
+import type {
+  CodeString,
+  Currency,
+  RateTuple,
+  SymbolString,
+} from '../types/currency';
 
 export const validateCodeString = (source: unknown): CodeString => {
   if (!source || typeof source !== 'string') {
@@ -61,4 +66,101 @@ export const parseSymbolStringsToTuples = (
 
     return [baseCodeString, quoteCodeString];
   });
+};
+
+// @todo: remove
+export const PIVOT_CURRENCY_CODE = validateCodeString(
+  import.meta.env.BUNDLE_API_PIVOT_CURRENCY
+);
+
+export const createCurrency = (
+  baseCode: CodeString,
+  quoteCode: CodeString,
+  data: RateTuple[]
+): Currency => {
+  return {
+    baseCode,
+    quoteCode,
+    data,
+  };
+};
+
+export const createPivotCurrency = (): Currency => {
+  return createCurrency(PIVOT_CURRENCY_CODE, PIVOT_CURRENCY_CODE, []);
+};
+
+export const createCrossCurrency = (
+  base: Currency,
+  quote: Currency
+): Currency => {
+  if (base.baseCode !== quote.baseCode) {
+    throw new Error(
+      `Base codes must be the same. Now: "${base.baseCode}*", "${quote.baseCode}*"`
+    );
+  }
+
+  if (isPivotCurrency(base)) {
+    return quote;
+  }
+
+  if (isPivotCurrency(quote)) {
+    return base;
+  }
+
+  const ratesByDates = new Map<
+    number,
+    { left?: number; right?: number }
+  >();
+
+  base.data.forEach(([date, rate]) => {
+    ratesByDates.set(date, {
+      ...(ratesByDates.get(date) || {}),
+      left: rate,
+    });
+  });
+
+  quote.data.forEach(([date, rate]) => {
+    ratesByDates.set(date, {
+      ...(ratesByDates.get(date) || {}),
+      right: rate,
+    });
+  });
+
+  const data: RateTuple[] = [];
+
+  Array.from(ratesByDates.entries())
+    .sort(([prev], [next]) => {
+      return prev - next;
+    })
+    .forEach(([date, { left, right }]) => {
+      if (!left || !right) {
+        return;
+      }
+
+      data.push([date, right / left]);
+    });
+
+  return createCurrency(base.quoteCode, quote.quoteCode, data);
+};
+
+export const appendDataToCurrency = (
+  currency: Currency,
+  data: [number, number][]
+): Currency => {
+  return {
+    baseCode: currency.baseCode,
+    quoteCode: currency.quoteCode,
+    data,
+  };
+};
+
+export const isPivotCurrency = (currency: Currency): boolean => {
+  return (
+    currency.baseCode === PIVOT_CURRENCY_CODE &&
+    currency.quoteCode === PIVOT_CURRENCY_CODE
+  );
+};
+
+export const isEmptyCurrency = (currency: Currency): boolean => {
+  return currency.data.length === 0;
 };

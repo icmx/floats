@@ -1,9 +1,19 @@
-import type { CodeString } from '../types/currency';
-import { validateCodeString } from '../utils/currency';
-import { Currency, PIVOT_CURRENCY_CODE } from './currency';
+import type {
+  CodeString,
+  Currency,
+  RateTuple,
+} from '../types/currency';
+import {
+  createCrossCurrency,
+  createCurrency,
+  createPivotCurrency,
+  PIVOT_CURRENCY_CODE,
+  validateCodeString,
+} from '../utils/currency';
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
+// @todo: remove
 export const API_PIVOT_CURRENCY = validateCodeString(
   import.meta.env.BUNDLE_API_PIVOT_CURRENCY
 );
@@ -24,21 +34,40 @@ export const fetchCSV = async (url: string): Promise<string> => {
   return text;
 };
 
+export const fetchRateTuples = async (
+  url: string
+): Promise<RateTuple[]> => {
+  const csv = await fetchCSV(url);
+
+  return csv
+    .trim()
+    .split('\n')
+    .map((line) => {
+      const [dateText, rateText] = line.split(',');
+
+      return [
+        new Date(dateText).getTime(),
+        Number.parseFloat(rateText),
+      ];
+    });
+};
+
 export const fetchCurrencyByCode = async (
   code: CodeString
 ): Promise<Currency> => {
   if (code === PIVOT_CURRENCY_CODE) {
-    return new Currency(PIVOT_CURRENCY_CODE, PIVOT_CURRENCY_CODE);
+    return createPivotCurrency();
   }
 
-  const [csv, latestCsv] = await Promise.all([
-    fetchCSV(`/${code}.csv`),
-    fetchCSV(`/${code}.latest.csv`),
+  const [data, latestData] = await Promise.all([
+    fetchRateTuples(`/${code}.csv`),
+    fetchRateTuples(`/${code}.latest.csv`),
   ]);
 
-  return new Currency(PIVOT_CURRENCY_CODE, code)
-    .appendWith(csv)
-    .appendWith(latestCsv);
+  return createCurrency(PIVOT_CURRENCY_CODE, code, [
+    ...data,
+    ...latestData,
+  ]);
 };
 
 export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
@@ -50,7 +79,7 @@ export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
     fetchCurrencyByCode(quoteCode),
   ]);
 
-  return baseCurrency.rateBy(quoteCurrency);
+  return createCrossCurrency(baseCurrency, quoteCurrency);
 };
 
 export const fetchCurrenciesBySymbols = async (

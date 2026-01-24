@@ -141,6 +141,9 @@ export const CODES = [
   'ZMW',
 ] as const;
 
+export const PIVOT_CURRENCY_CODE =
+  'EUR' satisfies (typeof CODES)[number];
+
 export const SYMBOL_LENGTH = 6;
 
 export const SYMBOLS = CODES.map((baseCode) => {
