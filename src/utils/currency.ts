@@ -1,6 +1,7 @@
 import {
   CODE_LENGTH,
   CODES,
+  PIVOT_CURRENCY_CODE,
   SYMBOL_LENGTH,
   SYMBOLS,
 } from '../constants/currency';
@@ -67,11 +68,6 @@ export const parseSymbolStringsToTuples = (
     return [baseCodeString, quoteCodeString];
   });
 };
-
-// @todo: remove
-export const PIVOT_CURRENCY_CODE = validateCodeString(
-  import.meta.env.BUNDLE_API_PIVOT_CURRENCY
-);
 
 export const createCurrency = (
   baseCode: CodeString,

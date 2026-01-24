@@ -1,3 +1,4 @@
+import { PIVOT_CURRENCY_CODE } from '../constants/currency';
 import type {
   CodeString,
   Currency,
@@ -7,20 +8,13 @@ import {
   createCrossCurrency,
   createCurrency,
   createPivotCurrency,
-  PIVOT_CURRENCY_CODE,
-  validateCodeString,
 } from '../utils/currency';
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
-// @todo: remove
-export const API_PIVOT_CURRENCY = validateCodeString(
-  import.meta.env.BUNDLE_API_PIVOT_CURRENCY
-);
-
 export const fetchCSV = async (url: string): Promise<string> => {
   const response = await fetch(
-    `${API_BASE_URL}/${API_PIVOT_CURRENCY}/${url}`
+    `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}/${url}`
   );
 
   if (!response.ok) {
