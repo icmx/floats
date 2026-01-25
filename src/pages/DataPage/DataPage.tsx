@@ -29,11 +29,6 @@ const usePageStore = create<
       try {
         const tuples = parseSymbolStringsToTuples(symbols);
         const currencies = await fetchCurrenciesBySymbols(tuples);
-        const currency = currencies.at(0);
-
-        if (!currency) {
-          throw new Error('No currencies');
-        }
 
         const headers = currencies.map((currency) => {
           return `${currency.baseCode}${currency.quoteCode}`;
