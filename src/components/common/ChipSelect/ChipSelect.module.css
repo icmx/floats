@@ -9,8 +9,7 @@
   border: solid 1px var(--color-line);
   border-radius: 0.25rem;
 
-  /* @todo: palette */
-  background-color: #ffffff;
+  background-color: var(--color-field);
 }
 
 .SelectedValues {
@@ -30,6 +29,9 @@
   padding: 2px 4px;
 
   font-size: var(--font-size-m);
+
+  color: var(--color-text);
+  background-color: transparent;
 }
 
 .Input:focus {

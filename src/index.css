@@ -9,8 +9,8 @@
     --color-link: oklch(28% 0.02 280);
     --color-line: oklch(80% 0.006 250);
     --color-page: oklch(98% 0.005 272);
-    --color-card: oklch(94% 0.01 272);
     --color-chip: oklch(90% 0.015 272);
+    --color-field: oklch(100% 0 0);
   }
 
   &[data-theme='dark'] {
@@ -19,8 +19,8 @@
     --color-link: oklch(96% 0.02 280);
     --color-line: oklch(32% 0.005 250);
     --color-page: oklch(24% 0.012 272);
-    --color-card: oklch(28% 0.02 272);
     --color-chip: oklch(28% 0.02 272);
+    --color-field: oklch(20% 0 0);
   }
 }
 
