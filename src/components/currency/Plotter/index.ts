@@ -1,2 +1,2 @@
-export * from './Plotter'
-export * from './Plotter.types'
+export * from './Plotter';
+export * from './Plotter.types';

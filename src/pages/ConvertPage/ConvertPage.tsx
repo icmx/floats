@@ -4,7 +4,7 @@ import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useQueryParams } from '../../hooks/useQueryParams';
-import { usePageStore } from './CovertPage.store';
+import { usePageStore } from './ConvertPage.store';
 
 export const ConvertPage: FunctionComponent = () => {
   const { by: symbols } = useQueryParams();

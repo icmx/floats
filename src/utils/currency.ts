@@ -43,8 +43,11 @@ export const validateSymbolString = (source: unknown): SymbolString => {
 export const splitSymbolToCodeStrings = (
   symbolString: SymbolString
 ): [CodeString, CodeString] => {
-  const baseCode = symbolString.substring(0, 3) as CodeString;
-  const quoteCode = symbolString.substring(3, 6) as CodeString;
+  const baseCode = symbolString.substring(0, CODE_LENGTH) as CodeString;
+  const quoteCode = symbolString.substring(
+    CODE_LENGTH,
+    CODE_LENGTH + CODE_LENGTH
+  ) as CodeString;
 
   return [baseCode, quoteCode];
 };
@@ -53,14 +56,6 @@ export const parseSymbolStringsToTuples = (
   rawSymbolStrings: string[]
 ): [CodeString, CodeString][] => {
   return rawSymbolStrings.map((rawSymbolString) => {
-    if (!rawSymbolString) {
-      throw new Error();
-    }
-
-    if (rawSymbolString.length !== 6) {
-      throw new Error();
-    }
-
     const symbolString = validateSymbolString(rawSymbolString);
     const [baseCodeString, quoteCodeString] =
       splitSymbolToCodeStrings(symbolString);
@@ -137,17 +132,6 @@ export const createCrossCurrency = (
     });
 
   return createCurrency(base.quoteCode, quote.quoteCode, data);
-};
-
-export const appendDataToCurrency = (
-  currency: Currency,
-  data: [number, number][]
-): Currency => {
-  return {
-    baseCode: currency.baseCode,
-    quoteCode: currency.quoteCode,
-    data,
-  };
 };
 
 export const isPivotCurrency = (currency: Currency): boolean => {

@@ -15,9 +15,7 @@ const THEMES: { value: ThemeValue; children: string }[] = [
 
 export const SettingsPage: FunctionComponent = () => {
   const [themeValue, setThemeValue] = useThemeValue();
-
   const [fractionDigits, setFractionDigits] = useFractionDigits();
-
   const [resultDigit, setResultDigit] = useState('');
 
   useEffect(() => {
@@ -39,6 +37,7 @@ export const SettingsPage: FunctionComponent = () => {
                 id={id}
                 label={theme.children}
                 type="radio"
+                name="theme"
                 checked={theme.value === themeValue}
                 value={theme.value}
                 onChange={() => {

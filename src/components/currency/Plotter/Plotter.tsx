@@ -114,7 +114,7 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
           },
           series: series.map((value, index) => {
             const type = isSingleSeries ? 'area' : 'line';
-            const color = CHART_COLORS[index];
+            const color = CHART_COLORS[index % CHART_COLORS.length];
 
             return {
               ...value,

@@ -1,4 +1,4 @@
-import { create } from 'zustand/react';
+import { create } from 'zustand';
 import { fetchCurrenciesBySymbols } from '../../api/client';
 import type { AsyncPayload } from '../../types/common';
 import { parseSymbolStringsToTuples } from '../../utils/currency';
