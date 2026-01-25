@@ -1,9 +1,9 @@
-import { lazy, Suspense, type FunctionComponent } from 'react';
+import { Suspense, type FunctionComponent } from 'react';
+import Highcharts from 'highcharts/highstock';
+import HighchartsReact from 'highcharts-react-official';
 import { useFractionDigits } from '../../../hooks/useFractionDigitsStore';
 import { Loading } from '../../common/Loading';
 import type { PlotterProps } from './Plotter.types';
-
-const StockChart = lazy(() => import('@highcharts/react/stock'));
 
 // @todo: move to CSS
 const CHART_COLORS = [
@@ -23,7 +23,9 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
 
   return (
     <Suspense fallback={<Loading />}>
-      <StockChart
+      <HighchartsReact
+        constructorType={'stockChart'}
+        highcharts={Highcharts}
         options={{
           chart: {
             style: {
@@ -59,30 +61,37 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
               {
                 type: 'month',
                 count: 1,
+                text: '1m',
               },
               {
                 type: 'month',
                 count: 3,
+                text: '3m',
               },
               {
                 type: 'month',
                 count: 6,
+                text: '6m',
               },
               {
                 type: 'ytd',
                 count: 1,
+                text: 'YTD',
               },
               {
                 type: 'year',
                 count: 1,
+                text: '1Y',
               },
               {
                 type: 'year',
                 count: 5,
+                text: '5Y',
               },
               {
                 type: 'year',
                 count: 10,
+                text: '10Y',
               },
               {
                 type: 'all',
