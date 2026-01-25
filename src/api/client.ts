@@ -9,6 +9,9 @@ import {
   createCurrency,
   createPivotCurrency,
 } from '../utils/currency';
+import { ApiCache } from './cache';
+
+const cache = new ApiCache<Currency>();
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
@@ -49,31 +52,35 @@ export const fetchRateTuples = async (
 export const fetchCurrencyByCode = async (
   code: CodeString
 ): Promise<Currency> => {
-  if (code === PIVOT_CURRENCY_CODE) {
-    return createPivotCurrency();
-  }
+  return cache.resolve(code, async () => {
+    if (code === PIVOT_CURRENCY_CODE) {
+      return createPivotCurrency();
+    }
 
-  const [data, latestData] = await Promise.all([
-    fetchRateTuples(`/${code}.csv`),
-    fetchRateTuples(`/${code}.latest.csv`),
-  ]);
+    const [data, latestData] = await Promise.all([
+      fetchRateTuples(`/${code}.csv`),
+      fetchRateTuples(`/${code}.latest.csv`),
+    ]);
 
-  return createCurrency(PIVOT_CURRENCY_CODE, code, [
-    ...data,
-    ...latestData,
-  ]);
+    return createCurrency(PIVOT_CURRENCY_CODE, code, [
+      ...data,
+      ...latestData,
+    ]);
+  });
 };
 
 export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
   CodeString,
   CodeString
 ]): Promise<Currency> => {
-  const [baseCurrency, quoteCurrency] = await Promise.all([
-    fetchCurrencyByCode(baseCode),
-    fetchCurrencyByCode(quoteCode),
-  ]);
+  return cache.resolve(`${baseCode}${quoteCode}`, async () => {
+    const [baseCurrency, quoteCurrency] = await Promise.all([
+      fetchCurrencyByCode(baseCode),
+      fetchCurrencyByCode(quoteCode),
+    ]);
 
-  return createCrossCurrency(baseCurrency, quoteCurrency);
+    return createCrossCurrency(baseCurrency, quoteCurrency);
+  });
 };
 
 export const fetchCurrenciesBySymbols = async (
