@@ -19,6 +19,7 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
   series,
 }) => {
   const [fractionDigits] = useFractionDigits();
+  const isSingleSeries = series.length === 1;
 
   return (
     <Suspense fallback={<Loading />}>
@@ -96,8 +97,13 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
           credits: {
             enabled: false,
           },
+          legend: {
+            enabled: !isSingleSeries,
+            verticalAlign: 'top',
+            layout: 'horizontal',
+            align: 'center',
+          },
           series: series.map((value, index) => {
-            const isSingleSeries = series.length === 1;
             const type = isSingleSeries ? 'area' : 'line';
             const color = CHART_COLORS[index];
 
