@@ -1,11 +1,11 @@
 import { useEffect, useState, type FunctionComponent } from 'react';
+import { BoxField } from '../../components/common/BoxField';
 import { LineField } from '../../components/common/LineField';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import {
   useThemeValue,
   type ThemeValue,
 } from '../../hooks/useThemeValueStore';
-import { BoxField } from '../../components/common/BoxField';
 
 const THEMES: { value: ThemeValue; children: string }[] = [
   { value: 'system', children: 'System' },
@@ -50,7 +50,7 @@ export const SettingsPage: FunctionComponent = () => {
         </div>
 
         <LineField
-          id="fraction-digit"
+          id="fraction-digit-source"
           label="Fraction Digits"
           type="number"
           min={0}
@@ -69,16 +69,13 @@ export const SettingsPage: FunctionComponent = () => {
           }}
         />
 
-        <output
-          style={{
-            fontFamily: 'monospace',
-            backgroundColor: 'gray',
-            display: 'block',
-            padding: '1rem',
-          }}
-        >
-          {resultDigit}
-        </output>
+        <LineField
+          id="fraction-digit-result"
+          label="Example output"
+          type="text"
+          readOnly={true}
+          value={resultDigit}
+        />
       </form>
     </>
   );
