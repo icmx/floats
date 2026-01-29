@@ -11,7 +11,6 @@ export const useFractionDigitsStore = create<FractionDigitsState>()(
     (set) => {
       return {
         fractionDigits: 2,
-
         setFractionDigits: (fractionDigits) => {
           set({ fractionDigits });
         },

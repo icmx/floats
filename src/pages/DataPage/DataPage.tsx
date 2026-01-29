@@ -1,8 +1,8 @@
 import { useEffect, type FunctionComponent } from 'react';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
 import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
+import { useFractionDigits } from '../../stores/fractionDigitsStore';
 import { usePageStore } from './DataPage.store';
 
 export const DateValue: FunctionComponent<{ value: number }> = ({

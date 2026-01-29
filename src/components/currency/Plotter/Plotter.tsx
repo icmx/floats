@@ -1,7 +1,7 @@
 import { Suspense, type FunctionComponent } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { useFractionDigits } from '../../../hooks/useFractionDigitsStore';
+import { useFractionDigits } from '../../../stores/fractionDigitsStore';
 import { Loading } from '../../common/Loading';
 import type { PlotterProps } from './Plotter.types';
 

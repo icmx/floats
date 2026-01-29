@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
-import { useThemeValue, type ThemeValue } from './useThemeValueStore';
+import {
+  useThemeValue,
+  type ThemeValue,
+} from '../stores/themeValueStore';
 
 type ResolvedThemeValue = Exclude<ThemeValue, 'system'>;
 

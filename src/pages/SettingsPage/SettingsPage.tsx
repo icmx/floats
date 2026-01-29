@@ -1,11 +1,11 @@
 import { useEffect, useState, type FunctionComponent } from 'react';
 import { BoxField } from '../../components/common/BoxField';
 import { LineField } from '../../components/common/LineField';
-import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
+import { useFractionDigits } from '../../stores/fractionDigitsStore';
 import {
   useThemeValue,
   type ThemeValue,
-} from '../../hooks/useThemeValueStore';
+} from '../../stores/themeValueStore';
 
 const THEMES: { value: ThemeValue; children: string }[] = [
   { value: 'system', children: 'System' },
