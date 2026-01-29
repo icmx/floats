@@ -1,17 +1,9 @@
 import { useEffect, useState, type FunctionComponent } from 'react';
 import { BoxField } from '../../components/common/BoxField';
 import { LineField } from '../../components/common/LineField';
+import { THEMES } from '../../constants/common';
 import { useFractionDigits } from '../../stores/fractionDigitsStore';
-import {
-  useThemeValue,
-  type ThemeValue,
-} from '../../stores/themeValueStore';
-
-const THEMES: { value: ThemeValue; children: string }[] = [
-  { value: 'system', children: 'System' },
-  { value: 'light', children: 'Light' },
-  { value: 'dark', children: 'Dark' },
-];
+import { useThemeValue } from '../../stores/themeValueStore';
 
 export const SettingsPage: FunctionComponent = () => {
   const [themeValue, setThemeValue] = useThemeValue();
