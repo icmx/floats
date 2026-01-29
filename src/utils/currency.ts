@@ -1,6 +1,5 @@
 import {
   CODE_LENGTH,
-  CODES,
   PIVOT_CURRENCY_CODE,
   SYMBOL_LENGTH,
   SYMBOLS,
@@ -11,20 +10,6 @@ import type {
   RateTuple,
   SymbolString,
 } from '../types/currency';
-
-export const validateCodeString = (source: unknown): CodeString => {
-  if (!source || typeof source !== 'string') {
-    throw new Error('Invalid currency code.');
-  }
-
-  const code = source as CodeString;
-
-  if (code.length !== CODE_LENGTH || !CODES.includes(code)) {
-    throw new Error(`No such currency code: "${code}".`);
-  }
-
-  return code;
-};
 
 export const validateSymbolString = (source: unknown): SymbolString => {
   if (!source || typeof source !== 'string') {
@@ -40,28 +25,17 @@ export const validateSymbolString = (source: unknown): SymbolString => {
   return symbol;
 };
 
-export const splitSymbolToCodeStrings = (
-  symbolString: SymbolString
+export const splitSymbolToCodes = (
+  symbol: SymbolString
 ): [CodeString, CodeString] => {
-  const baseCode = symbolString.substring(0, CODE_LENGTH) as CodeString;
-  const quoteCode = symbolString.substring(
+  const baseCode = symbol.substring(0, CODE_LENGTH) as CodeString;
+
+  const quoteCode = symbol.substring(
     CODE_LENGTH,
-    CODE_LENGTH + CODE_LENGTH
+    SYMBOL_LENGTH
   ) as CodeString;
 
   return [baseCode, quoteCode];
-};
-
-export const parseSymbolStringsToTuples = (
-  rawSymbolStrings: string[]
-): [CodeString, CodeString][] => {
-  return rawSymbolStrings.map((rawSymbolString) => {
-    const symbolString = validateSymbolString(rawSymbolString);
-    const [baseCodeString, quoteCodeString] =
-      splitSymbolToCodeStrings(symbolString);
-
-    return [baseCodeString, quoteCodeString];
-  });
 };
 
 export const createCurrency = (

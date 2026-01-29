@@ -2,7 +2,7 @@ import { useEffect, type FunctionComponent } from 'react';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
-import { useQueryParams } from '../../hooks/useQueryParams';
+import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
 import { usePageStore } from './DataPage.store';
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
@@ -24,11 +24,12 @@ export const FloatValue: FunctionComponent<{
 
 export const DataPage: FunctionComponent = () => {
   const [fractionDigits] = useFractionDigits();
+  const { symbols, error: paramError } = useSymbolsFromQueryParam();
 
-  const { by: symbols } = useQueryParams();
-
-  const { error, data } = usePageStore();
+  const { error: storeError, data } = usePageStore();
   const load = usePageStore((state) => state.load);
+
+  const error = paramError || storeError || null;
 
   const { head, body } = data;
 

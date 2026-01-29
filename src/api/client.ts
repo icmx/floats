@@ -3,11 +3,13 @@ import type {
   CodeString,
   Currency,
   RateTuple,
+  SymbolString,
 } from '../types/currency';
 import {
   createCrossCurrency,
   createCurrency,
   createPivotCurrency,
+  splitSymbolToCodes,
 } from '../utils/currency';
 import { ApiCache } from './cache';
 
@@ -69,11 +71,12 @@ export const fetchCurrencyByCode = async (
   });
 };
 
-export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
-  CodeString,
-  CodeString
-]): Promise<Currency> => {
-  return cache.resolve(`${baseCode}${quoteCode}`, async () => {
+export const fetchCurrencyBySymbol = async (
+  symbol: SymbolString
+): Promise<Currency> => {
+  const [baseCode, quoteCode] = splitSymbolToCodes(symbol);
+
+  return cache.resolve(symbol, async () => {
     const [baseCurrency, quoteCurrency] = await Promise.all([
       fetchCurrencyByCode(baseCode),
       fetchCurrencyByCode(quoteCode),
@@ -84,7 +87,7 @@ export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
 };
 
 export const fetchCurrenciesBySymbols = async (
-  symbols: [CodeString, CodeString][]
+  symbols: SymbolString[]
 ): Promise<Currency[]> => {
   const currencies = await Promise.all(
     symbols.map((symbol) => {

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { fetchCurrenciesBySymbols } from '../../api/client';
 import type { AsyncPayload } from '../../types/common';
-import { parseSymbolStringsToTuples } from '../../utils/currency';
+import type { SymbolString } from '../../types/currency';
 
 export type Data = {
   head: string[];
@@ -12,7 +12,9 @@ export type Data = {
 };
 
 export const usePageStore = create<
-  AsyncPayload<Data> & { load: (symbols: string[]) => Promise<void> }
+  AsyncPayload<Data> & {
+    load: (symbols: SymbolString[]) => Promise<void>;
+  }
 >()((set) => {
   return {
     isLoading: false,
@@ -22,8 +24,7 @@ export const usePageStore = create<
       set({ isLoading: true });
 
       try {
-        const tuples = parseSymbolStringsToTuples(symbols);
-        const currencies = await fetchCurrenciesBySymbols(tuples);
+        const currencies = await fetchCurrenciesBySymbols(symbols);
 
         const headers = currencies.map((currency) => {
           return `${currency.baseCode}${currency.quoteCode}`;

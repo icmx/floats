@@ -3,18 +3,20 @@ import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useQueryParams } from '../../hooks/useQueryParams';
+import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
 import { usePageStore } from './ConvertPage.store';
 
 export const ConvertPage: FunctionComponent = () => {
-  const { by: symbols } = useQueryParams();
+  const { symbols, error: paramError } = useSymbolsFromQueryParam();
 
   const {
     isLoading,
-    error,
+    error: storeError,
     data: { rates },
   } = usePageStore();
   const load = usePageStore((state) => state.load);
+
+  const error = paramError || storeError || null;
 
   useEffect(() => {
     load(symbols);

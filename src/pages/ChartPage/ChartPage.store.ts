@@ -2,14 +2,16 @@ import { create } from 'zustand';
 import { fetchCurrenciesBySymbols } from '../../api/client';
 import type { Series } from '../../components/currency/Plotter';
 import type { AsyncPayload } from '../../types/common';
-import { parseSymbolStringsToTuples } from '../../utils/currency';
+import type { SymbolString } from '../../types/currency';
 
 export type Data = {
   series: Series;
 };
 
 export const usePageStore = create<
-  AsyncPayload<Data> & { load: (symbols: string[]) => Promise<void> }
+  AsyncPayload<Data> & {
+    load: (symbols: SymbolString[]) => Promise<void>;
+  }
 >()((set) => {
   return {
     isLoading: false,
@@ -21,8 +23,7 @@ export const usePageStore = create<
       try {
         const data: Data = { series: [] };
 
-        const tuples = parseSymbolStringsToTuples(symbols);
-        const currencies = await fetchCurrenciesBySymbols(tuples);
+        const currencies = await fetchCurrenciesBySymbols(symbols);
 
         currencies.forEach((currency) => {
           data.series.push({
