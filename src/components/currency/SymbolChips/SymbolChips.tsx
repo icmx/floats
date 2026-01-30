@@ -1,29 +1,29 @@
 import { useCallback, useMemo, type FunctionComponent } from 'react';
 import { SYMBOLS } from '../../../constants/currency';
+import { useQueryParams } from '../../../hooks/useQueryParams';
 import {
   ChipSelect,
   type ChipSelectOption,
 } from '../../common/ChipSelect';
-import { useSymbolsFromQueryParam } from '../../../hooks/useSymbolsFromQueryParam';
-import type { SymbolString } from '../../../types/currency';
 
 export const SymbolChips: FunctionComponent = () => {
-  const symbolOptions: ChipSelectOption<SymbolString>[] =
-    useMemo(() => {
-      return SYMBOLS.map((symbol) => {
-        return {
-          id: `symbol-${symbol}`,
-          value: symbol,
-          pattern: symbol.toLowerCase(),
-          children: symbol,
-        };
-      });
-    }, []);
+  const symbolOptions: ChipSelectOption<string>[] = useMemo(() => {
+    return SYMBOLS.map((symbol) => {
+      return {
+        id: `symbol-${symbol}`,
+        value: symbol,
+        pattern: symbol.toLowerCase(),
+        children: symbol,
+      };
+    });
+  }, []);
 
-  const { symbols, setSymbols } = useSymbolsFromQueryParam();
+  // should be exactly like that since user CAN enter some "invalid" symbols
+  // from query string and still be cool. so user should be able to remove this
+  const { by: symbols, setBy: setSymbols } = useQueryParams();
 
   const selectedSymbolOptions = useMemo<
-    ChipSelectOption<SymbolString>[]
+    ChipSelectOption<string>[]
   >(() => {
     return symbols.map((symbol) => {
       return {
@@ -35,23 +35,19 @@ export const SymbolChips: FunctionComponent = () => {
     });
   }, [symbols]);
 
-  const handleChange = useCallback<
-    (options: ChipSelectOption<SymbolString>[]) => void
-  >(
-    (options) => {
+  const handleChange = useCallback(
+    (options: ChipSelectOption<string>[]): void => {
       setSymbols(options.map((option) => option.value));
     },
     [setSymbols]
   );
 
   return (
-    <>
-      <ChipSelect
-        options={symbolOptions}
-        selectedOptions={selectedSymbolOptions}
-        placeholder="Type symbols like USDEUR"
-        onChange={handleChange}
-      />
-    </>
+    <ChipSelect
+      options={symbolOptions}
+      selectedOptions={selectedSymbolOptions}
+      placeholder="Type symbols like USDEUR"
+      onChange={handleChange}
+    />
   );
 };

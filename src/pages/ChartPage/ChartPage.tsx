@@ -5,7 +5,6 @@ import {
   type Series,
 } from '../../components/currency/Plotter';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
 
@@ -27,10 +26,9 @@ const toData = (currencies: Currency[]): Data => {
 };
 
 export const ChartPage: FunctionComponent = () => {
-  const { error: paramError } = useSymbolsFromQueryParam();
-  const { errors: storeErrors, currencies } = useCurrencies();
+  const { errors, currencies } = useCurrencies();
 
-  const error = paramError || storeErrors.at(0) || null;
+  const error = errors.at(0) || null;
   const data = toData(currencies);
 
   return (

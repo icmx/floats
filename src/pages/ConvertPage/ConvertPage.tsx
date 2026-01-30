@@ -3,9 +3,8 @@ import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
-import type { CodeString, Currency } from '../../types/currency';
 import { useCurrencies } from '../../stores/currenciesStore';
+import type { CodeString, Currency } from '../../types/currency';
 
 export type Data = {
   rates: {
@@ -28,14 +27,9 @@ const toData = (currencies: Currency[]): Data => {
 };
 
 export const ConvertPage: FunctionComponent = () => {
-  const { error: paramError } = useSymbolsFromQueryParam();
-  const {
-    errors: storeErrors,
-    currencies,
-    isLoading,
-  } = useCurrencies();
+  const { errors, currencies, isLoading } = useCurrencies();
 
-  const error = paramError || storeErrors.at(0) || null;
+  const error = errors.at(0) || null;
   const data = toData(currencies);
 
   return (

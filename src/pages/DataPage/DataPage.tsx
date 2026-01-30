@@ -1,7 +1,6 @@
 import { type FunctionComponent } from 'react';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
 import { useFractionDigits } from '../../stores/fractionDigitsStore';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
@@ -72,11 +71,9 @@ export const FloatValue: FunctionComponent<{
 
 export const DataPage: FunctionComponent = () => {
   const [fractionDigits] = useFractionDigits();
+  const { errors, currencies } = useCurrencies();
 
-  const { error: paramError } = useSymbolsFromQueryParam();
-  const { errors: storeErrors, currencies } = useCurrencies();
-
-  const error = paramError || storeErrors.at(0) || null;
+  const error = errors.at(0) || null;
   const data = toData(currencies);
 
   const { head, body } = data;

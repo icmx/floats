@@ -11,18 +11,24 @@ import type {
   SymbolString,
 } from '../types/currency';
 
-export const validateSymbolString = (source: unknown): SymbolString => {
+export const isSymbolString = (
+  source: unknown
+): source is SymbolString => {
   if (!source || typeof source !== 'string') {
-    throw new Error('Invalid currency symbol.');
+    return false;
   }
 
   const symbol = source as SymbolString;
 
-  if (symbol.length !== SYMBOL_LENGTH || !SYMBOLS.includes(symbol)) {
-    throw new Error(`No such currency symbol: "${symbol}".`);
+  if (symbol.length !== SYMBOL_LENGTH) {
+    return false;
   }
 
-  return symbol;
+  if (!SYMBOLS.includes(symbol)) {
+    return false;
+  }
+
+  return true;
 };
 
 export const splitSymbolToCodes = (

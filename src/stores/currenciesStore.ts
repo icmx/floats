@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { create } from 'zustand';
+import { useShallow } from 'zustand/shallow';
 import { fetchCurrencyBySymbol } from '../api/client';
 import type { Currency, SymbolString } from '../types/currency';
 
@@ -95,14 +96,16 @@ export type UseCurrencies = {
 
 export const useCurrencies = () => {
   const { currencies, activeSymbols, loadingSymbols, errorsBySymbol } =
-    useCurrenciesStore((state) => {
-      return {
-        currencies: state.currencies,
-        activeSymbols: state.activeSymbols,
-        loadingSymbols: state.loadingSymbols,
-        errorsBySymbol: state.errorsBySymbol,
-      };
-    });
+    useCurrenciesStore(
+      useShallow((state) => {
+        return {
+          currencies: state.currencies,
+          activeSymbols: state.activeSymbols,
+          loadingSymbols: state.loadingSymbols,
+          errorsBySymbol: state.errorsBySymbol,
+        };
+      })
+    );
 
   return useMemo(() => {
     const activeCurrencies = activeSymbols
