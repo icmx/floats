@@ -1,26 +1,42 @@
-import { useEffect, type FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
-import { usePageStore } from './ConvertPage.store';
+import type { CodeString, Currency } from '../../types/currency';
+import { useCurrencies } from '../../stores/currenciesStore';
+
+export type Data = {
+  rates: {
+    symbol: [CodeString, CodeString];
+    rate: number;
+  }[];
+};
+
+const toData = (currencies: Currency[]): Data => {
+  const data: Data = {
+    rates: currencies.map((currency) => {
+      return {
+        symbol: [currency.baseCode, currency.quoteCode],
+        rate: currency.data.at(-1)?.[1] || 0,
+      };
+    }),
+  };
+
+  return data;
+};
 
 export const ConvertPage: FunctionComponent = () => {
-  const { symbols, error: paramError } = useSymbolsFromQueryParam();
-
+  const { error: paramError } = useSymbolsFromQueryParam();
   const {
+    errors: storeErrors,
+    currencies,
     isLoading,
-    error: storeError,
-    data: { rates },
-  } = usePageStore();
-  const load = usePageStore((state) => state.load);
+  } = useCurrencies();
 
-  const error = paramError || storeError || null;
-
-  useEffect(() => {
-    load(symbols);
-  }, [load, symbols]);
+  const error = paramError || storeErrors.at(0) || null;
+  const data = toData(currencies);
 
   return (
     <>
@@ -31,7 +47,7 @@ export const ConvertPage: FunctionComponent = () => {
       {error && <ErrorCallout error={error} />}
 
       <form>
-        {rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
+        {data.rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
           return (
             <Converter
               key={`${baseCode}${quoteCode}`}

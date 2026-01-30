@@ -1,9 +1,57 @@
-import { useEffect, type FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
 import { useFractionDigits } from '../../stores/fractionDigitsStore';
-import { usePageStore } from './DataPage.store';
+import { useCurrencies } from '../../stores/currenciesStore';
+import type { Currency } from '../../types/currency';
+
+type Data = {
+  head: string[];
+  body: {
+    date: number;
+    rates: (number | null)[];
+  }[];
+};
+
+const toData = (currencies: Currency[]): Data => {
+  const headers = currencies.map((currency) => {
+    return `${currency.baseCode}${currency.quoteCode}`;
+  });
+
+  const head = ['date', ...headers];
+
+  const ratesByDates = new Map<number, (number | null)[]>();
+  const SIZE = currencies.length;
+
+  currencies.forEach((currency, index) => {
+    currency.data.forEach(([date, rate]) => {
+      const ratesByDate =
+        ratesByDates.get(date) || new Array(SIZE).fill(null);
+
+      ratesByDate[index] = rate;
+
+      ratesByDates.set(date, ratesByDate);
+    });
+  });
+
+  const body: { date: number; rates: (number | null)[] }[] = [];
+
+  Array.from(ratesByDates.entries())
+    .sort(([prev], [next]) => {
+      return prev - next;
+    })
+    .forEach(([date, rates]) => {
+      body.push({ date, rates });
+    });
+
+  const data: Data = {
+    head,
+    body,
+  };
+
+  return data;
+};
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
   value,
@@ -24,18 +72,14 @@ export const FloatValue: FunctionComponent<{
 
 export const DataPage: FunctionComponent = () => {
   const [fractionDigits] = useFractionDigits();
-  const { symbols, error: paramError } = useSymbolsFromQueryParam();
 
-  const { error: storeError, data } = usePageStore();
-  const load = usePageStore((state) => state.load);
+  const { error: paramError } = useSymbolsFromQueryParam();
+  const { errors: storeErrors, currencies } = useCurrencies();
 
-  const error = paramError || storeError || null;
+  const error = paramError || storeErrors.at(0) || null;
+  const data = toData(currencies);
 
   const { head, body } = data;
-
-  useEffect(() => {
-    load(symbols);
-  }, [load, symbols]);
 
   return (
     <>

@@ -1,21 +1,37 @@
-import { useEffect, type FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import { Plotter } from '../../components/currency/Plotter';
+import {
+  Plotter,
+  type Series,
+} from '../../components/currency/Plotter';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useSymbolsFromQueryParam } from '../../hooks/useSymbolsFromQueryParam';
-import { usePageStore } from './ChartPage.store';
+import { useCurrencies } from '../../stores/currenciesStore';
+import type { Currency } from '../../types/currency';
+
+type Data = {
+  series: Series;
+};
+
+const toData = (currencies: Currency[]): Data => {
+  const data: Data = { series: [] };
+
+  currencies.forEach((currency) => {
+    data.series.push({
+      name: `${currency.baseCode}${currency.quoteCode}`,
+      data: [...currency.data],
+    });
+  });
+
+  return data;
+};
 
 export const ChartPage: FunctionComponent = () => {
-  const { symbols, error: paramError } = useSymbolsFromQueryParam();
+  const { error: paramError } = useSymbolsFromQueryParam();
+  const { errors: storeErrors, currencies } = useCurrencies();
 
-  const { error: storeError, data } = usePageStore();
-  const load = usePageStore((state) => state.load);
-
-  const error = paramError || storeError || null;
-
-  useEffect(() => {
-    load(symbols);
-  }, [load, symbols]);
+  const error = paramError || storeErrors.at(0) || null;
+  const data = toData(currencies);
 
   return (
     <>
