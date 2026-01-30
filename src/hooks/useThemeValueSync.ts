@@ -25,7 +25,7 @@ const applyThemeValue = (themeValue: ThemeValue): void => {
   dataset.theme = themeValue;
 };
 
-export const useThemeValueEffect = () => {
+export const useThemeValueSync = (): void => {
   const [themeValue] = useThemeValue();
 
   useEffect(() => {
