@@ -3,64 +3,78 @@ import { create } from 'zustand';
 import { fetchCurrencyBySymbol } from '../api/client';
 import type { Currency, SymbolString } from '../types/currency';
 
+export type SymbolsRecord<T> = Partial<Record<SymbolString, T>>;
+
 export const useCurrenciesStore = create<{
-  currencies: Map<SymbolString, Currency>;
+  currencies: SymbolsRecord<Currency>;
   activeSymbols: SymbolString[];
-  loadingSymbols: Set<SymbolString>;
-  errorsBySymbol: Map<SymbolString, unknown>;
+  loadingSymbols: SymbolsRecord<boolean>;
+  errorsBySymbol: SymbolsRecord<unknown>;
 }>()(() => {
   return {
-    currencies: new Map(),
+    currencies: {},
     activeSymbols: [],
-    loadingSymbols: new Set(),
-    errorsBySymbol: new Map(),
+    loadingSymbols: {},
+    errorsBySymbol: {},
   };
 });
 
 export const loadCurrenciesToStore = async (
   symbols: SymbolString[]
 ): Promise<void> => {
-  const { currencies, loadingSymbols } = useCurrenciesStore.getState();
+  const state = useCurrenciesStore.getState();
 
-  const symbolsToFetch = symbols.filter(
-    (symbol) => !currencies.has(symbol) && !loadingSymbols.has(symbol)
-  );
+  const symbolsToFetch = symbols.filter((symbol) => {
+    return !state.currencies[symbol] && !state.loadingSymbols[symbol];
+  });
 
-  useCurrenciesStore.setState({ activeSymbols: symbols });
+  useCurrenciesStore.setState((state) => {
+    if (symbolsToFetch.length === 0) {
+      return {
+        activeSymbols: symbols,
+      };
+    }
+
+    const loadingSymbols = { ...state.loadingSymbols };
+
+    symbolsToFetch.forEach((symbol) => {
+      loadingSymbols[symbol] = true;
+    });
+
+    return {
+      activeSymbols: symbols,
+      loadingSymbols,
+    };
+  });
 
   if (symbolsToFetch.length === 0) {
     return;
   }
 
-  useCurrenciesStore.setState((state) => ({
-    loadingSymbols: new Set([
-      ...state.loadingSymbols,
-      ...symbolsToFetch,
-    ]),
-  }));
-
   const results = await Promise.allSettled(
     symbolsToFetch.map(async (symbol) => {
-      const currency = await fetchCurrencyBySymbol(symbol);
-
-      return { symbol, currency };
+      return {
+        symbol,
+        currency: await fetchCurrencyBySymbol(symbol),
+      };
     })
   );
 
   useCurrenciesStore.setState((state) => {
-    const nextCurrencies = new Map(state.currencies);
-    const nextErrors = new Map(state.errorsBySymbol);
-    const nextLoading = new Set(state.loadingSymbols);
+    const nextCurrencies = { ...state.currencies };
+    const nextErrors = { ...state.errorsBySymbol };
+    const nextLoading = { ...state.loadingSymbols };
 
-    results.forEach((result, index) => {
+    results.forEach((value, index) => {
       const symbol = symbolsToFetch[index];
-      nextLoading.delete(symbol);
 
-      if (result.status === 'fulfilled') {
-        nextCurrencies.set(symbol, result.value.currency);
-        nextErrors.delete(symbol);
+      nextLoading[symbol] = false;
+
+      if (value.status === 'fulfilled') {
+        nextCurrencies[symbol] = value.value.currency;
+        delete nextErrors[symbol];
       } else {
-        nextErrors.set(symbol, result.reason);
+        nextErrors[symbol] = value.reason;
       }
     });
 
@@ -75,37 +89,41 @@ export const loadCurrenciesToStore = async (
 export type UseCurrencies = {
   currencies: Currency[];
   isLoading: boolean;
-  errors: unknown[];
   isEmpty: boolean;
+  errors: unknown[];
 };
 
-export const useCurrencies = (): UseCurrencies => {
-  const currencies = useCurrenciesStore((state) => state.currencies);
-  const activeSymbols = useCurrenciesStore(
-    (state) => state.activeSymbols
-  );
+export const useCurrencies = () => {
+  const { currencies, activeSymbols, loadingSymbols, errorsBySymbol } =
+    useCurrenciesStore((state) => {
+      return {
+        currencies: state.currencies,
+        activeSymbols: state.activeSymbols,
+        loadingSymbols: state.loadingSymbols,
+        errorsBySymbol: state.errorsBySymbol,
+      };
+    });
 
-  const activeCurrencies = useMemo(() => {
-    return activeSymbols
-      .map((symbol) => currencies.get(symbol))
+  return useMemo(() => {
+    const activeCurrencies = activeSymbols
+      .map((symbol) => currencies[symbol])
       .filter((currency): currency is Currency => !!currency);
-  }, [currencies, activeSymbols]);
 
-  const loadingSymbols = useCurrenciesStore(
-    (state) => state.loadingSymbols
-  );
+    const isLoading = activeSymbols.some(
+      (symbol) => loadingSymbols[symbol] === true
+    );
 
-  const isLoading = loadingSymbols.size > 0;
+    const isEmpty = activeCurrencies.length === 0;
 
-  const isEmpty = useMemo(() => {
-    return activeCurrencies.length === 0;
-  }, [activeCurrencies]);
+    const errors = activeSymbols
+      .map((symbol) => errorsBySymbol[symbol])
+      .filter(Boolean);
 
-  const errorsBySymbol = useCurrenciesStore(
-    (state) => state.errorsBySymbol
-  );
-
-  const errors = Array.from(errorsBySymbol.values());
-
-  return { currencies: activeCurrencies, isLoading, errors, isEmpty };
+    return {
+      currencies: activeCurrencies,
+      isLoading,
+      errors,
+      isEmpty,
+    };
+  }, [activeSymbols, currencies, loadingSymbols, errorsBySymbol]);
 };
