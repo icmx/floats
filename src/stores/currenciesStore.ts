@@ -72,7 +72,7 @@ export const loadCurrenciesToStore = async (
 
       if (value.status === 'fulfilled') {
         nextCurrencies[symbol] = value.value.currency;
-        delete nextErrors[symbol];
+        nextErrors[symbol] = undefined;
       } else {
         nextErrors[symbol] = value.reason;
       }
