@@ -106,6 +106,10 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
             enabled: false,
           },
           legend: {
+            itemStyle: {
+              color: 'var(--color-text)',
+            },
+
             enabled: !isSingleSeries,
             verticalAlign: 'top',
             layout: 'horizontal',
