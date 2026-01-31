@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react';
 import { Callout } from '../../common/Callout';
-import type { ErrorCalloutProps } from './ErrorCalloutProps';
+import type { ErrorCalloutProps } from './ErrorCallout.types';
 
 const FALLBACK_MESSAGE = 'Unknown error happened.';
 

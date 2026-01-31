@@ -1,2 +1,2 @@
 export * from './ErrorCallout';
-export * from './ErrorCalloutProps';
+export * from './ErrorCallout.types';

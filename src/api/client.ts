@@ -91,8 +91,8 @@ export const getCurrencies = async (
   symbols: SymbolString[]
 ): Promise<Results<Currency, unknown>> => {
   const settled = await Promise.allSettled(
-    symbols.map(async (symbol) => {
-      return await fetchCurrencyBySymbol(symbol);
+    symbols.map((symbol) => {
+      return fetchCurrencyBySymbol(symbol);
     })
   );
 

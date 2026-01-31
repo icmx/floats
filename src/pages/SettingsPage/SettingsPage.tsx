@@ -1,4 +1,4 @@
-import { useEffect, useState, type FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { BoxField } from '../../components/common/BoxField';
 import { LineField } from '../../components/common/LineField';
 import { THEMES } from '../../constants/common';
@@ -8,13 +8,10 @@ import { useThemeValue } from '../../stores/themeValueStore';
 export const SettingsPage: FunctionComponent = () => {
   const [themeValue, setThemeValue] = useThemeValue();
   const [fractionDigits, setFractionDigits] = useFractionDigits();
-  const [resultDigit, setResultDigit] = useState('');
 
-  useEffect(() => {
-    setResultDigit(
-      'Will show: ' + (1000.12345678).toFixed(fractionDigits)
-    );
-  }, [fractionDigits]);
+  const resultDigit = `Will show: ${(1000.12345678).toFixed(
+    fractionDigits
+  )}`;
 
   return (
     <>

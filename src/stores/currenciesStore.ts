@@ -87,7 +87,7 @@ export type UseCurrencies = {
   errors: unknown[];
 };
 
-export const useCurrencies = () => {
+export const useCurrencies = (): UseCurrencies => {
   const { currencies, activeSymbols, loadingSymbols, errorsBySymbol } =
     useCurrenciesStore(
       useShallow((state) => {
