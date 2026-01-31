@@ -1,4 +1,5 @@
 import { PIVOT_CURRENCY_CODE } from '../constants/currency';
+import type { Results } from '../types/common';
 import type {
   CodeString,
   Currency,
@@ -86,14 +87,20 @@ export const fetchCurrencyBySymbol = async (
   });
 };
 
-export const fetchCurrenciesBySymbols = async (
+export const getCurrencies = async (
   symbols: SymbolString[]
-): Promise<Currency[]> => {
-  const currencies = await Promise.all(
-    symbols.map((symbol) => {
-      return fetchCurrencyBySymbol(symbol);
+): Promise<Results<Currency, unknown>> => {
+  const settled = await Promise.allSettled(
+    symbols.map(async (symbol) => {
+      return await fetchCurrencyBySymbol(symbol);
     })
   );
 
-  return currencies;
+  return settled.map((result) => {
+    if (result.status === 'fulfilled') {
+      return { success: true, data: result.value };
+    } else {
+      return { success: false, error: result.reason };
+    }
+  });
 };

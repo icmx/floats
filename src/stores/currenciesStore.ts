@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/shallow';
-import { fetchCurrencyBySymbol } from '../api/client';
+import { getCurrencies } from '../api/client';
 import type { Currency, SymbolString } from '../types/currency';
 
 export type SymbolsRecord<T> = Partial<Record<SymbolString, T>>;
@@ -52,30 +52,23 @@ export const loadCurrenciesToStore = async (
     return;
   }
 
-  const results = await Promise.allSettled(
-    symbolsToFetch.map(async (symbol) => {
-      return {
-        symbol,
-        currency: await fetchCurrencyBySymbol(symbol),
-      };
-    })
-  );
+  const results = await getCurrencies(symbolsToFetch);
 
   useCurrenciesStore.setState((state) => {
     const nextCurrencies = { ...state.currencies };
     const nextErrors = { ...state.errorsBySymbol };
     const nextLoading = { ...state.loadingSymbols };
 
-    results.forEach((value, index) => {
+    results.forEach((result, index) => {
       const symbol = symbolsToFetch[index];
 
       nextLoading[symbol] = false;
 
-      if (value.status === 'fulfilled') {
-        nextCurrencies[symbol] = value.value.currency;
+      if (result.success) {
+        nextCurrencies[symbol] = result.data;
         nextErrors[symbol] = undefined;
       } else {
-        nextErrors[symbol] = value.reason;
+        nextErrors[symbol] = result.error;
       }
     });
 

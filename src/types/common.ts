@@ -1,8 +1,8 @@
-export type Result<TData, TError = unknown> =
+export type Result<TData, TError> =
   | { success: true; data: TData }
   | { success: false; error: TError };
 
-export type Results<TData, TError = unknown> = Result<TData, TError>[];
+export type Results<TData, TError> = Result<TData, TError>[];
 
 export type QueryParams = {
   by: string[];
