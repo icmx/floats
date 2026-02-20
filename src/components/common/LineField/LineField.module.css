@@ -15,12 +15,12 @@
   display: block;
 
   margin: 0.25rem 0;
-  padding: 4px;
+  padding: 10px;
   width: 100%;
   box-sizing: border-box;
 
   border: solid 1px var(--color-line);
-  border-radius: 0.25rem;
+  border-radius: 8px;
 
   font-size: var(--font-size-m);
 
