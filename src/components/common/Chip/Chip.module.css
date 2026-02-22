@@ -51,6 +51,5 @@
 }
 
 .ChipButton:hover {
-  /* todo: palette */
-  background-color: oklch(66% 0.2 25);
+  background-color: var(--color-warn);
 }
