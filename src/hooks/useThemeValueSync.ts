@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useThemeValue, type ThemeValue } from './useThemeValueStore';
+import { useThemeValue } from '../stores/themeValueStore';
+import type { ThemeValue } from '../types/common';
 
 type ResolvedThemeValue = Exclude<ThemeValue, 'system'>;
 
@@ -24,7 +25,7 @@ const applyThemeValue = (themeValue: ThemeValue): void => {
   dataset.theme = themeValue;
 };
 
-export const useThemeValueEffect = () => {
+export const useThemeValueSync = (): void => {
   const [themeValue] = useThemeValue();
 
   useEffect(() => {

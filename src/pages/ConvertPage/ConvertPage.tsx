@@ -1,24 +1,36 @@
-import { useEffect, type FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { Converter } from '../../components/currency/Converter';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useQueryParams } from '../../hooks/useQueryParams';
-import { usePageStore } from './CovertPage.store';
+import { useCurrencies } from '../../stores/currenciesStore';
+import type { CodeString, Currency } from '../../types/currency';
+
+export type Data = {
+  rates: {
+    symbol: [CodeString, CodeString];
+    rate: number;
+  }[];
+};
+
+const toData = (currencies: Currency[]): Data => {
+  const data: Data = {
+    rates: currencies.map((currency) => {
+      return {
+        symbol: [currency.baseCode, currency.quoteCode],
+        rate: currency.data.at(-1)?.[1] || 0,
+      };
+    }),
+  };
+
+  return data;
+};
 
 export const ConvertPage: FunctionComponent = () => {
-  const { by: symbols } = useQueryParams();
+  const { errors, currencies, isLoading } = useCurrencies();
 
-  const {
-    isLoading,
-    error,
-    data: { rates },
-  } = usePageStore();
-  const load = usePageStore((state) => state.load);
-
-  useEffect(() => {
-    load(symbols);
-  }, [load, symbols]);
+  const error = errors.at(0) || null;
+  const data = toData(currencies);
 
   return (
     <>
@@ -29,7 +41,7 @@ export const ConvertPage: FunctionComponent = () => {
       {error && <ErrorCallout error={error} />}
 
       <form>
-        {rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
+        {data.rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
           return (
             <Converter
               key={`${baseCode}${quoteCode}`}

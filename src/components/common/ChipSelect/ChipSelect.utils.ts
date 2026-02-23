@@ -1,6 +1,6 @@
 import type { ChipSelectOption } from './ChipSelect.types';
 
-export const defaultOptionsFilter = <T extends string = string>(
+export const defaultOptionsFilter = <T>(
   options: ChipSelectOption<T>[],
   inputValue: string
 ): ChipSelectOption<T>[] => {

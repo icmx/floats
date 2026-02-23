@@ -1,13 +1,16 @@
 import { PIVOT_CURRENCY_CODE } from '../constants/currency';
+import type { Results } from '../types/common';
 import type {
   CodeString,
   Currency,
   RateTuple,
+  SymbolString,
 } from '../types/currency';
 import {
   createCrossCurrency,
   createCurrency,
   createPivotCurrency,
+  splitSymbolToCodes,
 } from '../utils/currency';
 import { ApiCache } from './cache';
 
@@ -69,11 +72,12 @@ export const fetchCurrencyByCode = async (
   });
 };
 
-export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
-  CodeString,
-  CodeString
-]): Promise<Currency> => {
-  return cache.resolve(`${baseCode}${quoteCode}`, async () => {
+export const fetchCurrencyBySymbol = async (
+  symbol: SymbolString
+): Promise<Currency> => {
+  const [baseCode, quoteCode] = splitSymbolToCodes(symbol);
+
+  return cache.resolve(symbol, async () => {
     const [baseCurrency, quoteCurrency] = await Promise.all([
       fetchCurrencyByCode(baseCode),
       fetchCurrencyByCode(quoteCode),
@@ -83,14 +87,20 @@ export const fetchCurrencyBySymbol = async ([baseCode, quoteCode]: [
   });
 };
 
-export const fetchCurrenciesBySymbols = async (
-  symbols: [CodeString, CodeString][]
-): Promise<Currency[]> => {
-  const currencies = await Promise.all(
+export const getCurrencies = async (
+  symbols: SymbolString[]
+): Promise<Results<Currency, unknown>> => {
+  const settled = await Promise.allSettled(
     symbols.map((symbol) => {
       return fetchCurrencyBySymbol(symbol);
     })
   );
 
-  return currencies;
+  return settled.map((result) => {
+    if (result.status === 'fulfilled') {
+      return { success: true, data: result.value };
+    } else {
+      return { success: false, error: result.reason };
+    }
+  });
 };

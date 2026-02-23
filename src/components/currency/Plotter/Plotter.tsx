@@ -1,18 +1,17 @@
 import { Suspense, type FunctionComponent } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { useFractionDigits } from '../../../hooks/useFractionDigitsStore';
+import { useFractionDigits } from '../../../stores/fractionDigitsStore';
 import { Loading } from '../../common/Loading';
 import type { PlotterProps } from './Plotter.types';
 
-// @todo: move to CSS
 const CHART_COLORS = [
-  '#6366f1', // indigo
-  '#22c55e', // green
-  '#f59e0b', // amber
-  '#ec4899', // pink
-  '#06b6d4', // cyan
-  '#f97316', // orange
+  'var(--chart-line-indigo)',
+  'var(--chart-line-green)',
+  'var(--chart-line-amber)',
+  'var(--chart-line-pink)',
+  'var(--chart-line-cyan)',
+  'var(--chart-line-orange)',
 ];
 
 export const Plotter: FunctionComponent<PlotterProps> = ({
@@ -107,6 +106,10 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
             enabled: false,
           },
           legend: {
+            itemStyle: {
+              color: 'var(--color-text)',
+            },
+
             enabled: !isSingleSeries,
             verticalAlign: 'top',
             layout: 'horizontal',
@@ -114,7 +117,7 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
           },
           series: series.map((value, index) => {
             const type = isSingleSeries ? 'area' : 'line';
-            const color = CHART_COLORS[index];
+            const color = CHART_COLORS[index % CHART_COLORS.length];
 
             return {
               ...value,

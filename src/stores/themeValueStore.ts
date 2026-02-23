@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-
-export type ThemeValue = 'system' | 'light' | 'dark';
+import type { ThemeValue } from '../types/common';
 
 export type ThemeState = {
   themeValue: ThemeValue;

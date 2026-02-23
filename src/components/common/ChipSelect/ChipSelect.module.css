@@ -4,17 +4,17 @@
   display: block;
 
   margin: 1rem 0;
-  padding: 2px;
+  padding: 4px;
 
   border: solid 1px var(--color-line);
-  border-radius: 0.25rem;
+  border-radius: 8px;
 
   background-color: var(--color-field);
 }
 
 .SelectedValues {
   display: flex;
-  gap: 2px;
+  gap: 4px;
   flex-wrap: wrap;
 }
 
@@ -24,9 +24,11 @@
 
   display: block;
 
-  flex-grow: 1;
   margin: 0;
-  padding: 2px 4px;
+  padding: 6px 4px;
+
+  flex: 1;
+  min-width: 0;
 
   font-size: var(--font-size-m);
 
@@ -45,8 +47,6 @@
   top: 100%;
 
   max-height: 240px;
-
-  z-index: 1000;
 
   list-style: none;
   overflow-y: scroll;

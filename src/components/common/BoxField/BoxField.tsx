@@ -5,11 +5,11 @@ import styles from './BoxField.module.css';
 export const BoxField: FunctionComponent<BoxFieldProps> = ({
   id,
   label,
-  ...inputPtops
+  ...inputProps
 }) => {
   return (
     <div className={styles.BoxField}>
-      <input className={styles.BoxFieldInput} id={id} {...inputPtops} />
+      <input className={styles.BoxFieldInput} id={id} {...inputProps} />
       <label className={styles.BoxFieldLabel} htmlFor={id}>
         {label}
       </label>

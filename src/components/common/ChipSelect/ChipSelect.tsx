@@ -14,7 +14,7 @@ import type {
 import { defaultOptionsFilter } from './ChipSelect.utils';
 import styles from './ChipSelect.module.css';
 
-export const ChipSelect = <T extends string = string>({
+export const ChipSelect = <T,>({
   options,
   selectedOptions,
   placeholder,

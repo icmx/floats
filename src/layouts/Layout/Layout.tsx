@@ -1,13 +1,15 @@
 import { type FunctionComponent } from 'react';
 import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
-import { useThemeValueEffect } from '../../hooks/useThemeValueEffect';
 import { useRoutesUrls } from '../../hooks/useRoutesUrls';
+import { useQueryParamsSync } from '../../hooks/useQueryParamsSync';
+import { useThemeValueSync } from '../../hooks/useThemeValueSync';
 import { useTitle } from '../../hooks/useTitle';
 import { classNames } from '../../utils/common';
 import styles from './Layout.module.css';
 
 export const Layout: FunctionComponent = () => {
-  useThemeValueEffect();
+  useThemeValueSync();
+  useQueryParamsSync();
 
   const title = useTitle();
   const urls = useRoutesUrls();

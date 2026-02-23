@@ -1,0 +1,17 @@
+<svg
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <rect x="32" y="32" width="448" height="448" fill="#1a1a2e" />
+  <rect x="64" y="64" width="384" height="384" fill="url(#gradient)" />
+  <rect x="64" y="64" width="384" height="32" fill="#a5b4fc"/>
+  <defs>
+    <linearGradient id="gradient" x1="256" y1="64" x2="256" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366f1" />
+      <stop stop-color="#6366f1" stop-opacity="0.1" offset="1" />
+    </linearGradient>
+  </defs>
+</svg>

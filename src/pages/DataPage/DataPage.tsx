@@ -1,9 +1,56 @@
-import { useEffect, type FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import { useFractionDigits } from '../../hooks/useFractionDigitsStore';
-import { useQueryParams } from '../../hooks/useQueryParams';
-import { usePageStore } from './DataPage.store';
+import { useFractionDigits } from '../../stores/fractionDigitsStore';
+import { useCurrencies } from '../../stores/currenciesStore';
+import type { Currency } from '../../types/currency';
+
+type Data = {
+  head: string[];
+  body: {
+    date: number;
+    rates: (number | null)[];
+  }[];
+};
+
+const toData = (currencies: Currency[]): Data => {
+  const headers = currencies.map((currency) => {
+    return `${currency.baseCode}${currency.quoteCode}`;
+  });
+
+  const head = ['date', ...headers];
+
+  const ratesByDates = new Map<number, (number | null)[]>();
+  const SIZE = currencies.length;
+
+  currencies.forEach((currency, index) => {
+    currency.data.forEach(([date, rate]) => {
+      const ratesByDate =
+        ratesByDates.get(date) || new Array(SIZE).fill(null);
+
+      ratesByDate[index] = rate;
+
+      ratesByDates.set(date, ratesByDate);
+    });
+  });
+
+  const body: { date: number; rates: (number | null)[] }[] = [];
+
+  Array.from(ratesByDates.entries())
+    .sort(([prev], [next]) => {
+      return prev - next;
+    })
+    .forEach(([date, rates]) => {
+      body.push({ date, rates });
+    });
+
+  const data: Data = {
+    head,
+    body,
+  };
+
+  return data;
+};
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
   value,
@@ -24,17 +71,12 @@ export const FloatValue: FunctionComponent<{
 
 export const DataPage: FunctionComponent = () => {
   const [fractionDigits] = useFractionDigits();
+  const { errors, currencies } = useCurrencies();
 
-  const { by: symbols } = useQueryParams();
-
-  const { error, data } = usePageStore();
-  const load = usePageStore((state) => state.load);
+  const error = errors.at(0) || null;
+  const data = toData(currencies);
 
   const { head, body } = data;
-
-  useEffect(() => {
-    load(symbols);
-  }, [load, symbols]);
 
   return (
     <>
