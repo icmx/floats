@@ -13,8 +13,6 @@ export const useQueryParamsSync = (): void => {
   }, [by]);
 
   useEffect(() => {
-    if (symbols.length) {
-      loadCurrenciesToStore(symbols);
-    }
+    loadCurrenciesToStore(symbols);
   }, [symbols]);
 };
