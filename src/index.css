@@ -103,7 +103,7 @@ td.align-right {
 #root {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  min-height: calc(100vh - 0rem);
+  min-height: 100svh;
 
   margin: 0 1rem;
 }
