@@ -2,7 +2,7 @@
   "name": "floats",
   "short_name": "floats",
   "description": "Currency explorer",
-  "theme_color": "#0094ff",
+  "theme_color": "#1d1f25",
   "background_color": "#1d1f25",
   "display": "standalone",
   "icons": [
