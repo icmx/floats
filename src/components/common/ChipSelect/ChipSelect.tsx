@@ -17,6 +17,7 @@ import styles from './ChipSelect.module.css';
 export const ChipSelect = <T,>({
   options,
   selectedOptions,
+  autoCapitalize,
   placeholder,
   onChange = () => {},
   optionsFilter = defaultOptionsFilter,
@@ -166,6 +167,7 @@ export const ChipSelect = <T,>({
           ref={inputRef}
           type="text"
           value={inputValue}
+          autoCapitalize={autoCapitalize}
           placeholder={placeholder}
           onChange={(event) => {
             setInputValue(event.target.value);

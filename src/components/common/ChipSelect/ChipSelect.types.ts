@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { InputHTMLAttributes, ReactNode } from 'react';
 
 export type ChipSelectOption<T> = {
   id: string;
@@ -10,7 +10,8 @@ export type ChipSelectOption<T> = {
 export type ChipSelectProps<T> = {
   options: ChipSelectOption<T>[];
   selectedOptions: ChipSelectOption<T>[];
-  placeholder?: string;
+  autoCapitalize?: InputHTMLAttributes<HTMLInputElement>['autoCapitalize'];
+  placeholder?: InputHTMLAttributes<HTMLInputElement>['placeholder'];
   onChange?: (options: ChipSelectOption<T>[]) => void;
   optionsFilter?: (
     options: ChipSelectOption<T>[],
