@@ -124,3 +124,21 @@ export const isPivotCurrency = (currency: Currency): boolean => {
 export const isEmptyCurrency = (currency: Currency): boolean => {
   return currency.data.length === 0;
 };
+
+export const LOCALES = navigator?.languages || ['en'];
+
+export const EXPLORE_FRACTION_DIGITS = 6;
+
+export const CONVERT_FRACTION_DIGITS = 2;
+
+export const exploreFormatter = new Intl.NumberFormat(LOCALES, {
+  maximumFractionDigits: EXPLORE_FRACTION_DIGITS,
+  minimumFractionDigits: EXPLORE_FRACTION_DIGITS,
+  roundingMode: 'halfEven',
+});
+
+export const convertFormatter = new Intl.NumberFormat(LOCALES, {
+  maximumFractionDigits: CONVERT_FRACTION_DIGITS,
+  minimumFractionDigits: CONVERT_FRACTION_DIGITS,
+  roundingMode: 'halfEven',
+});

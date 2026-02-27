@@ -1,10 +1,8 @@
 import { useState, type FunctionComponent } from 'react';
 import { LineField } from '../../common/LineField';
+import { convertFormatter } from '../../../utils/currency';
 import type { ConverterProps } from './Converter.types';
 import styles from './Converter.module.css';
-
-// hardcoded here since no one needs more for real money values
-const FRACTION_DIGITS = 2;
 
 export const Converter: FunctionComponent<ConverterProps> = ({
   baseAmount,
@@ -26,7 +24,7 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         type="number"
         min={0}
         step={0.01}
-        value={baseValue.toFixed(FRACTION_DIGITS)}
+        value={convertFormatter.format(baseValue)}
         onChange={(event) => {
           const nextBaseValue =
             Number.parseFloat(event.target.value) || 0;
@@ -44,7 +42,7 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         type="number"
         min={0}
         step={0.01}
-        value={quoteValue.toFixed(FRACTION_DIGITS)}
+        value={convertFormatter.format(quoteValue)}
         onChange={(event) => {
           const nextQuoteValue =
             Number.parseFloat(event.target.value) || 0;

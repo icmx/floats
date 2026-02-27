@@ -1,8 +1,8 @@
 import { Suspense, type FunctionComponent } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { useFractionDigits } from '../../../stores/fractionDigitsStore';
 import { Loading } from '../../common/Loading';
+import { EXPLORE_FRACTION_DIGITS } from '../../../utils/currency';
 import type { PlotterProps } from './Plotter.types';
 
 const CHART_COLORS = [
@@ -17,7 +17,6 @@ const CHART_COLORS = [
 export const Plotter: FunctionComponent<PlotterProps> = ({
   series,
 }) => {
-  const [fractionDigits] = useFractionDigits();
   const isSingleSeries = series.length === 1;
 
   return (
@@ -125,7 +124,7 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
               color,
               animation: true,
               tooltip: {
-                valueDecimals: fractionDigits,
+                valueDecimals: EXPLORE_FRACTION_DIGITS,
                 pointFormat: '{series.name}: {point.y}',
               },
             };
