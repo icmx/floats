@@ -46,6 +46,7 @@ export const SymbolChips: FunctionComponent = () => {
     <ChipSelect
       options={symbolOptions}
       selectedOptions={selectedSymbolOptions}
+      autoCapitalize="characters"
       placeholder="Type symbols like USDEUR"
       onChange={handleChange}
     />

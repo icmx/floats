@@ -1,9 +1,9 @@
 import { type FunctionComponent } from 'react';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import { useFractionDigits } from '../../stores/fractionDigitsStore';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
+import { exploreFormatter } from '../../utils/currency';
 
 type Data = {
   head: string[];
@@ -62,15 +62,13 @@ export const DateValue: FunctionComponent<{ value: number }> = ({
 
 export const FloatValue: FunctionComponent<{
   value: number | null;
-  fraction: number;
-}> = ({ value, fraction }) => {
-  const text = value === null ? '' : value.toFixed(fraction);
+}> = ({ value }) => {
+  const text = value === null ? '' : exploreFormatter.format(value);
 
   return <data value={value ?? undefined}>{text}</data>;
 };
 
 export const DataPage: FunctionComponent = () => {
-  const [fractionDigits] = useFractionDigits();
   const { errors, currencies } = useCurrencies();
 
   const error = errors.at(0) || null;
@@ -110,11 +108,8 @@ export const DataPage: FunctionComponent = () => {
                   const key = `${row.date}_${head.at(index + 1)}`;
 
                   return (
-                    <td key={key} className="align-right">
-                      <FloatValue
-                        value={rate}
-                        fraction={fractionDigits}
-                      />
+                    <td key={key} className="align-right is-number">
+                      <FloatValue value={rate} />
                     </td>
                   );
                 })}
