@@ -17,8 +17,10 @@ import styles from './ChipSelect.module.css';
 export const ChipSelect = <T,>({
   options,
   selectedOptions,
+  autoComplete,
   autoCapitalize,
   placeholder,
+  spellCheck,
   onChange = () => {},
   optionsFilter = defaultOptionsFilter,
 }: ChipSelectProps<T>) => {
@@ -168,7 +170,9 @@ export const ChipSelect = <T,>({
           type="text"
           value={inputValue}
           autoCapitalize={autoCapitalize}
+          autoComplete={autoComplete}
           placeholder={placeholder}
+          spellCheck={spellCheck}
           onChange={(event) => {
             setInputValue(event.target.value);
             setIsOpen(true);
