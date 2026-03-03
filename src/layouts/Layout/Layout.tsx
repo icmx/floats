@@ -1,5 +1,6 @@
 import { type FunctionComponent } from 'react';
 import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
+import { BuildPlate } from '../../components/common/BuildPlate';
 import { useQueryParamsSync } from '../../hooks/useQueryParamsSync';
 import { useRoutesUrls } from '../../hooks/useRoutesUrls';
 import { useThemeValueSync } from '../../hooks/useThemeValueSync';
@@ -46,7 +47,10 @@ export const Layout: FunctionComponent = () => {
         <Outlet />
       </main>
       <footer className={styles.LayoutFooter}>
-        <p>floats - currency explorer app (WIP)</p>
+        <p>(WIP) floats · currency explorer app</p>
+        <p>
+          <BuildPlate />
+        </p>
       </footer>
     </>
   );
