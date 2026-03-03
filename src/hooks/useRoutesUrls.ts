@@ -4,9 +4,8 @@ import { buildSearch } from '../utils/common';
 import { useQueryParams } from './useQueryParams';
 
 export type UseRoutesUrls = {
-  chart: string;
+  explore: string;
   convert: string;
-  data: string;
 };
 
 export const useRoutesUrls = (): UseRoutesUrls => {
@@ -18,8 +17,7 @@ export const useRoutesUrls = (): UseRoutesUrls => {
   }, [queryParams, persistQueryParams]);
 
   return {
-    chart: `/chart${search}`,
+    explore: `/explore${search}`,
     convert: `/convert${search}`,
-    data: `/data${search}`,
   };
 };

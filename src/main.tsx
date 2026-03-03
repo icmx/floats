@@ -3,9 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { Layout } from './layouts/Layout';
-import { ChartPage } from './pages/ChartPage';
 import { ConvertPage } from './pages/ConvertPage';
-import { DataPage } from './pages/DataPage';
+import { ExplorePage } from './pages/ExplorePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SettingsPage } from './pages/SettingsPage';
 import './index.css';
@@ -25,20 +24,13 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Navigate to="/chart" />,
+        element: <Navigate to="/explore" />,
       },
       {
-        path: '/chart',
-        element: <ChartPage />,
+        path: '/explore',
+        element: <ExplorePage />,
         handle: {
-          title: 'Chart',
-        },
-      },
-      {
-        path: '/data',
-        element: <DataPage />,
-        handle: {
-          title: 'Data',
+          title: 'Explore',
         },
       },
       {

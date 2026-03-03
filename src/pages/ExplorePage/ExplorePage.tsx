@@ -1,11 +1,32 @@
 import { type FunctionComponent } from 'react';
-import { SymbolChips } from '../../components/currency/SymbolChips';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
+import {
+  Plotter,
+  type Series,
+} from '../../components/currency/Plotter';
+import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
 import { exploreFormatter } from '../../utils/currency';
 
-type Data = {
+type ChartData = {
+  series: Series;
+};
+
+const toChartData = (currencies: Currency[]): ChartData => {
+  const data: ChartData = { series: [] };
+
+  currencies.forEach((currency) => {
+    data.series.push({
+      name: `${currency.baseCode}${currency.quoteCode}`,
+      data: [...currency.data],
+    });
+  });
+
+  return data;
+};
+
+type TableData = {
   head: string[];
   body: {
     date: number;
@@ -13,7 +34,7 @@ type Data = {
   }[];
 };
 
-const toData = (currencies: Currency[]): Data => {
+const toTableData = (currencies: Currency[]): TableData => {
   const headers = currencies.map((currency) => {
     return `${currency.baseCode}${currency.quoteCode}`;
   });
@@ -44,7 +65,7 @@ const toData = (currencies: Currency[]): Data => {
       body.push({ date, rates });
     });
 
-  const data: Data = {
+  const data: TableData = {
     head,
     body,
   };
@@ -68,13 +89,13 @@ export const FloatValue: FunctionComponent<{
   return <data value={value ?? undefined}>{text}</data>;
 };
 
-export const DataPage: FunctionComponent = () => {
+export const ExplorePage: FunctionComponent = () => {
   const { errors, currencies } = useCurrencies();
 
   const error = errors.at(0) || null;
-  const data = toData(currencies);
 
-  const { head, body } = data;
+  const chartData = toChartData(currencies);
+  const tableData = toTableData(currencies);
 
   return (
     <>
@@ -82,10 +103,12 @@ export const DataPage: FunctionComponent = () => {
 
       {error && <ErrorCallout error={error} />}
 
+      <Plotter series={chartData.series} />
+
       <table>
         <thead>
           <tr>
-            {head.map((cell, index) => {
+            {tableData.head.map((cell, index) => {
               return (
                 <th
                   key={cell}
@@ -98,14 +121,16 @@ export const DataPage: FunctionComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {body.map((row) => {
+          {tableData.body.map((row) => {
             return (
               <tr key={row.date}>
                 <th className="align-left">
                   <DateValue value={row.date} />
                 </th>
                 {row.rates.map((rate, index) => {
-                  const key = `${row.date}_${head.at(index + 1)}`;
+                  const key = `${row.date}_${tableData.head.at(
+                    index + 1
+                  )}`;
 
                   return (
                     <td key={key} className="align-right is-number">
