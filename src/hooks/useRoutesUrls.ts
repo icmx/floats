@@ -1,23 +1,23 @@
 import { useMemo } from 'react';
+import { usePersistQueryParams } from '../stores/persistQueryParamsStore';
 import { buildSearch } from '../utils/common';
 import { useQueryParams } from './useQueryParams';
 
 export type UseRoutesUrls = {
-  chart: string;
+  explore: string;
   convert: string;
-  data: string;
 };
 
 export const useRoutesUrls = (): UseRoutesUrls => {
-  const { by } = useQueryParams();
+  const { queryParams } = useQueryParams();
+  const { persistQueryParams } = usePersistQueryParams();
 
   const search = useMemo(() => {
-    return buildSearch({ by });
-  }, [by]);
+    return buildSearch(queryParams) || buildSearch(persistQueryParams);
+  }, [queryParams, persistQueryParams]);
 
   return {
-    chart: `/chart${search}`,
+    explore: `/explore${search}`,
     convert: `/convert${search}`,
-    data: `/data${search}`,
   };
 };

@@ -20,12 +20,13 @@ export const SymbolChips: FunctionComponent = () => {
 
   // should be exactly like that since user CAN enter some "invalid" symbols
   // from query string and still be cool. so user should be able to remove this
-  const { by: symbols, setBy: setSymbols } = useQueryParams();
+  const { queryParams, setQueryParams } = useQueryParams();
+  const { by } = queryParams;
 
   const selectedSymbolOptions = useMemo<
     ChipSelectOption<string>[]
   >(() => {
-    return symbols.map((symbol) => {
+    return by.map((symbol) => {
       return {
         id: `symbol-${symbol}`,
         value: symbol,
@@ -33,21 +34,23 @@ export const SymbolChips: FunctionComponent = () => {
         children: symbol,
       };
     });
-  }, [symbols]);
+  }, [by]);
 
   const handleChange = useCallback(
     (options: ChipSelectOption<string>[]): void => {
-      setSymbols(options.map((option) => option.value));
+      setQueryParams({ by: options.map((option) => option.value) });
     },
-    [setSymbols]
+    [setQueryParams]
   );
 
   return (
     <ChipSelect
       options={symbolOptions}
       selectedOptions={selectedSymbolOptions}
+      autoComplete="off"
       autoCapitalize="characters"
       placeholder="Type symbols like USDEUR"
+      spellCheck="false"
       onChange={handleChange}
     />
   );

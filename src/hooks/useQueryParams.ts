@@ -1,37 +1,40 @@
-import { useCallback, useMemo } from 'react';
-import { useLocationSearch } from './useLocationSearch';
+import { useCallback, useEffect, useMemo } from 'react';
+import { usePersistQueryParams } from '../stores/persistQueryParamsStore';
 import type { QueryParams } from '../types/common';
 import { buildSearch, parseSearch } from '../utils/common';
+import { useLocationSearch } from './useLocationSearch';
 
 export type UseQueryParams = {
-  by: string[];
-  setBy: (value: string[]) => void;
+  queryParams: QueryParams;
+  setQueryParams: (queryParams: QueryParams) => void;
 };
 
 export const useQueryParams = (): UseQueryParams => {
   const [locationSearch, setLocationSearch] = useLocationSearch();
+  const { setPersistQueryParams } = usePersistQueryParams();
 
-  const params = useMemo(() => {
+  const prevQueryParams = useMemo(() => {
     return parseSearch(locationSearch);
   }, [locationSearch]);
 
-  const setParams = useCallback(
-    (value: QueryParams) => {
-      const search = buildSearch(value);
+  const setQueryParams = useCallback(
+    (nextQueryParams: QueryParams) => {
+      const search = buildSearch(nextQueryParams);
 
       setLocationSearch(search);
     },
     [setLocationSearch]
   );
 
-  const { by } = params;
+  // @todo: maybe this should be moved somewhere, not sure
+  useEffect(() => {
+    if (locationSearch) {
+      setPersistQueryParams(prevQueryParams);
+    }
+  }, [locationSearch, prevQueryParams, setPersistQueryParams]);
 
-  const setBy = useCallback(
-    (value: string[]) => {
-      setParams({ ...params, by: value });
-    },
-    [params, setParams]
-  );
-
-  return { by, setBy };
+  return {
+    queryParams: prevQueryParams,
+    setQueryParams,
+  };
 };

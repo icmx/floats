@@ -4,7 +4,8 @@ import { isSymbolString } from '../utils/currency';
 import { useQueryParams } from './useQueryParams';
 
 export const useQueryParamsSync = (): void => {
-  const { by } = useQueryParams();
+  const { queryParams } = useQueryParams();
+  const { by } = queryParams;
 
   const symbols = useMemo(() => {
     return by.filter((value) => {

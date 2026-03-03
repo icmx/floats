@@ -1,7 +1,8 @@
 import { type FunctionComponent } from 'react';
 import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
-import { useRoutesUrls } from '../../hooks/useRoutesUrls';
+import { BuildPlate } from '../../components/common/BuildPlate';
 import { useQueryParamsSync } from '../../hooks/useQueryParamsSync';
+import { useRoutesUrls } from '../../hooks/useRoutesUrls';
 import { useThemeValueSync } from '../../hooks/useThemeValueSync';
 import { useTitle } from '../../hooks/useTitle';
 import { classNames } from '../../utils/common';
@@ -29,14 +30,11 @@ export const Layout: FunctionComponent = () => {
 
       <header className={styles.LayoutHeader}>
         <div className={styles.HeaderGroup}>
-          <NavLink className={handleClassName} to={urls.chart}>
-            Chart
+          <NavLink className={handleClassName} to={urls.explore}>
+            Explore
           </NavLink>
           <NavLink className={handleClassName} to={urls.convert}>
             Convert
-          </NavLink>
-          <NavLink className={handleClassName} to={urls.data}>
-            Data
           </NavLink>
         </div>
         <div className={styles.HeaderGroup}>
@@ -49,7 +47,10 @@ export const Layout: FunctionComponent = () => {
         <Outlet />
       </main>
       <footer className={styles.LayoutFooter}>
-        <p>floats - currency explorer app (WIP)</p>
+        <p>(WIP) floats · currency explorer app</p>
+        <p>
+          <BuildPlate />
+        </p>
       </footer>
     </>
   );
