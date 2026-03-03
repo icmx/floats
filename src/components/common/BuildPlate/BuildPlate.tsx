@@ -2,7 +2,7 @@ import type { FunctionComponent } from 'react';
 import styles from './BuildPlate.module.css';
 
 const getCommitRef = (): string => {
-  const commitRef = JSON.parse(__DEFINE_COMMIT_REF__) as string;
+  const commitRef = __DEFINE_COMMIT_REF__;
 
   if (!commitRef) {
     return 'develop';
@@ -12,7 +12,7 @@ const getCommitRef = (): string => {
 };
 
 const getBuildTimestamp = (): string => {
-  const buildTimestamp = JSON.parse(__DEFINE_BUILD_TIMESTAMP__);
+  const buildTimestamp = __DEFINE_BUILD_TIMESTAMP__;
 
   return new Date(buildTimestamp)
     .toJSON()
