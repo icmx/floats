@@ -103,7 +103,10 @@ export const ExplorePage: FunctionComponent = () => {
 
       {error && <ErrorCallout error={error} />}
 
-      <Plotter series={chartData.series} />
+      {/* @todo: handle empty state gracefully */}
+      {chartData.series?.length > 0 && (
+        <Plotter series={chartData.series} />
+      )}
 
       <table>
         <thead>

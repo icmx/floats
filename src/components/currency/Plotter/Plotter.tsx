@@ -55,6 +55,7 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
           },
 
           rangeSelector: {
+            selected: 1,
             buttons: [
               {
                 type: 'month',
