@@ -3,6 +3,6 @@ export type Series = {
   data: [number, number][];
 }[];
 
-export type PlotterProps = {
+export type ChartProps = {
   series: Series;
 };

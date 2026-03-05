@@ -3,7 +3,7 @@ import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import { Loading } from '../../common/Loading';
 import { EXPLORE_FRACTION_DIGITS } from '../../../utils/currency';
-import type { PlotterProps } from './Plotter.types';
+import type { ChartProps } from './Chart.types';
 
 const CHART_COLORS = [
   'var(--chart-line-indigo)',
@@ -14,9 +14,7 @@ const CHART_COLORS = [
   'var(--chart-line-orange)',
 ];
 
-export const Plotter: FunctionComponent<PlotterProps> = ({
-  series,
-}) => {
+export const Chart: FunctionComponent<ChartProps> = ({ series }) => {
   const isSingleSeries = series.length === 1;
 
   return (

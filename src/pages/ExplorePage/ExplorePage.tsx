@@ -1,9 +1,6 @@
 import { type FunctionComponent } from 'react';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import {
-  Plotter,
-  type Series,
-} from '../../components/currency/Plotter';
+import { Chart, type Series } from '../../components/currency/Chart';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
@@ -105,7 +102,7 @@ export const ExplorePage: FunctionComponent = () => {
 
       {/* @todo: handle empty state gracefully */}
       {chartData.series?.length > 0 && (
-        <Plotter series={chartData.series} />
+        <Chart series={chartData.series} />
       )}
 
       <table>
