@@ -3,6 +3,6 @@ export type Series = {
   data: [number, number][];
 }[];
 
-export type ChartProps = {
+export type DataChartProps = {
   series: Series;
 };

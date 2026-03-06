@@ -1,6 +1,9 @@
 import { type FunctionComponent } from 'react';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
-import { Chart, type Series } from '../../components/currency/Chart';
+import {
+  DataChart,
+  type Series,
+} from '../../components/currency/DataChart';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
@@ -105,7 +108,7 @@ export const ExplorePage: FunctionComponent = () => {
 
       {/* @todo: handle empty state gracefully */}
       {chartData.series?.length > 0 && (
-        <Chart series={chartData.series} />
+        <DataChart series={chartData.series} />
       )}
 
       <DataGrid<{ date: number; [c: string]: number }>
