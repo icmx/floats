@@ -90,16 +90,19 @@ td {
   border-bottom: solid 1px var(--color-line);
 }
 
+/* @todo: remove */
 th.align-left,
 td.align-left {
   text-align: left;
 }
 
+/* @todo: remove */
 th.align-right,
 td.align-right {
   text-align: right;
 }
 
+/* @todo: remove */
 th.is-number,
 td.is-number {
   font-variant-numeric: tabular-nums;

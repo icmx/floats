@@ -5,6 +5,7 @@ import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
 import { exploreFormatter } from '../../utils/currency';
+import { DataGrid } from '../../components/common/DataGrid';
 
 type ChartData = {
   series: Series;
@@ -94,6 +95,8 @@ export const ExplorePage: FunctionComponent = () => {
   const chartData = toChartData(currencies);
   const tableData = toTableData(currencies);
 
+  const symbolCols = tableData.head.slice(1);
+
   return (
     <>
       <SymbolChips />
@@ -105,44 +108,48 @@ export const ExplorePage: FunctionComponent = () => {
         <Chart series={chartData.series} />
       )}
 
-      <table>
-        <thead>
-          <tr>
-            {tableData.head.map((cell, index) => {
-              return (
-                <th
-                  key={cell}
-                  className={index === 0 ? 'align-left' : 'align-right'}
-                >
-                  {cell}
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {tableData.body.map((row) => {
-            return (
-              <tr key={row.date}>
-                <th className="align-left">
-                  <DateValue value={row.date} />
-                </th>
-                {row.rates.map((rate, index) => {
-                  const key = `${row.date}_${tableData.head.at(
-                    index + 1
-                  )}`;
+      <DataGrid<{ date: number; [c: string]: number }>
+        colDefs={{
+          date: {
+            title: 'Date',
+            format: (value) => {
+              return new Date(value).toISOString().slice(0, 10);
+            },
+          },
+          ...Object.fromEntries(
+            symbolCols.map((col) => {
+              return [
+                col,
+                {
+                  title: col,
+                  format: (value) => {
+                    if (!value) {
+                      return '';
+                    }
 
-                  return (
-                    <td key={key} className="align-right is-number">
-                      <FloatValue value={rate} />
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                    return exploreFormatter.format(value);
+                  },
+                },
+              ];
+            })
+          ),
+        }}
+        rowDef={{
+          key: (row) => {
+            return row.date.toString();
+          },
+        }}
+        rows={tableData.body.map((row) => {
+          return {
+            date: row.date,
+            ...Object.fromEntries(
+              row.rates.map((rate, i) => {
+                return [symbolCols[i], rate];
+              })
+            ),
+          };
+        })}
+      />
     </>
   );
 };
