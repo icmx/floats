@@ -5,10 +5,10 @@ import {
   type Series,
 } from '../../components/currency/DataChart';
 import { SymbolChips } from '../../components/currency/SymbolChips';
+import { DataTable } from '../../components/currency/DataTable';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currency } from '../../types/currency';
 import { exploreFormatter } from '../../utils/currency';
-import { DataGrid } from '../../components/common/DataGrid';
 
 type ChartData = {
   series: Series;
@@ -111,7 +111,7 @@ export const ExplorePage: FunctionComponent = () => {
         <DataChart series={chartData.series} />
       )}
 
-      <DataGrid<{ date: number; [c: string]: number }>
+      <DataTable<{ date: number; [c: string]: number }>
         colDefs={{
           date: {
             title: 'Date',

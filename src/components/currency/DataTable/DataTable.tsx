@@ -1,10 +1,10 @@
-import type { ColDef, DataGridProps } from './DataGrid.types';
+import type { ColDef, DataTableProps } from './DataTable.types';
 
-export const DataGrid = <TRow extends { [c: string]: unknown }>({
+export const DataTable = <TRow extends { [c: string]: unknown }>({
   colDefs,
   rowDef,
   rows,
-}: DataGridProps<TRow>) => {
+}: DataTableProps<TRow>) => {
   const cols = Object.entries(colDefs) satisfies [
     string,
     ColDef<unknown>

@@ -7,7 +7,7 @@ export type RowDef<TRow extends { [c: string]: unknown }> = {
   key: (row: TRow) => string;
 };
 
-export type DataGridProps<TRow extends { [c: string]: unknown }> = {
+export type DataTableProps<TRow extends { [c: string]: unknown }> = {
   colDefs: { [C in keyof TRow]: ColDef<TRow[C]> };
   rowDef: RowDef<TRow>;
   rows: { [C in keyof TRow]: TRow[C] }[];
