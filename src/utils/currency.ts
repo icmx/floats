@@ -69,10 +69,10 @@ export const createCrossCurrency = (
   base: Currency,
   quote: Currency
 ): Currency => {
-  const [[baseBaseCode], [quoteBaseCode]] = [
-    extractCurrencyCodes(base),
-    extractCurrencyCodes(quote),
-  ];
+  const [
+    [baseBaseCode, baseQuoteCode],
+    [quoteBaseCode, quoteQuoteCode],
+  ] = [extractCurrencyCodes(base), extractCurrencyCodes(quote)];
 
   if (baseBaseCode !== quoteBaseCode) {
     throw new Error(
@@ -80,32 +80,47 @@ export const createCrossCurrency = (
     );
   }
 
-  if (isPivotCurrency(base)) {
-    return quote;
-  }
-
-  if (isPivotCurrency(quote)) {
-    return base;
-  }
-
   const ratesByDates = new Map<
     number,
-    { left: number | null; right: number | null }
+    { base: number | null; quote: number | null }
   >();
+
+  const emptyRate: { base: number | null; quote: number | null } = {
+    base: null,
+    quote: null,
+  };
 
   base.body.forEach(([date, rate]) => {
     ratesByDates.set(date, {
-      ...(ratesByDates.get(date) || { left: null, right: null }),
-      left: rate,
+      ...(ratesByDates.get(date) || emptyRate),
+      base: rate,
     });
   });
 
   quote.body.forEach(([date, rate]) => {
     ratesByDates.set(date, {
-      ...(ratesByDates.get(date) || { left: null, right: null }),
-      right: rate,
+      ...(ratesByDates.get(date) || emptyRate),
+      quote: rate,
     });
   });
+
+  if (isPivotCurrency(base)) {
+    quote.body.forEach(([date]) => {
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || emptyRate),
+        base: 1,
+      });
+    });
+  }
+
+  if (isPivotCurrency(quote)) {
+    base.body.forEach(([date]) => {
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || emptyRate),
+        quote: 1,
+      });
+    });
+  }
 
   const body: DateRate[] = [];
 
@@ -113,18 +128,13 @@ export const createCrossCurrency = (
     .sort(([prev], [next]) => {
       return prev - next;
     })
-    .forEach(([date, { left, right }]) => {
-      if (!left || !right) {
+    .forEach(([date, { base, quote }]) => {
+      if (!base || !quote) {
         return;
       }
 
-      body.push([date, right / left]);
+      body.push([date, quote / base]);
     });
-
-  const [[, baseQuoteCode], [, quoteQuoteCode]] = [
-    extractCurrencyCodes(base),
-    extractCurrencyCodes(quote),
-  ];
 
   return createCurrency(baseQuoteCode, quoteQuoteCode, body);
 };

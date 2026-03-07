@@ -75,9 +75,9 @@ export const fetchCurrencyByCode = async (
 export const fetchCurrencyBySymbol = async (
   symbol: SymbolString
 ): Promise<Currency> => {
-  const [baseCode, quoteCode] = splitSymbolToCodes(symbol);
-
   return cache.resolve(symbol, async () => {
+    const [baseCode, quoteCode] = splitSymbolToCodes(symbol);
+
     const [baseCurrency, quoteCurrency] = await Promise.all([
       fetchCurrencyByCode(baseCode),
       fetchCurrencyByCode(quoteCode),
