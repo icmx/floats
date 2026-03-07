@@ -107,6 +107,12 @@ export const join = (value: string[]): string => {
     .join(SEPARATOR);
 };
 
+export const isodateFormatter = {
+  format: (value: number): string => {
+    return new Date(value).toISOString().slice(0, 10);
+  },
+};
+
 export const exploreFormatter = new Intl.NumberFormat(LOCALES, {
   maximumFractionDigits: EXPLORE_FRACTION_DIGITS,
   minimumFractionDigits: EXPLORE_FRACTION_DIGITS,

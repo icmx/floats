@@ -1,39 +1,43 @@
-import type { ColDef, DataTableProps } from './DataTable.types';
+import type { RateNumber } from '../../../types/currency';
+import type {
+  ColDef,
+  DataRow,
+  DataTableProps,
+} from './DataTable.types';
 
-export const DataTable = <TRow extends { [c: string]: unknown }>({
+export const DataTable = <TRow extends DataRow = DataRow>({
   colDefs,
-  rowDef,
   rows,
 }: DataTableProps<TRow>) => {
-  const cols = Object.entries(colDefs) satisfies [
-    string,
-    ColDef<unknown>
-  ][];
-
   return (
     <>
       <table>
         <thead>
           <tr>
-            {cols.map(([key, colDef]) => {
-              return <th key={key}>{colDef.title}</th>;
+            {colDefs.map((colDef) => {
+              return (
+                <th key={colDef.key} className={colDef.className}>
+                  {colDef.title}
+                </th>
+              );
             })}
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => {
-            const rowKey = rowDef.key(row);
-            const cells = Object.entries(row) satisfies [
-              keyof TRow,
-              TRow[keyof TRow]
-            ][];
+            const rowKey = row[0].toString();
 
             return (
               <tr key={rowKey}>
-                {cells.map(([colKey, rowValue]) => {
-                  const cell = colDefs[colKey].format(rowValue);
+                {row.map((value, index) => {
+                  const colDef = colDefs[index] as ColDef<RateNumber>;
+                  const children = colDef.format(value);
 
-                  return <td key={colKey}>{cell}</td>;
+                  return (
+                    <td key={colDef.key} className={colDef.className}>
+                      {children}
+                    </td>
+                  );
                 })}
               </tr>
             );

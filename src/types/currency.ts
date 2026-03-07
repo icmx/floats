@@ -4,9 +4,13 @@ export type CodeString = (typeof CODES)[number];
 
 export type SymbolString = `${CodeString}${CodeString}`;
 
-export type DateRate = [number, number | null];
+export type DateNumber = number;
 
-export type DateRates = [number, ...(number | null)[]];
+export type RateNumber = number | null;
+
+export type DateRate = [DateNumber, RateNumber];
+
+export type DateRates = [DateNumber, ...RateNumber[]];
 
 export type Currency = Readonly<{
   head: ['date', SymbolString];

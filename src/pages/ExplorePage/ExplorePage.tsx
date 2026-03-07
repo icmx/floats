@@ -5,6 +5,10 @@ import {
   type Series,
 } from '../../components/currency/DataChart';
 import { DataTable } from '../../components/currency/DataTable';
+import {
+  createDateColDef,
+  createRateColDef,
+} from '../../components/currency/DataTable/DateTable.utils';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currencies, Currency } from '../../types/currency';
@@ -82,8 +86,6 @@ export const ExplorePage: FunctionComponent = () => {
   const chartData = toChartData(currencies);
   const tableData = toTableData(currencies);
 
-  const symbolCols = tableData.head.slice(1);
-
   return (
     <>
       <SymbolChips />
@@ -95,47 +97,14 @@ export const ExplorePage: FunctionComponent = () => {
         <DataChart series={chartData.series} />
       )}
 
-      <DataTable<{ date: number; [c: string]: number }>
-        colDefs={{
-          date: {
-            title: 'Date',
-            format: (value) => {
-              return new Date(value).toISOString().slice(0, 10);
-            },
-          },
-          ...Object.fromEntries(
-            symbolCols.map((col) => {
-              return [
-                col,
-                {
-                  title: col,
-                  format: (value) => {
-                    if (!value) {
-                      return '';
-                    }
-
-                    return exploreFormatter.format(value);
-                  },
-                },
-              ];
-            })
-          ),
-        }}
-        rowDef={{
-          key: (row) => {
-            return row.date.toString();
-          },
-        }}
-        rows={tableData.body.map((row) => {
-          return {
-            date: row[0],
-            ...Object.fromEntries(
-              row.slice(1).map((rate, i) => {
-                return [symbolCols[i], rate];
-              })
-            ),
-          };
-        })}
+      <DataTable
+        colDefs={[
+          createDateColDef(),
+          ...tableData.head.slice(1).map((symbol) => {
+            return createRateColDef(symbol);
+          }),
+        ]}
+        rows={tableData.body}
       />
     </>
   );
