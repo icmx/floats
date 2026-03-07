@@ -4,11 +4,11 @@ import {
   DataChart,
   type Series,
 } from '../../components/currency/DataChart';
-import { SymbolChips } from '../../components/currency/SymbolChips';
 import { DataTable } from '../../components/currency/DataTable';
+import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
-import type { Currency } from '../../types/currency';
-import { exploreFormatter } from '../../utils/currency';
+import type { Currencies, Currency } from '../../types/currency';
+import { exploreFormatter } from '../../utils/common';
 
 type ChartData = {
   series: Series;
@@ -19,34 +19,25 @@ const toChartData = (currencies: Currency[]): ChartData => {
 
   currencies.forEach((currency) => {
     data.series.push({
-      name: `${currency.baseCode}${currency.quoteCode}`,
-      data: [...currency.data],
+      name: currency.head[1],
+      data: [...currency.body],
     });
   });
 
   return data;
 };
 
-type TableData = {
-  head: string[];
-  body: {
-    date: number;
-    rates: (number | null)[];
-  }[];
-};
-
-const toTableData = (currencies: Currency[]): TableData => {
-  const headers = currencies.map((currency) => {
-    return `${currency.baseCode}${currency.quoteCode}`;
-  });
-
-  const head = ['date', ...headers];
+const toTableData = (currencies: Currency[]): Currencies => {
+  const head: Currencies['head'] = ['date'];
+  const body: Currencies['body'] = [];
 
   const ratesByDates = new Map<number, (number | null)[]>();
   const SIZE = currencies.length;
 
   currencies.forEach((currency, index) => {
-    currency.data.forEach(([date, rate]) => {
+    head.push(currency.head[1]);
+
+    currency.body.forEach(([date, rate]) => {
       const ratesByDate =
         ratesByDates.get(date) || new Array(SIZE).fill(null);
 
@@ -56,22 +47,15 @@ const toTableData = (currencies: Currency[]): TableData => {
     });
   });
 
-  const body: { date: number; rates: (number | null)[] }[] = [];
-
   Array.from(ratesByDates.entries())
     .sort(([prev], [next]) => {
       return prev - next;
     })
     .forEach(([date, rates]) => {
-      body.push({ date, rates });
+      body.push([date, ...rates]);
     });
 
-  const data: TableData = {
-    head,
-    body,
-  };
-
-  return data;
+  return { head, body };
 };
 
 export const DateValue: FunctionComponent<{ value: number }> = ({
@@ -144,9 +128,9 @@ export const ExplorePage: FunctionComponent = () => {
         }}
         rows={tableData.body.map((row) => {
           return {
-            date: row.date,
+            date: row[0],
             ...Object.fromEntries(
-              row.rates.map((rate, i) => {
+              row.slice(1).map((rate, i) => {
                 return [symbolCols[i], rate];
               })
             ),

@@ -1,8 +1,8 @@
 import { Suspense, type FunctionComponent } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
+import { EXPLORE_FRACTION_DIGITS } from '../../../constants/common';
 import { Loading } from '../../common/Loading';
-import { EXPLORE_FRACTION_DIGITS } from '../../../utils/currency';
 import type { DataChartProps } from './DataChart.types';
 
 const CHART_COLORS = [

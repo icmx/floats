@@ -3,7 +3,7 @@ import type { Results } from '../types/common';
 import type {
   CodeString,
   Currency,
-  RateTuple,
+  DateRate,
   SymbolString,
 } from '../types/currency';
 import {
@@ -36,7 +36,7 @@ export const fetchCSV = async (url: string): Promise<string> => {
 
 export const fetchRateTuples = async (
   url: string
-): Promise<RateTuple[]> => {
+): Promise<DateRate[]> => {
   const csv = await fetchCSV(url);
 
   return csv
@@ -87,6 +87,7 @@ export const fetchCurrencyBySymbol = async (
   });
 };
 
+// @todo: should return Currencies (multiple type)
 export const getCurrencies = async (
   symbols: SymbolString[]
 ): Promise<Results<Currency, unknown>> => {
