@@ -12,7 +12,7 @@ import {
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currencies, Currency } from '../../types/currency';
-import { exploreFormatter } from '../../utils/common';
+import styles from './ExplorePage.module.css';
 
 type ChartData = {
   series: Series;
@@ -62,22 +62,6 @@ const toTableData = (currencies: Currency[]): Currencies => {
   return { head, body };
 };
 
-export const DateValue: FunctionComponent<{ value: number }> = ({
-  value,
-}) => {
-  const dateTime = new Date(value).toJSON().substring(0, 10);
-
-  return <time dateTime={dateTime}>{dateTime}</time>;
-};
-
-export const FloatValue: FunctionComponent<{
-  value: number | null;
-}> = ({ value }) => {
-  const text = value === null ? '' : exploreFormatter.format(value);
-
-  return <data value={value ?? undefined}>{text}</data>;
-};
-
 export const ExplorePage: FunctionComponent = () => {
   const { errors, currencies } = useCurrencies();
 
@@ -88,24 +72,28 @@ export const ExplorePage: FunctionComponent = () => {
 
   return (
     <>
-      <SymbolChips />
-
       {error && <ErrorCallout error={error} />}
 
-      {/* @todo: handle empty state gracefully */}
-      {chartData.series?.length > 0 && (
-        <DataChart series={chartData.series} />
-      )}
+      <div className={styles.Group}>
+        <div className={styles.Panel}>
+          <SymbolChips />
+          {chartData.series?.length > 0 && (
+            <DataChart series={chartData.series} />
+          )}
+        </div>
 
-      <DataTable
-        colDefs={[
-          createDateColDef(),
-          ...tableData.head.slice(1).map((symbol) => {
-            return createRateColDef(symbol);
-          }),
-        ]}
-        rows={tableData.body}
-      />
+        <div className={styles.Panel}>
+          <DataTable
+            colDefs={[
+              createDateColDef(),
+              ...tableData.head.slice(1).map((symbol) => {
+                return createRateColDef(symbol);
+              }),
+            ]}
+            rows={tableData.body}
+          />
+        </div>
+      </div>
     </>
   );
 };

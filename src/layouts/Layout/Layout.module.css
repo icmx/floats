@@ -2,14 +2,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  padding: 0 1rem;
+
+  background-color: var(--color-chip);
 }
 
-.LayoutFooter {
-  margin: 1rem 0 0;
-
-  font-size: var(--font-size-s);
-
-  border-top: solid 1px var(--color-line);
+.LayoutContent {
+  padding: 0 0 0 1rem;
 }
 
 .HeaderGroup {
@@ -18,7 +18,10 @@
 }
 
 .HeaderLink {
-  padding: 0.5rem 0;
+  --height: calc(var(--header-height) - (var(--border-width) * 2));
+
+  height: var(--height);
+  line-height: var(--height);
 
   display: inline-block;
 

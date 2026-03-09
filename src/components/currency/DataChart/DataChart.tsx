@@ -1,9 +1,11 @@
-import { Suspense, type FunctionComponent } from 'react';
+import { useEffect, useRef, type FunctionComponent } from 'react';
 import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
+import HighchartsReact, {
+  type HighchartsReactRefObject,
+} from 'highcharts-react-official';
 import { EXPLORE_FRACTION_DIGITS } from '../../../constants/common';
-import { Loading } from '../../common/Loading';
 import type { DataChartProps } from './DataChart.types';
+import styles from './DataChart.module.css';
 
 const CHART_COLORS = [
   'var(--chart-line-indigo)',
@@ -17,13 +19,34 @@ const CHART_COLORS = [
 export const DataChart: FunctionComponent<DataChartProps> = ({
   series,
 }) => {
+  const chartRef = useRef<HighchartsReactRefObject>(null);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      chartRef?.current?.chart?.reflow();
+    });
+
+    observer.observe(document.body);
+
+    return () => {
+      observer.disconnect();
+    };
+  });
+
   const isSingleSeries = series.length === 1;
 
   return (
-    <Suspense fallback={<Loading />}>
+    <div className={styles.DataChartContainer}>
       <HighchartsReact
-        constructorType={'stockChart'}
+        ref={chartRef}
         highcharts={Highcharts}
+        constructorType={'stockChart'}
+        containerProps={{
+          style: {
+            height: '100%',
+            width: '100%',
+          },
+        }}
         options={{
           chart: {
             style: {
@@ -137,6 +160,6 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
           },
         }}
       />
-    </Suspense>
+    </div>
   );
 };

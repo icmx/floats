@@ -4,6 +4,7 @@ import type {
   DataRow,
   DataTableProps,
 } from './DataTable.types';
+import styles from './DataTable.module.css';
 
 export const DataTable = <TRow extends DataRow = DataRow>({
   colDefs,
@@ -11,39 +12,47 @@ export const DataTable = <TRow extends DataRow = DataRow>({
 }: DataTableProps<TRow>) => {
   return (
     <>
-      <table>
-        <thead>
-          <tr>
-            {colDefs.map((colDef) => {
+      <div className={styles.DataTableContainer}>
+        <table>
+          <thead>
+            <tr>
+              {colDefs.map((colDef) => {
+                return (
+                  <th
+                    key={colDef.key}
+                    className={styles[colDef.className]}
+                  >
+                    {colDef.title}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => {
+              const rowKey = row[0].toString();
+
               return (
-                <th key={colDef.key} className={colDef.className}>
-                  {colDef.title}
-                </th>
+                <tr key={rowKey}>
+                  {row.map((value, index) => {
+                    const colDef = colDefs[index] as ColDef<RateNumber>;
+                    const children = colDef.format(value);
+
+                    return (
+                      <td
+                        key={colDef.key}
+                        className={styles[colDef.className]}
+                      >
+                        {children}
+                      </td>
+                    );
+                  })}
+                </tr>
               );
             })}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => {
-            const rowKey = row[0].toString();
-
-            return (
-              <tr key={rowKey}>
-                {row.map((value, index) => {
-                  const colDef = colDefs[index] as ColDef<RateNumber>;
-                  const children = colDef.format(value);
-
-                  return (
-                    <td key={colDef.key} className={colDef.className}>
-                      {children}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };

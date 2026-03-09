@@ -108,8 +108,14 @@ export const join = (value: string[]): string => {
 };
 
 export const isodateFormatter = {
-  format: (value: number): string => {
+  format: (value: string | number): string => {
     return new Date(value).toISOString().slice(0, 10);
+  },
+};
+
+export const isodatetimeFormatter = {
+  format: (value: string | number): string => {
+    return new Date(value).toJSON().slice(0, 16).replace('T', ' ');
   },
 };
 
