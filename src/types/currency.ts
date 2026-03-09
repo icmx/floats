@@ -4,10 +4,20 @@ export type CodeString = (typeof CODES)[number];
 
 export type SymbolString = `${CodeString}${CodeString}`;
 
-export type RateTuple = [number, number];
+export type DateNumber = number;
+
+export type RateNumber = number | null;
+
+export type DateRate = [DateNumber, RateNumber];
+
+export type DateRates = [DateNumber, ...RateNumber[]];
 
 export type Currency = Readonly<{
-  baseCode: CodeString;
-  quoteCode: CodeString;
-  data: RateTuple[];
+  head: ['date', SymbolString];
+  body: DateRate[];
+}>;
+
+export type Currencies = Readonly<{
+  head: ['date', ...SymbolString[]];
+  body: DateRates[];
 }>;

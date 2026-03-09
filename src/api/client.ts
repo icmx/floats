@@ -3,7 +3,7 @@ import type { Results } from '../types/common';
 import type {
   CodeString,
   Currency,
-  RateTuple,
+  DateRate,
   SymbolString,
 } from '../types/currency';
 import {
@@ -20,7 +20,7 @@ export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
 export const fetchCSV = async (url: string): Promise<string> => {
   const response = await fetch(
-    `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}/${url}`
+    `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}${url}`
   );
 
   if (!response.ok) {
@@ -36,7 +36,7 @@ export const fetchCSV = async (url: string): Promise<string> => {
 
 export const fetchRateTuples = async (
   url: string
-): Promise<RateTuple[]> => {
+): Promise<DateRate[]> => {
   const csv = await fetchCSV(url);
 
   return csv
@@ -75,9 +75,9 @@ export const fetchCurrencyByCode = async (
 export const fetchCurrencyBySymbol = async (
   symbol: SymbolString
 ): Promise<Currency> => {
-  const [baseCode, quoteCode] = splitSymbolToCodes(symbol);
-
   return cache.resolve(symbol, async () => {
+    const [baseCode, quoteCode] = splitSymbolToCodes(symbol);
+
     const [baseCurrency, quoteCurrency] = await Promise.all([
       fetchCurrencyByCode(baseCode),
       fetchCurrencyByCode(quoteCode),
@@ -87,6 +87,7 @@ export const fetchCurrencyBySymbol = async (
   });
 };
 
+// @todo: should return Currencies (multiple type)
 export const getCurrencies = async (
   symbols: SymbolString[]
 ): Promise<Results<Currency, unknown>> => {

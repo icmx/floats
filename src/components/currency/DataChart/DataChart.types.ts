@@ -1,8 +1,8 @@
 export type Series = {
   name: string;
-  data: [number, number][];
+  data: [number, number | null][];
 }[];
 
-export type PlotterProps = {
+export type DataChartProps = {
   series: Series;
 };

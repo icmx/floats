@@ -12,4 +12,17 @@ export default defineConfig({
     __DEFINE_COMMIT_REF__: JSON.stringify(process.env.COMMIT_REF || 0),
     __DEFINE_BUILD_TIMESTAMP__: JSON.stringify(Date.now()),
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'highcharts-vendor': [
+            'highcharts/highstock',
+            'highcharts-react-official',
+          ],
+        },
+      },
+    },
+  },
 });

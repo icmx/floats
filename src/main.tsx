@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { Layout } from './layouts/Layout';
+import { AboutPage } from './pages/AboutPage';
 import { ConvertPage } from './pages/ConvertPage';
 import { ExplorePage } from './pages/ExplorePage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -38,6 +39,13 @@ const router = createBrowserRouter([
         element: <ConvertPage />,
         handle: {
           title: 'Convert',
+        },
+      },
+      {
+        path: '/about',
+        element: <AboutPage />,
+        handle: {
+          title: 'About',
         },
       },
       {

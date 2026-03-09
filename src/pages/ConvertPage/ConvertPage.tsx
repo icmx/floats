@@ -5,6 +5,7 @@ import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { CodeString, Currency } from '../../types/currency';
+import { extractCurrencyCodes } from '../../utils/currency';
 
 export type Data = {
   rates: {
@@ -16,9 +17,11 @@ export type Data = {
 const toData = (currencies: Currency[]): Data => {
   const data: Data = {
     rates: currencies.map((currency) => {
+      const [baseCode, quoteCode] = extractCurrencyCodes(currency);
+
       return {
-        symbol: [currency.baseCode, currency.quoteCode],
-        rate: currency.data.at(-1)?.[1] || 0,
+        symbol: [baseCode, quoteCode],
+        rate: currency.body.at(-1)?.[1] || 0,
       };
     }),
   };

@@ -1,0 +1,5 @@
+@media (width > 720px) {
+  .DataChartContainer {
+    height: calc(80vh - var(--header-height));
+  }
+}

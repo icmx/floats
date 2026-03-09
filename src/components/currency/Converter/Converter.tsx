@@ -1,6 +1,6 @@
 import { useState, type FunctionComponent } from 'react';
+import { convertFormatter } from '../../../utils/common';
 import { LineField } from '../../common/LineField';
-import { convertFormatter } from '../../../utils/currency';
 import type { ConverterProps } from './Converter.types';
 import styles from './Converter.module.css';
 

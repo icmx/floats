@@ -6,6 +6,9 @@
   --chart-line-cyan: #06b6d4;
   --chart-line-orange: #f97316;
 
+  --header-height: 2.5rem;
+  --border-width: 3px;
+
   --font-size-l: 1.2rem;
   --font-size-m: 1rem;
   --font-size-s: 0.8rem;
@@ -14,6 +17,8 @@
   --color-warn: oklch(66% 0.2 25);
 
   &[data-theme='light'] {
+    color-scheme: light dark;
+
     --color-text: oklch(22% 0.012 275);
     --color-link: oklch(28% 0.02 280);
     --color-line: oklch(80% 0.006 250);
@@ -23,6 +28,8 @@
   }
 
   &[data-theme='dark'] {
+    color-scheme: dark light;
+
     --color-text: oklch(93% 0.011 275);
     --color-link: oklch(96% 0.02 280);
     --color-line: oklch(32% 0.005 250);
@@ -32,13 +39,8 @@
   }
 }
 
-html {
-  scrollbar-gutter: stable;
-}
-
 body {
-  margin: 0 auto;
-  max-width: 1024px;
+  margin: 0;
 
   color: var(--color-text);
   background-color: var(--color-page);
@@ -47,76 +49,16 @@ body {
   font-size: var(--font-size-m);
 }
 
+#root {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
 a {
   color: var(--color-link);
 }
 
-h1 {
-  margin: 0;
-  font-size: var(--font-size-l);
-}
-
-table {
+h2 {
   margin: 1rem 0;
-  border-collapse: collapse;
-
-  width: 100%;
-}
-
-@media (min-width: 1024px) {
-  table {
-    width: unset;
-  }
-}
-
-thead {
-  position: sticky;
-  left: 0;
-  top: -1px;
-  background-color: var(--color-page);
-}
-
-th {
-  padding: 6px 12px 6px;
-
-  border-top: solid 1px var(--color-line);
-  border-bottom: solid 1px var(--color-line);
-}
-
-td {
-  padding: 6px 12px;
-
-  border-top: solid 1px var(--color-line);
-  border-bottom: solid 1px var(--color-line);
-}
-
-th.align-left,
-td.align-left {
-  text-align: left;
-}
-
-th.align-right,
-td.align-right {
-  text-align: right;
-}
-
-th.is-number,
-td.is-number {
-  font-variant-numeric: tabular-nums;
-}
-
-#root {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-height: 100svh;
-
-  margin: 0 1rem;
-}
-
-@media (min-width: 1024px) {
-  #root {
-    min-height: calc(100vh - 2rem);
-
-    margin: 1rem 1rem;
-  }
+  font-size: var(--font-size-l);
 }

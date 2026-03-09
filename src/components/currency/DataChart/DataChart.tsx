@@ -1,9 +1,11 @@
-import { Suspense, type FunctionComponent } from 'react';
+import { useEffect, useRef, type FunctionComponent } from 'react';
 import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
-import { Loading } from '../../common/Loading';
-import { EXPLORE_FRACTION_DIGITS } from '../../../utils/currency';
-import type { PlotterProps } from './Plotter.types';
+import HighchartsReact, {
+  type HighchartsReactRefObject,
+} from 'highcharts-react-official';
+import { EXPLORE_FRACTION_DIGITS } from '../../../constants/common';
+import type { DataChartProps } from './DataChart.types';
+import styles from './DataChart.module.css';
 
 const CHART_COLORS = [
   'var(--chart-line-indigo)',
@@ -14,16 +16,37 @@ const CHART_COLORS = [
   'var(--chart-line-orange)',
 ];
 
-export const Plotter: FunctionComponent<PlotterProps> = ({
+export const DataChart: FunctionComponent<DataChartProps> = ({
   series,
 }) => {
+  const chartRef = useRef<HighchartsReactRefObject>(null);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      chartRef?.current?.chart?.reflow();
+    });
+
+    observer.observe(document.body);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const isSingleSeries = series.length === 1;
 
   return (
-    <Suspense fallback={<Loading />}>
+    <div className={styles.DataChartContainer}>
       <HighchartsReact
-        constructorType={'stockChart'}
+        ref={chartRef}
         highcharts={Highcharts}
+        constructorType={'stockChart'}
+        containerProps={{
+          style: {
+            height: '100%',
+            width: '100%',
+          },
+        }}
         options={{
           chart: {
             style: {
@@ -55,6 +78,7 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
           },
 
           rangeSelector: {
+            selected: 1,
             buttons: [
               {
                 type: 'month',
@@ -136,6 +160,6 @@ export const Plotter: FunctionComponent<PlotterProps> = ({
           },
         }}
       />
-    </Suspense>
+    </div>
   );
 };

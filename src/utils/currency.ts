@@ -7,7 +7,7 @@ import {
 import type {
   CodeString,
   Currency,
-  RateTuple,
+  DateRate,
   SymbolString,
 } from '../types/currency';
 
@@ -44,15 +44,20 @@ export const splitSymbolToCodes = (
   return [baseCode, quoteCode];
 };
 
+export const extractCurrencyCodes = (
+  currency: Currency
+): [CodeString, CodeString] => {
+  return splitSymbolToCodes(currency.head[1]);
+};
+
 export const createCurrency = (
   baseCode: CodeString,
   quoteCode: CodeString,
-  data: RateTuple[]
+  body: DateRate[]
 ): Currency => {
   return {
-    baseCode,
-    quoteCode,
-    data,
+    head: ['date', `${baseCode}${quoteCode}`],
+    body: [...body],
   };
 };
 
@@ -64,81 +69,82 @@ export const createCrossCurrency = (
   base: Currency,
   quote: Currency
 ): Currency => {
-  if (base.baseCode !== quote.baseCode) {
+  const [
+    [baseBaseCode, baseQuoteCode],
+    [quoteBaseCode, quoteQuoteCode],
+  ] = [extractCurrencyCodes(base), extractCurrencyCodes(quote)];
+
+  if (baseBaseCode !== quoteBaseCode) {
     throw new Error(
-      `Base codes must be the same. Now: "${base.baseCode}*", "${quote.baseCode}*"`
+      `Base codes must be the same. Now: "${baseBaseCode}/*", "${quoteBaseCode}/*"`
     );
-  }
-
-  if (isPivotCurrency(base)) {
-    return quote;
-  }
-
-  if (isPivotCurrency(quote)) {
-    return base;
   }
 
   const ratesByDates = new Map<
     number,
-    { left?: number; right?: number }
+    { base: number | null; quote: number | null }
   >();
 
-  base.data.forEach(([date, rate]) => {
+  const emptyRate: { base: number | null; quote: number | null } = {
+    base: null,
+    quote: null,
+  };
+
+  base.body.forEach(([date, rate]) => {
     ratesByDates.set(date, {
-      ...(ratesByDates.get(date) || {}),
-      left: rate,
+      ...(ratesByDates.get(date) || emptyRate),
+      base: rate,
     });
   });
 
-  quote.data.forEach(([date, rate]) => {
+  quote.body.forEach(([date, rate]) => {
     ratesByDates.set(date, {
-      ...(ratesByDates.get(date) || {}),
-      right: rate,
+      ...(ratesByDates.get(date) || emptyRate),
+      quote: rate,
     });
   });
 
-  const data: RateTuple[] = [];
+  if (isPivotCurrency(base)) {
+    quote.body.forEach(([date]) => {
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || emptyRate),
+        base: 1,
+      });
+    });
+  }
+
+  if (isPivotCurrency(quote)) {
+    base.body.forEach(([date]) => {
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || emptyRate),
+        quote: 1,
+      });
+    });
+  }
+
+  const body: DateRate[] = [];
 
   Array.from(ratesByDates.entries())
     .sort(([prev], [next]) => {
       return prev - next;
     })
-    .forEach(([date, { left, right }]) => {
-      if (!left || !right) {
+    .forEach(([date, { base, quote }]) => {
+      if (!base || !quote) {
         return;
       }
 
-      data.push([date, right / left]);
+      body.push([date, quote / base]);
     });
 
-  return createCurrency(base.quoteCode, quote.quoteCode, data);
+  return createCurrency(baseQuoteCode, quoteQuoteCode, body);
 };
 
 export const isPivotCurrency = (currency: Currency): boolean => {
   return (
-    currency.baseCode === PIVOT_CURRENCY_CODE &&
-    currency.quoteCode === PIVOT_CURRENCY_CODE
+    currency.head[1] === `${PIVOT_CURRENCY_CODE}${PIVOT_CURRENCY_CODE}`
   );
 };
 
 export const isEmptyCurrency = (currency: Currency): boolean => {
-  return currency.data.length === 0;
+  return currency.body.length === 0;
 };
-
-export const LOCALES = navigator?.languages || ['en'];
-
-export const EXPLORE_FRACTION_DIGITS = 6;
-
-export const CONVERT_FRACTION_DIGITS = 2;
-
-export const exploreFormatter = new Intl.NumberFormat(LOCALES, {
-  maximumFractionDigits: EXPLORE_FRACTION_DIGITS,
-  minimumFractionDigits: EXPLORE_FRACTION_DIGITS,
-  roundingMode: 'halfEven',
-});
-
-export const convertFormatter = new Intl.NumberFormat(LOCALES, {
-  maximumFractionDigits: CONVERT_FRACTION_DIGITS,
-  minimumFractionDigits: CONVERT_FRACTION_DIGITS,
-  roundingMode: 'halfEven',
-});

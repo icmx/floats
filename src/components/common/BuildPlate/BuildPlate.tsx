@@ -1,4 +1,5 @@
 import type { FunctionComponent } from 'react';
+import { isodatetimeFormatter } from '../../../utils/common';
 import styles from './BuildPlate.module.css';
 
 const getCommitRef = (): string => {
@@ -14,10 +15,7 @@ const getCommitRef = (): string => {
 const getBuildTimestamp = (): string => {
   const buildTimestamp = __DEFINE_BUILD_TIMESTAMP__;
 
-  return new Date(buildTimestamp)
-    .toJSON()
-    .slice(0, 16)
-    .replace('T', ' ');
+  return isodatetimeFormatter.format(buildTimestamp);
 };
 
 export const BuildPlate: FunctionComponent = () => {

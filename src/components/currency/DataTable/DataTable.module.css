@@ -1,0 +1,70 @@
+.DataTableContainer {
+  overflow-y: scroll;
+}
+
+@media (width > 720px) {
+  .DataTableContainer {
+    height: calc(100vh - var(--header-height));
+
+    padding-right: 0.5rem;
+  }
+}
+
+.DataTableContainer {
+  table {
+    margin: 1rem 0;
+    border-collapse: collapse;
+
+    width: 100%;
+  }
+
+  thead {
+    position: sticky;
+    left: 0;
+    top: -1px;
+    background-color: var(--color-page);
+  }
+
+  th {
+    padding: 6px 12px 6px;
+
+    border-top: solid 1px var(--color-line);
+    border-bottom: solid 1px var(--color-line);
+
+    text-wrap: nowrap;
+  }
+
+  td {
+    padding: 6px 12px;
+
+    border-top: solid 1px var(--color-line);
+    border-bottom: solid 1px var(--color-line);
+
+    text-wrap: nowrap;
+  }
+
+  th:first-child,
+  td:first-child {
+    padding-left: 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
+  }
+
+  th.align-left,
+  td.align-left {
+    text-align: left;
+  }
+
+  th.align-right,
+  td.align-right {
+    text-align: right;
+  }
+
+  th.is-number,
+  td.is-number {
+    font-variant-numeric: tabular-nums;
+  }
+}

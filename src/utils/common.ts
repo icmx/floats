@@ -1,3 +1,8 @@
+import {
+  CONVERT_FRACTION_DIGITS,
+  EXPLORE_FRACTION_DIGITS,
+  LOCALES,
+} from '../constants/common';
 import type { QueryParams } from '../types/common';
 
 export const classNames = (
@@ -101,3 +106,27 @@ export const join = (value: string[]): string => {
     .filter((entry) => !!entry)
     .join(SEPARATOR);
 };
+
+export const isodateFormatter = {
+  format: (value: string | number): string => {
+    return new Date(value).toISOString().slice(0, 10);
+  },
+};
+
+export const isodatetimeFormatter = {
+  format: (value: string | number): string => {
+    return new Date(value).toJSON().slice(0, 16).replace('T', ' ');
+  },
+};
+
+export const exploreFormatter = new Intl.NumberFormat(LOCALES, {
+  maximumFractionDigits: EXPLORE_FRACTION_DIGITS,
+  minimumFractionDigits: EXPLORE_FRACTION_DIGITS,
+  roundingMode: 'halfEven',
+});
+
+export const convertFormatter = new Intl.NumberFormat(LOCALES, {
+  maximumFractionDigits: CONVERT_FRACTION_DIGITS,
+  minimumFractionDigits: CONVERT_FRACTION_DIGITS,
+  roundingMode: 'halfEven',
+});
