@@ -8,7 +8,7 @@ import { DataTable } from '../../components/currency/DataTable';
 import {
   createDateColDef,
   createRateColDef,
-} from '../../components/currency/DataTable/DateTable.utils';
+} from '../../components/currency/DataTable/DataTable.utils';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currencies, Currency } from '../../types/currency';

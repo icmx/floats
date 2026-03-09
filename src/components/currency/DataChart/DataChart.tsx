@@ -31,7 +31,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
     return () => {
       observer.disconnect();
     };
-  });
+  }, []);
 
   const isSingleSeries = series.length === 1;
 

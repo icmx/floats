@@ -50,7 +50,7 @@ export const SymbolChips: FunctionComponent = () => {
       autoComplete="off"
       autoCapitalize="characters"
       placeholder="Type symbols like USDEUR"
-      spellCheck="false"
+      spellCheck={false}
       onChange={handleChange}
     />
   );

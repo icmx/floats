@@ -20,7 +20,7 @@ export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
 export const fetchCSV = async (url: string): Promise<string> => {
   const response = await fetch(
-    `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}/${url}`
+    `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}${url}`
   );
 
   if (!response.ok) {
