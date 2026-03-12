@@ -13,9 +13,12 @@
 .DataTableContainer {
   table {
     margin: 1rem 0;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+
 
     width: 100%;
+    table-layout: fixed;
   }
 
   thead {
@@ -37,7 +40,7 @@
   td {
     padding: 6px 12px;
 
-    border-top: solid 1px var(--color-line);
+    border-top: solid 1px transparent;
     border-bottom: solid 1px var(--color-line);
 
     text-wrap: nowrap;
@@ -53,18 +56,29 @@
     padding-right: 0;
   }
 
-  th.align-left,
-  td.align-left {
+  th.is-date {
     text-align: left;
   }
 
-  th.align-right,
-  td.align-right {
+  th.is-rate {
     text-align: right;
   }
 
-  th.is-number,
-  td.is-number {
+  td.is-date {
+    text-align: left;
+  }
+
+  td.is-rate {
+    text-align: right;
     font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (width > 720px) {
+  .DataTableContainer {
+    table {
+      width: unset;
+      table-layout: auto;
+    }
   }
 }

@@ -8,7 +8,7 @@ import type { ColDef } from './DataTable.types';
 export const createDateColDef = (): ColDef<DateNumber> => {
   return {
     key: 'date',
-    className: 'align-left',
+    type: 'date',
     title: 'Date',
     format: (value) => {
       return isodateFormatter.format(value);
@@ -21,7 +21,7 @@ export const createRateColDef = (
 ): ColDef<RateNumber> => {
   return {
     key: symbol.toLowerCase(),
-    className: 'align-right is-number',
+    type: 'rate',
     title: symbol,
     format: (value) => {
       if (value === null) {
