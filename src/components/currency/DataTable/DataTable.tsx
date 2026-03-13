@@ -34,18 +34,6 @@ export const DataTable = <TRow extends DataRow = DataRow>({
   const [scrollTop, setScrollTop] = useState(0);
 
   useEffect(() => {
-    if (!rowRef.current) {
-      return;
-    }
-
-    const height = rowRef.current.getBoundingClientRect().height || 0;
-
-    if (height > 0) {
-      setRowHeight(height);
-    }
-  }, [colDefs, rows]);
-
-  useEffect(() => {
     const container = containerRef.current;
 
     if (!container) {
@@ -65,6 +53,28 @@ export const DataTable = <TRow extends DataRow = DataRow>({
     };
   }, []);
 
+  useEffect(() => {
+    const row = rowRef.current;
+
+    if (!row) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      const height = row.getBoundingClientRect().height || 0;
+
+      if (height > 0) {
+        setRowHeight(height);
+      }
+    });
+
+    observer.observe(row);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [colDefs, rows]);
+
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
 
@@ -82,8 +92,8 @@ export const DataTable = <TRow extends DataRow = DataRow>({
     Math.ceil(viewportHeight / rowHeight) + 2 * OVERSCAN;
 
   const startIndexFrom = 0;
-  const startindexTo = Math.floor(scrollTop / rowHeight) - OVERSCAN;
-  const startIndex = Math.max(startIndexFrom, startindexTo);
+  const startIndexTo = Math.floor(scrollTop / rowHeight) - OVERSCAN;
+  const startIndex = Math.max(startIndexFrom, startIndexTo);
 
   const endIndexFrom = startIndex + visualCount;
   const endIndexTo = rowCount;
