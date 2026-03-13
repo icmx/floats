@@ -16,7 +16,6 @@
     border-collapse: separate;
     border-spacing: 0;
 
-
     width: 100%;
     table-layout: fixed;
   }
@@ -61,6 +60,13 @@
   }
 
   th.is-rate {
+    /**
+     * @todo: Temporary solution to prevent column layout shifts (due
+     * to virtual scrolling). When VS will be stable, it should measure
+     * all the columns widths and apply the most wide one, an then
+     * virtualize. This is similar to Virtuoso approach. */
+    padding-left: 2rem;
+
     text-align: right;
   }
 
