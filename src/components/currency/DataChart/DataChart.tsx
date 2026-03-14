@@ -23,7 +23,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
 
   useEffect(() => {
     const observer = new ResizeObserver(() => {
-      chartRef?.current?.chart?.reflow();
+      chartRef.current?.chart?.reflow();
     });
 
     observer.observe(document.body);

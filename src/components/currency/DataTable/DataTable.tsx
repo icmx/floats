@@ -4,32 +4,34 @@ import {
   useRef,
   useState,
   type FunctionComponent,
+  type RefObject,
 } from 'react';
 import type { DataRow, DataTableProps } from './DataTable.types';
 import styles from './DataTable.module.css';
 
-const OVERSCAN = 5;
-const DEFAULT_ROW_HEIGHT = 32;
+const INITIAL_ROW_HEIGHT = 32;
+const OVERSCAN = 16;
 
-const SpacingRow: FunctionComponent<{
-  colSpan: number;
-  height: number;
-}> = ({ colSpan, height }) => {
-  return (
-    <tr style={{ height }}>
-      <td colSpan={colSpan} style={{ padding: 0, border: 'none' }}></td>
-    </tr>
-  );
+type UseVirtualRowScrollOptions = {
+  rowsCount: number;
 };
 
-export const DataTable = <TRow extends DataRow = DataRow>({
-  colDefs,
-  rows,
-}: DataTableProps<TRow>) => {
+type UseVirtualRowScrollResult = {
+  containerRef: RefObject<HTMLDivElement | null>;
+  rowRef: RefObject<HTMLTableRowElement | null>;
+  handleScroll: () => void;
+  indexes: number[];
+  topSpace: number;
+  bottomSpace: number;
+};
+
+const useVirtualRowScroll = (
+  opions: UseVirtualRowScrollOptions
+): UseVirtualRowScrollResult => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLTableRowElement>(null);
 
-  const [rowHeight, setRowHeight] = useState(DEFAULT_ROW_HEIGHT);
+  const [rowHeight, setRowHeight] = useState(INITIAL_ROW_HEIGHT);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
 
@@ -73,7 +75,7 @@ export const DataTable = <TRow extends DataRow = DataRow>({
     return () => {
       observer.disconnect();
     };
-  }, [colDefs, rows]);
+  }, [opions.rowsCount]);
 
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
@@ -81,12 +83,8 @@ export const DataTable = <TRow extends DataRow = DataRow>({
     if (!container) {
       return;
     }
-
     setScrollTop(container.scrollTop);
   }, []);
-
-  const colCount = colDefs.length;
-  const rowCount = rows.length;
 
   const visualCount =
     Math.ceil(viewportHeight / rowHeight) + 2 * OVERSCAN;
@@ -96,19 +94,56 @@ export const DataTable = <TRow extends DataRow = DataRow>({
   const startIndex = Math.max(startIndexFrom, startIndexTo);
 
   const endIndexFrom = startIndex + visualCount;
-  const endIndexTo = rowCount;
+  const endIndexTo = opions.rowsCount;
   const endIndex = Math.min(endIndexFrom, endIndexTo);
 
   const topSpace = startIndex * rowHeight;
-  const bottomSpace = Math.max(0, (rowCount - endIndex) * rowHeight);
+  const bottomSpace = Math.max(
+    0,
+    (opions.rowsCount - endIndex) * rowHeight
+  );
 
-  const visibleRows = rows.slice(startIndex, endIndex);
+  const indexes: number[] = [];
+
+  for (let i = startIndex; i < endIndex; i++) {
+    indexes.push(i);
+  }
+
+  return {
+    containerRef,
+    rowRef,
+    handleScroll,
+    indexes,
+    topSpace,
+    bottomSpace,
+  };
+};
+
+const SpacingRow: FunctionComponent<{
+  colSpan: number;
+  height: number;
+}> = ({ colSpan, height }) => {
+  return (
+    <tr style={{ height }}>
+      <td colSpan={colSpan} style={{ padding: 0, border: 'none' }}></td>
+    </tr>
+  );
+};
+
+export const DataTable = <TRow extends DataRow = DataRow>({
+  colDefs,
+  rows,
+}: DataTableProps<TRow>) => {
+  const colSpan = colDefs.length;
+  const rowsCount = rows.length;
+
+  const virtual = useVirtualRowScroll({ rowsCount });
 
   return (
     <div
       className={styles.DataTableContainer}
-      ref={containerRef}
-      onScroll={handleScroll}
+      ref={virtual.containerRef}
+      onScroll={virtual.handleScroll}
     >
       <table>
         <thead>
@@ -124,32 +159,39 @@ export const DataTable = <TRow extends DataRow = DataRow>({
           </tr>
         </thead>
         <tbody>
-          {topSpace > 0 && (
-            <SpacingRow colSpan={colCount} height={topSpace} />
+          {virtual.topSpace > 0 && (
+            <SpacingRow colSpan={colSpan} height={virtual.topSpace} />
           )}
 
-          {visibleRows.map((row, i) => (
-            <tr
-              key={row[0].toString()}
-              ref={startIndex + i === 0 ? rowRef : undefined}
-            >
-              {row.map((value, index) => {
-                const colDef = colDefs[index];
+          {virtual.indexes.map((index) => {
+            const row = rows[index];
 
-                return (
-                  <td
-                    key={colDef.key}
-                    className={styles[`is-${colDef.type}`]}
-                  >
-                    {colDef.format(value as number)}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
+            return (
+              <tr
+                key={row[0].toString()}
+                ref={index === 0 ? virtual.rowRef : undefined}
+              >
+                {row.map((value, index) => {
+                  const colDef = colDefs[index];
 
-          {bottomSpace > 0 && (
-            <SpacingRow colSpan={colCount} height={bottomSpace} />
+                  return (
+                    <td
+                      key={colDef.key}
+                      className={styles[`is-${colDef.type}`]}
+                    >
+                      {colDef.format(value as number)}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+
+          {virtual.bottomSpace > 0 && (
+            <SpacingRow
+              colSpan={colSpan}
+              height={virtual.bottomSpace}
+            />
           )}
         </tbody>
       </table>
