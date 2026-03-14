@@ -26,7 +26,7 @@ type UseVirtualRowScrollResult = {
 };
 
 const useVirtualRowScroll = (
-  opions: UseVirtualRowScrollOptions
+  options: UseVirtualRowScrollOptions
 ): UseVirtualRowScrollResult => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLTableRowElement>(null);
@@ -75,7 +75,7 @@ const useVirtualRowScroll = (
     return () => {
       observer.disconnect();
     };
-  }, [opions.rowsCount]);
+  }, [options.rowsCount]);
 
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
@@ -94,13 +94,13 @@ const useVirtualRowScroll = (
   const startIndex = Math.max(startIndexFrom, startIndexTo);
 
   const endIndexFrom = startIndex + visualCount;
-  const endIndexTo = opions.rowsCount;
+  const endIndexTo = options.rowsCount;
   const endIndex = Math.min(endIndexFrom, endIndexTo);
 
   const topSpace = startIndex * rowHeight;
   const bottomSpace = Math.max(
     0,
-    (opions.rowsCount - endIndex) * rowHeight
+    (options.rowsCount - endIndex) * rowHeight
   );
 
   const indexes: number[] = [];
@@ -137,13 +137,22 @@ export const DataTable = <TRow extends DataRow = DataRow>({
   const colSpan = colDefs.length;
   const rowsCount = rows.length;
 
-  const virtual = useVirtualRowScroll({ rowsCount });
+  const {
+    containerRef,
+    handleScroll,
+    topSpace,
+    indexes,
+    rowRef,
+    bottomSpace,
+  } = useVirtualRowScroll({
+    rowsCount,
+  });
 
   return (
     <div
       className={styles.DataTableContainer}
-      ref={virtual.containerRef}
-      onScroll={virtual.handleScroll}
+      ref={containerRef}
+      onScroll={handleScroll}
     >
       <table>
         <thead>
@@ -159,17 +168,17 @@ export const DataTable = <TRow extends DataRow = DataRow>({
           </tr>
         </thead>
         <tbody>
-          {virtual.topSpace > 0 && (
-            <SpacingRow colSpan={colSpan} height={virtual.topSpace} />
+          {topSpace > 0 && (
+            <SpacingRow colSpan={colSpan} height={topSpace} />
           )}
 
-          {virtual.indexes.map((index) => {
+          {indexes.map((index) => {
             const row = rows[index];
 
             return (
               <tr
                 key={row[0].toString()}
-                ref={index === 0 ? virtual.rowRef : undefined}
+                ref={index === 0 ? rowRef : undefined}
               >
                 {row.map((value, index) => {
                   const colDef = colDefs[index];
@@ -187,11 +196,8 @@ export const DataTable = <TRow extends DataRow = DataRow>({
             );
           })}
 
-          {virtual.bottomSpace > 0 && (
-            <SpacingRow
-              colSpan={colSpan}
-              height={virtual.bottomSpace}
-            />
+          {bottomSpace > 0 && (
+            <SpacingRow colSpan={colSpan} height={bottomSpace} />
           )}
         </tbody>
       </table>
