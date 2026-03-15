@@ -133,34 +133,29 @@ const XSizingRow: FunctionComponent<{
   colDefs: Pick<ColDef<unknown>, 'key' | 'type'>[];
   rows: DataRow[];
 }> = ({ colDefs, rows }) => {
-  const cols = useMemo(() => {
-    return colDefs
-      .map((_, index) => {
-        // date (first value) is in yyyy-mm-dd, which means always 10 chars
-        if (index === 0) {
-          return 10;
+  const cols: string[] = useMemo(() => {
+    return colDefs.map((_, index) => {
+      // date (first value) is always in yyyy-mm-dd
+      if (index === 0) {
+        return '0000-00-00';
+      }
+
+      // any other value is rate, which is float > 0
+      let max = 0;
+
+      rows.forEach((row) => {
+        const cell = row[index];
+
+        if (cell !== null && cell > max) {
+          max = cell;
         }
-
-        // any other value is rate, which is float > 0
-        let max = 0;
-
-        rows.forEach((row) => {
-          const cell = row[index];
-
-          if (cell !== null && cell > max) {
-            max = cell;
-          }
-        });
-
-        const integerLength = Math.ceil(Math.log10(max + 1));
-        const pointLength = 1;
-        const fractionLength = EXPLORE_FRACTION_DIGITS;
-
-        return integerLength + pointLength + fractionLength;
-      })
-      .map((count) => {
-        return '0'.repeat(count);
       });
+
+      const integerCount = Math.ceil(Math.log10(max + 1));
+      const fractionCount = EXPLORE_FRACTION_DIGITS;
+
+      return `${'0'.repeat(integerCount)}.${'0'.repeat(fractionCount)}`;
+    });
   }, [colDefs, rows]);
 
   return (
