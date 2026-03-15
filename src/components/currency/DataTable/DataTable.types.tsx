@@ -1,17 +1,18 @@
 import type { DateNumber, RateNumber } from '../../../types/currency';
 
-export type ColType = 'date' | 'rate';
+export type ColDisplayType = 'date' | 'rate';
 
-export type DataRow = [DateNumber, ...RateNumber[]];
+export type DataCell<TValue> = { value: TValue; displayValue: string };
 
-export type ColDef<TValue> = {
+export type DataRow = [DataCell<DateNumber>, ...DataCell<RateNumber>[]];
+
+export type ColDef = {
   key: string;
-  type: ColType;
-  title: string;
-  format: (value: TValue) => string;
+  displayType: ColDisplayType;
+  label: string;
 };
 
-export type DataTableProps<TRow extends DataRow = DataRow> = {
-  colDefs: [ColDef<DateNumber>, ...ColDef<RateNumber>[]];
-  rows: TRow[];
+export type DataTableProps = {
+  colDefs: ColDef[];
+  rows: DataRow[];
 };

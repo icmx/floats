@@ -2,11 +2,17 @@ import { type FunctionComponent } from 'react';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import {
   DataChart,
-  type Series,
+  type DataChartProps,
 } from '../../components/currency/DataChart';
-import { DataTable } from '../../components/currency/DataTable';
 import {
+  DataTable,
+  type DataRow,
+  type DataTableProps,
+} from '../../components/currency/DataTable';
+import {
+  createDateCell,
   createDateColDef,
+  createRateCell,
   createRateColDef,
 } from '../../components/currency/DataTable/DataTable.utils';
 import { SymbolChips } from '../../components/currency/SymbolChips';
@@ -14,12 +20,8 @@ import { useCurrencies } from '../../stores/currenciesStore';
 import type { Currencies, Currency } from '../../types/currency';
 import styles from './ExplorePage.module.css';
 
-type ChartData = {
-  series: Series;
-};
-
-const toChartData = (currencies: Currency[]): ChartData => {
-  const data: ChartData = { series: [] };
+const toChartData = (currencies: Currency[]): DataChartProps => {
+  const data: DataChartProps = { series: [] };
 
   currencies.forEach((currency) => {
     data.series.push({
@@ -31,7 +33,7 @@ const toChartData = (currencies: Currency[]): ChartData => {
   return data;
 };
 
-const toTableData = (currencies: Currency[]): Currencies => {
+const toTableData = (currencies: Currency[]): DataTableProps => {
   const head: Currencies['head'] = ['date'];
   const body: Currencies['body'] = [];
 
@@ -59,7 +61,24 @@ const toTableData = (currencies: Currency[]): Currencies => {
       body.push([date, ...rates]);
     });
 
-  return { head, body };
+  return {
+    colDefs: head.map((cell, index) => {
+      if (index === 0) {
+        return createDateColDef();
+      }
+
+      return createRateColDef(cell);
+    }),
+    rows: body.map((row) => {
+      return row.map((cell, index) => {
+        if (index === 0) {
+          return createDateCell(row[0]);
+        }
+
+        return createRateCell(cell);
+      });
+    }) as DataRow[],
+  };
 };
 
 export const ExplorePage: FunctionComponent = () => {
@@ -77,21 +96,11 @@ export const ExplorePage: FunctionComponent = () => {
       <div className={styles.Group}>
         <div className={styles.Panel}>
           <SymbolChips />
-          {chartData.series?.length > 0 && (
-            <DataChart series={chartData.series} />
-          )}
+          {chartData.series?.length > 0 && <DataChart {...chartData} />}
         </div>
 
         <div className={styles.Panel}>
-          <DataTable
-            colDefs={[
-              createDateColDef(),
-              ...tableData.head.slice(1).map((symbol) => {
-                return createRateColDef(symbol);
-              }),
-            ]}
-            rows={tableData.body}
-          />
+          <DataTable {...tableData} />
         </div>
       </div>
     </>

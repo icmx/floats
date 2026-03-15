@@ -7,7 +7,6 @@ import {
   type FunctionComponent,
   type RefObject,
 } from 'react';
-import { EXPLORE_FRACTION_DIGITS } from '../../../constants/common';
 import { classNames } from '../../../utils/common';
 import type {
   ColDef,
@@ -130,7 +129,7 @@ const useVirtualRowScroll = (
 };
 
 const XSizingRow: FunctionComponent<{
-  colDefs: Pick<ColDef<unknown>, 'key' | 'type'>[];
+  colDefs: ColDef[];
   rows: DataRow[];
 }> = ({ colDefs, rows }) => {
   const cols: string[] = useMemo(() => {
@@ -140,21 +139,19 @@ const XSizingRow: FunctionComponent<{
         return '0000-00-00';
       }
 
-      // any other value is rate, which is float > 0
-      let max = 0;
+      let maxValue = 0;
+      let maxDisplayValue = '';
 
       rows.forEach((row) => {
         const cell = row[index];
 
-        if (cell !== null && cell > max) {
-          max = cell;
+        if (cell.value !== null && cell.value > maxValue) {
+          maxValue = cell.value;
+          maxDisplayValue = cell.displayValue;
         }
       });
 
-      const integerCount = Math.ceil(Math.log10(max + 1));
-      const fractionCount = EXPLORE_FRACTION_DIGITS;
-
-      return `${'0'.repeat(integerCount)}.${'0'.repeat(fractionCount)}`;
+      return maxDisplayValue;
     });
   }, [colDefs, rows]);
 
@@ -167,7 +164,7 @@ const XSizingRow: FunctionComponent<{
           <td
             key={`sizing-${colDef.key}`}
             className={classNames([
-              styles[`is-${colDef.type}`],
+              styles[`is-${colDef.displayType}`],
               styles.XSizingCol,
             ])}
           >
@@ -190,10 +187,10 @@ const YSpacingRow: FunctionComponent<{
   );
 };
 
-export const DataTable = <TRow extends DataRow = DataRow>({
+export const DataTable: FunctionComponent<DataTableProps> = ({
   colDefs,
   rows,
-}: DataTableProps<TRow>) => {
+}) => {
   const colSpan = colDefs.length;
   const rowsCount = rows.length;
 
@@ -220,9 +217,9 @@ export const DataTable = <TRow extends DataRow = DataRow>({
             {colDefs.map((colDef) => (
               <th
                 key={colDef.key}
-                className={styles[`is-${colDef.type}`]}
+                className={styles[`is-${colDef.displayType}`]}
               >
-                {colDef.title}
+                {colDef.label}
               </th>
             ))}
           </tr>
@@ -239,18 +236,18 @@ export const DataTable = <TRow extends DataRow = DataRow>({
 
             return (
               <tr
-                key={row[0].toString()}
+                key={row[0].value.toString()}
                 ref={index === 0 ? rowRef : undefined}
               >
-                {row.map((value, index) => {
+                {row.map((cell, index) => {
                   const colDef = colDefs[index];
 
                   return (
                     <td
-                      key={`value-${colDef.key}`}
-                      className={styles[`is-${colDef.type}`]}
+                      key={`cell-${colDef.key}`}
+                      className={styles[`is-${colDef.displayType}`]}
                     >
-                      {colDef.format(value as number)}
+                      {cell.displayValue}
                     </td>
                   );
                 })}
