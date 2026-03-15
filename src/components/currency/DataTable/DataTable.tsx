@@ -3,10 +3,17 @@ import {
   useEffect,
   useRef,
   useState,
+  useMemo,
   type FunctionComponent,
   type RefObject,
 } from 'react';
-import type { DataRow, DataTableProps } from './DataTable.types';
+import { EXPLORE_FRACTION_DIGITS } from '../../../constants/common';
+import { classNames } from '../../../utils/common';
+import type {
+  ColDef,
+  DataRow,
+  DataTableProps,
+} from './DataTable.types';
 import styles from './DataTable.module.css';
 
 const INITIAL_ROW_HEIGHT = 32;
@@ -75,7 +82,7 @@ const useVirtualRowScroll = (
     return () => {
       observer.disconnect();
     };
-  }, [options.rowsCount]);
+  }, []);
 
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
@@ -83,7 +90,10 @@ const useVirtualRowScroll = (
     if (!container) {
       return;
     }
-    setScrollTop(container.scrollTop);
+
+    requestAnimationFrame(() => {
+      setScrollTop(container.scrollTop);
+    });
   }, []);
 
   const visualCount =
@@ -119,13 +129,68 @@ const useVirtualRowScroll = (
   };
 };
 
-const SpacingRow: FunctionComponent<{
+const XSizingRow: FunctionComponent<{
+  colDefs: Pick<ColDef<unknown>, 'key' | 'type'>[];
+  rows: DataRow[];
+}> = ({ colDefs, rows }) => {
+  const cols = useMemo(() => {
+    return colDefs
+      .map((_, index) => {
+        // date (first value) is in yyyy-mm-dd, which means always 10 chars
+        if (index === 0) {
+          return 10;
+        }
+
+        // any other value is rate, which is float > 0
+        let max = 0;
+
+        rows.forEach((row) => {
+          const cell = row[index];
+
+          if (cell !== null && cell > max) {
+            max = cell;
+          }
+        });
+
+        const integerLength = Math.ceil(Math.log10(max + 1));
+        const pointLength = 1;
+        const fractionLength = EXPLORE_FRACTION_DIGITS;
+
+        return integerLength + pointLength + fractionLength;
+      })
+      .map((count) => {
+        return '0'.repeat(count);
+      });
+  }, [colDefs, rows]);
+
+  return (
+    <tr className={styles.XSizingRow}>
+      {cols.map((col, index) => {
+        const colDef = colDefs[index];
+
+        return (
+          <td
+            key={`sizing-${colDef.key}`}
+            className={classNames([
+              styles[`is-${colDef.type}`],
+              styles.XSizingCol,
+            ])}
+          >
+            {col}
+          </td>
+        );
+      })}
+    </tr>
+  );
+};
+
+const YSpacingRow: FunctionComponent<{
   colSpan: number;
   height: number;
 }> = ({ colSpan, height }) => {
   return (
     <tr style={{ height }}>
-      <td colSpan={colSpan} style={{ padding: 0, border: 'none' }}></td>
+      <td colSpan={colSpan} className={styles.YSpacingCol}></td>
     </tr>
   );
 };
@@ -168,8 +233,10 @@ export const DataTable = <TRow extends DataRow = DataRow>({
           </tr>
         </thead>
         <tbody>
+          <XSizingRow colDefs={colDefs} rows={rows} />
+
           {topSpace > 0 && (
-            <SpacingRow colSpan={colSpan} height={topSpace} />
+            <YSpacingRow colSpan={colSpan} height={topSpace} />
           )}
 
           {indexes.map((index) => {
@@ -185,7 +252,7 @@ export const DataTable = <TRow extends DataRow = DataRow>({
 
                   return (
                     <td
-                      key={colDef.key}
+                      key={`value-${colDef.key}`}
                       className={styles[`is-${colDef.type}`]}
                     >
                       {colDef.format(value as number)}
@@ -197,7 +264,7 @@ export const DataTable = <TRow extends DataRow = DataRow>({
           })}
 
           {bottomSpace > 0 && (
-            <SpacingRow colSpan={colSpan} height={bottomSpace} />
+            <YSpacingRow colSpan={colSpan} height={bottomSpace} />
           )}
         </tbody>
       </table>

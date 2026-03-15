@@ -60,13 +60,6 @@
   }
 
   th.is-rate {
-    /**
-     * @todo: Temporary solution to prevent column layout shifts (due
-     * to virtual scrolling). When VS will be stable, it should measure
-     * all the columns widths and apply the most wide one, an then
-     * virtualize. This is similar to Virtuoso approach. */
-    padding-left: 2rem;
-
     text-align: right;
   }
 
@@ -86,5 +79,27 @@
       width: unset;
       table-layout: auto;
     }
+  }
+}
+
+.DataTableContainer {
+  .XSizingRow {
+    height: 0;
+    visibility: hidden;
+  }
+
+  .XSizingCol {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: none;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 0;
+  }
+
+  .YSpacingCol {
+    padding: 0;
+    border: none;
   }
 }
