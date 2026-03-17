@@ -254,15 +254,17 @@ type UseVirtualRowScrollResult = {
   bottomSpace: number;
 };
 
-const useVirtualRowScroll = (
-  options: UseVirtualRowScrollOptions
-): UseVirtualRowScrollResult => {
+const useVirtualRowScroll = ({
+  containerRef,
+  rowRef,
+  rowsCount,
+}: UseVirtualRowScrollOptions): UseVirtualRowScrollResult => {
   const [rowHeight, setRowHeight] = useState(INITIAL_ROW_HEIGHT);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
 
   useEffect(() => {
-    const container = options.containerRef.current;
+    const container = containerRef.current;
 
     if (!container) {
       return;
@@ -279,10 +281,10 @@ const useVirtualRowScroll = (
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [containerRef]);
 
   useEffect(() => {
-    const row = options.rowRef.current;
+    const row = rowRef.current;
 
     if (!row) {
       return;
@@ -301,10 +303,10 @@ const useVirtualRowScroll = (
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [rowRef]);
 
   const handleScroll = useCallback(() => {
-    const container = options.containerRef.current;
+    const container = containerRef.current;
 
     if (!container) {
       return;
@@ -313,7 +315,7 @@ const useVirtualRowScroll = (
     requestAnimationFrame(() => {
       setScrollTop(container.scrollTop);
     });
-  }, []);
+  }, [containerRef]);
 
   const visualCount =
     Math.ceil(viewportHeight / rowHeight) + 2 * OVERSCAN;
@@ -323,14 +325,11 @@ const useVirtualRowScroll = (
   const startIndex = Math.max(startIndexFrom, startIndexTo);
 
   const endIndexFrom = startIndex + visualCount;
-  const endIndexTo = options.rowsCount;
+  const endIndexTo = rowsCount;
   const endIndex = Math.min(endIndexFrom, endIndexTo);
 
   const topSpace = startIndex * rowHeight;
-  const bottomSpace = Math.max(
-    0,
-    (options.rowsCount - endIndex) * rowHeight
-  );
+  const bottomSpace = Math.max(0, (rowsCount - endIndex) * rowHeight);
 
   const indexes: number[] = [];
 
