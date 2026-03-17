@@ -5,6 +5,7 @@
 
   padding: 0 1rem;
 
+  /* @todo: dedicated color */
   background-color: var(--color-chip);
 }
 

@@ -5,30 +5,30 @@
 @media (width > 720px) {
   .DataTableContainer {
     height: calc(100vh - var(--header-height));
-
-    padding-right: 0.5rem;
   }
 }
 
 .DataTableContainer {
   table {
     margin: 1rem 0;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
 
     width: 100%;
+    table-layout: fixed;
   }
 
   thead {
     position: sticky;
     left: 0;
-    top: -1px;
+    top: 0;
     background-color: var(--color-page);
   }
 
   th {
-    padding: 6px 12px 6px;
+    padding: 6px 12px;
 
-    border-top: solid 1px var(--color-line);
+    border-top: solid 1px transparent;
     border-bottom: solid 1px var(--color-line);
 
     text-wrap: nowrap;
@@ -37,34 +37,68 @@
   td {
     padding: 6px 12px;
 
-    border-top: solid 1px var(--color-line);
+    border-top: solid 1px transparent;
     border-bottom: solid 1px var(--color-line);
 
     text-wrap: nowrap;
   }
 
-  th:first-child,
-  td:first-child {
-    padding-left: 0;
-  }
-
-  th:last-child,
-  td:last-child {
-    padding-right: 0;
-  }
-
-  th.align-left,
-  td.align-left {
+  th.is-date {
     text-align: left;
   }
 
-  th.align-right,
-  td.align-right {
+  th.is-rate {
     text-align: right;
   }
 
-  th.is-number,
-  td.is-number {
+  td.is-date {
+    text-align: left;
+  }
+
+  td.is-rate {
+    text-align: right;
     font-variant-numeric: tabular-nums;
+  }
+
+  td.is-selected {
+    /* @todo: dedicated color */
+    --color-selection: color-mix(
+      in srgb,
+      var(--color-main) 30%,
+      transparent
+    );
+
+    background-color: var(--color-selection);
+  }
+}
+
+@media (width > 720px) {
+  .DataTableContainer {
+    table {
+      width: unset;
+      table-layout: auto;
+    }
+  }
+}
+
+.DataTableContainer {
+  .XSizingRow {
+    height: 0;
+    visibility: hidden;
+  }
+
+  .XSizingCol {
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: none;
+    overflow: hidden;
+    text-wrap: nowrap;
+    line-height: 0;
+  }
+
+  .YSpacingCol {
+    padding: 0;
+    border: none;
   }
 }

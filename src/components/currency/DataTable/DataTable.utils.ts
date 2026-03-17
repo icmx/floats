@@ -3,32 +3,38 @@ import {
   exploreFormatter,
   isodateFormatter,
 } from '../../../utils/common';
-import type { ColDef } from './DataTable.types';
+import type { ColDef, DataCell } from './DataTable.types';
 
-export const createDateColDef = (): ColDef<DateNumber> => {
+export const createDateColDef = (): ColDef => {
   return {
     key: 'date',
-    className: 'align-left',
-    title: 'Date',
-    format: (value) => {
-      return isodateFormatter.format(value);
-    },
+    displayType: 'date',
+    label: 'Date',
   };
 };
 
-export const createRateColDef = (
-  symbol: string
-): ColDef<RateNumber> => {
+export const createRateColDef = (symbol: string): ColDef => {
   return {
     key: symbol.toLowerCase(),
-    className: 'align-right is-number',
-    title: symbol,
-    format: (value) => {
-      if (value === null) {
-        return '';
-      }
+    displayType: 'rate',
+    label: symbol,
+  };
+};
 
-      return exploreFormatter.format(value);
-    },
+export const createDateCell = (
+  value: DateNumber
+): DataCell<DateNumber> => {
+  return {
+    value,
+    displayValue: isodateFormatter.format(value),
+  };
+};
+
+export const createRateCell = (
+  value: RateNumber
+): DataCell<RateNumber> => {
+  return {
+    value,
+    displayValue: value === null ? '' : exploreFormatter.format(value),
   };
 };
