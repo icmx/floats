@@ -39,7 +39,7 @@ const useScrollToBottom = (
       top: container.scrollHeight,
     });
 
-    // @todo: meybe move this feature to imperative handler and make
+    // @todo: maybe move this feature to imperative handler and make
     // the single effect both for chart and table (to scroll to most
     // recent data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,7 +96,6 @@ const isPositionInSelection = (
 
 type UseSelectionOptions = {
   containerRef: RefObject<HTMLElement | null>;
-  colDefs: ColDef[];
   rows: DataRow[];
 };
 
@@ -112,7 +111,6 @@ type UseSelectionResult = {
 
 const useSelection = ({
   containerRef,
-  colDefs,
   rows,
 }: UseSelectionOptions): UseSelectionResult => {
   const anchorRef = useRef<Position | null>(null);
@@ -186,7 +184,7 @@ const useSelection = ({
       event.preventDefault();
 
       const hasModifiers = event.ctrlKey || event.metaKey;
-      const hasCKey = event.key === 'c';
+      const hasCKey = event.key.toLowerCase() === 'c';
       const shouldCopy = hasModifiers && hasCKey;
 
       if (!shouldCopy) {
@@ -221,7 +219,9 @@ const useSelection = ({
         .map((line) => line.join('\t'))
         .join('\n');
 
-      navigator.clipboard.writeText(text);
+      navigator.clipboard.writeText(text).catch((reason) => {
+        console.error(reason);
+      });
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -229,7 +229,7 @@ const useSelection = ({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [selection, rows, colDefs]);
+  }, [selection, rows]);
 
   const isSelected = useCallback(
     (position: Position) => {
@@ -430,7 +430,6 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
   const { isSelected, handleCellMouseDown, handleCellMouseEnter } =
     useSelection({
       containerRef,
-      colDefs,
       rows,
     });
 
