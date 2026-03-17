@@ -7,6 +7,7 @@ import {
   type FunctionComponent,
   type RefObject,
   type MouseEvent as SyntheticMouseEvent,
+  type DependencyList,
 } from 'react';
 import { classNames } from '../../../utils/common';
 import type {
@@ -18,6 +19,27 @@ import styles from './DataTable.module.css';
 
 const INITIAL_ROW_HEIGHT = 32;
 const OVERSCAN = 16;
+
+type UseScrollToBottomOptions = {
+  containerRef: RefObject<HTMLElement | null>;
+};
+
+const useScrollToBottom = (
+  { containerRef }: UseScrollToBottomOptions,
+  deps: DependencyList
+) => {
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    container.scrollTo({
+      top: container.scrollHeight,
+    });
+  }, deps);
+};
 
 type Position = { rowIndex: number; colIndex: number };
 
@@ -235,6 +257,7 @@ type UseVirtualRowScrollResult = {
 const useVirtualRowScroll = (
   options: UseVirtualRowScrollOptions
 ): UseVirtualRowScrollResult => {
+  // @todo: move refs outside
   const containerRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLTableRowElement>(null);
 
@@ -413,6 +436,8 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
       colDefs,
       rows,
     });
+
+  useScrollToBottom({ containerRef }, [rows]);
 
   return (
     <div
