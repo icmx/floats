@@ -38,7 +38,12 @@ const useScrollToBottom = (
     container.scrollTo({
       top: container.scrollHeight,
     });
-  }, deps);
+
+    // @todo: meybe move this feature to imperative handler and make
+    // the single effect both for chart and table (to scroll to most
+    // recent data)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [containerRef, ...deps]);
 };
 
 type Position = { rowIndex: number; colIndex: number };
