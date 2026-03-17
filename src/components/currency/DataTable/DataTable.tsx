@@ -242,12 +242,12 @@ const useSelection = ({
 };
 
 type UseVirtualRowScrollOptions = {
+  containerRef: RefObject<HTMLDivElement | null>;
+  rowRef: RefObject<HTMLTableRowElement | null>;
   rowsCount: number;
 };
 
 type UseVirtualRowScrollResult = {
-  containerRef: RefObject<HTMLDivElement | null>;
-  rowRef: RefObject<HTMLTableRowElement | null>;
   handleScroll: () => void;
   indexes: number[];
   topSpace: number;
@@ -257,16 +257,12 @@ type UseVirtualRowScrollResult = {
 const useVirtualRowScroll = (
   options: UseVirtualRowScrollOptions
 ): UseVirtualRowScrollResult => {
-  // @todo: move refs outside
-  const containerRef = useRef<HTMLDivElement>(null);
-  const rowRef = useRef<HTMLTableRowElement>(null);
-
   const [rowHeight, setRowHeight] = useState(INITIAL_ROW_HEIGHT);
   const [viewportHeight, setViewportHeight] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
 
   useEffect(() => {
-    const container = containerRef.current;
+    const container = options.containerRef.current;
 
     if (!container) {
       return;
@@ -286,7 +282,7 @@ const useVirtualRowScroll = (
   }, []);
 
   useEffect(() => {
-    const row = rowRef.current;
+    const row = options.rowRef.current;
 
     if (!row) {
       return;
@@ -308,7 +304,7 @@ const useVirtualRowScroll = (
   }, []);
 
   const handleScroll = useCallback(() => {
-    const container = containerRef.current;
+    const container = options.containerRef.current;
 
     if (!container) {
       return;
@@ -343,8 +339,6 @@ const useVirtualRowScroll = (
   }
 
   return {
-    containerRef,
-    rowRef,
     handleScroll,
     indexes,
     topSpace,
@@ -416,19 +410,18 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
   colDefs,
   rows,
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rowRef = useRef<HTMLTableRowElement>(null);
+
   const colSpan = colDefs.length;
   const rowsCount = rows.length;
 
-  const {
-    containerRef,
-    handleScroll,
-    topSpace,
-    indexes,
-    rowRef,
-    bottomSpace,
-  } = useVirtualRowScroll({
-    rowsCount,
-  });
+  const { handleScroll, topSpace, indexes, bottomSpace } =
+    useVirtualRowScroll({
+      containerRef,
+      rowRef,
+      rowsCount,
+    });
 
   const { isSelected, handleCellMouseDown, handleCellMouseEnter } =
     useSelection({
