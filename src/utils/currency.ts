@@ -70,6 +70,7 @@ export const createPivotCurrency = (): Currency => {
   return createCurrency(PIVOT_CURRENCY_CODE, PIVOT_CURRENCY_CODE, []);
 };
 
+// @todo: split and add tests here (very fragile)
 export const createCrossCurrency = (
   base: Currency,
   quote: Currency
@@ -85,43 +86,62 @@ export const createCrossCurrency = (
     );
   }
 
-  const ratesByDates = new Map<
-    number,
-    { base: number | null; quote: number | null }
-  >();
+  type Rate = { base: number | null; quote: number | null };
 
-  const emptyRate: { base: number | null; quote: number | null } = {
-    base: null,
-    quote: null,
-  };
+  const EMPTY: Rate = { base: null, quote: null };
+  const ratesByDates = new Map<number, Rate>();
 
-  base.body.forEach(([date, rate]) => {
-    ratesByDates.set(date, {
-      ...(ratesByDates.get(date) || emptyRate),
-      base: rate,
+  const minDate = Math.max(
+    base.body.at(0)?.[0] || 0,
+    quote.body.at(0)?.[0] || 0
+  );
+
+  const maxDate = Math.min(
+    base.body.at(-1)?.[0] || 0,
+    quote.body.at(-1)?.[0] || 0
+  );
+
+  const dayMs = 86_400_000;
+
+  for (let date = minDate; date <= maxDate; date += dayMs) {
+    ratesByDates.set(date, EMPTY);
+  }
+
+  base.body
+    .filter(([date]) => {
+      return ratesByDates.has(date);
+    })
+    .forEach(([date, rate]) => {
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || EMPTY),
+        base: rate,
+      });
     });
-  });
 
-  quote.body.forEach(([date, rate]) => {
-    ratesByDates.set(date, {
-      ...(ratesByDates.get(date) || emptyRate),
-      quote: rate,
+  quote.body
+    .filter(([date]) => {
+      return ratesByDates.has(date);
+    })
+    .forEach(([date, rate]) => {
+      ratesByDates.set(date, {
+        ...(ratesByDates.get(date) || EMPTY),
+        quote: rate,
+      });
     });
-  });
 
   if (isPivotCurrency(base)) {
-    quote.body.forEach(([date]) => {
+    Array.from(ratesByDates.entries()).forEach(([date]) => {
       ratesByDates.set(date, {
-        ...(ratesByDates.get(date) || emptyRate),
+        ...(ratesByDates.get(date) || EMPTY),
         base: 1,
       });
     });
   }
 
   if (isPivotCurrency(quote)) {
-    base.body.forEach(([date]) => {
+    Array.from(ratesByDates.entries()).forEach(([date]) => {
       ratesByDates.set(date, {
-        ...(ratesByDates.get(date) || emptyRate),
+        ...(ratesByDates.get(date) || EMPTY),
         quote: 1,
       });
     });
@@ -129,17 +149,24 @@ export const createCrossCurrency = (
 
   const body: DateRate[] = [];
 
-  Array.from(ratesByDates.entries())
-    .sort(([prev], [next]) => {
-      return prev - next;
-    })
-    .forEach(([date, { base, quote }]) => {
+  Array.from(ratesByDates.entries()).forEach(
+    ([date, { base, quote }]) => {
       if (!base || !quote) {
-        return;
+        body.push([date, null]);
+      } else {
+        body.push([date, quote / base]);
       }
+    }
+  );
 
-      body.push([date, quote / base]);
-    });
+  for (let i = 1; i < body.length; i++) {
+    const [, prevRate] = body[i - 1];
+    const [date, nextRate] = body[i];
+
+    if (nextRate === null) {
+      body[i] = [date, prevRate];
+    }
+  }
 
   return createCurrency(baseQuoteCode, quoteQuoteCode, body);
 };
