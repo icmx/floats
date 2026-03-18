@@ -1,6 +1,6 @@
 import { useRef, type FunctionComponent } from 'react';
-import { SERIES_COLORS } from '../../../constants/currency';
 import { classNames } from '../../../utils/common';
+import { getSeriesColor } from '../../../utils/currency';
 import { Bulb } from '../../common/Bulb';
 import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';
@@ -50,8 +50,7 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
               const shouldShowBulb =
                 hasMultipleRateColumns && colIndex > 0;
 
-              const color =
-                SERIES_COLORS[(colIndex - 1) % SERIES_COLORS.length];
+              const color = getSeriesColor(colIndex - 1);
 
               return (
                 <th

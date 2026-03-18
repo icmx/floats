@@ -1,6 +1,7 @@
 import {
   CODE_LENGTH,
   PIVOT_CURRENCY_CODE,
+  SERIES_COLORS,
   SYMBOL_LENGTH,
   SYMBOLS,
 } from '../constants/currency';
@@ -10,6 +11,10 @@ import type {
   DateRate,
   SymbolString,
 } from '../types/currency';
+
+export const getSeriesColor = (seriesIndex: number): string => {
+  return SERIES_COLORS[seriesIndex % SERIES_COLORS.length];
+};
 
 export const isSymbolString = (
   source: unknown
