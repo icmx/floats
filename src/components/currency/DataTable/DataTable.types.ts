@@ -2,7 +2,10 @@ import type { DateNumber, RateNumber } from '../../../types/currency';
 
 export type ColDisplayType = 'date' | 'rate';
 
-export type DataCell<TValue> = { value: TValue; displayValue: string };
+export type DataCell<TValue> = {
+  value: TValue;
+  displayValue: string;
+};
 
 export type DataRow = [DataCell<DateNumber>, ...DataCell<RateNumber>[]];
 
