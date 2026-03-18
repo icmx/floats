@@ -4,17 +4,9 @@ import HighchartsReact, {
   type HighchartsReactRefObject,
 } from 'highcharts-react-official';
 import { EXPLORE_FRACTION_DIGITS } from '../../../constants/common';
+import { SERIES_COLORS } from '../../../constants/currency';
 import type { DataChartProps } from './DataChart.types';
 import styles from './DataChart.module.css';
-
-const CHART_COLORS = [
-  'var(--chart-line-indigo)',
-  'var(--chart-line-green)',
-  'var(--chart-line-amber)',
-  'var(--chart-line-pink)',
-  'var(--chart-line-cyan)',
-  'var(--chart-line-orange)',
-];
 
 export const DataChart: FunctionComponent<DataChartProps> = ({
   series,
@@ -140,7 +132,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
           },
           series: series.map((value, index) => {
             const type = isSingleSeries ? 'area' : 'line';
-            const color = CHART_COLORS[index % CHART_COLORS.length];
+            const color = SERIES_COLORS[index % SERIES_COLORS.length];
 
             return {
               ...value,

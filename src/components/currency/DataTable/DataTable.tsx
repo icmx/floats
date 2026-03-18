@@ -1,5 +1,7 @@
 import { useRef, type FunctionComponent } from 'react';
+import { SERIES_COLORS } from '../../../constants/currency';
 import { classNames } from '../../../utils/common';
+import { Bulb } from '../../common/Bulb';
 import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';
 import { useScrollToBottom } from './hooks/useScrollToBottom';
@@ -17,6 +19,8 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
 
   const colSpan = colDefs.length;
   const rowsCount = rows.length;
+
+  const hasMultipleRateColumns = colSpan > 2; // date + more than 2 rate columns
 
   const { handleScroll, topSpace, indexes, bottomSpace } =
     useVirtualRowScroll({
@@ -42,14 +46,23 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
       <table>
         <thead>
           <tr>
-            {colDefs.map((colDef) => (
-              <th
-                key={colDef.key}
-                className={styles[`is-${colDef.displayType}`]}
-              >
-                {colDef.label}
-              </th>
-            ))}
+            {colDefs.map((colDef, colIndex) => {
+              const shouldShowBulb =
+                hasMultipleRateColumns && colIndex > 0;
+
+              const color =
+                SERIES_COLORS[(colIndex - 1) % SERIES_COLORS.length];
+
+              return (
+                <th
+                  key={colDef.key}
+                  className={styles[`is-${colDef.displayType}`]}
+                >
+                  {shouldShowBulb && <Bulb color={color} />}
+                  {colDef.label}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>

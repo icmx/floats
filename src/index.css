@@ -1,10 +1,10 @@
 :root {
-  --chart-line-indigo: #6366f1;
-  --chart-line-green: #22c55e;
-  --chart-line-amber: #f59e0b;
-  --chart-line-pink: #ec4899;
-  --chart-line-cyan: #06b6d4;
-  --chart-line-orange: #f97316;
+  --color-series-indigo: #6366f1;
+  --color-series-green: #22c55e;
+  --color-series-amber: #f59e0b;
+  --color-series-pink: #ec4899;
+  --color-series-cyan: #06b6d4;
+  --color-series-orange: #f97316;
 
   --header-height: 2.5rem;
   --border-width: 3px;
