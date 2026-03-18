@@ -53,6 +53,10 @@
   }
 }
 
+::selection {
+  background-color: var(--color-selection);
+}
+
 body {
   margin: 0;
 
