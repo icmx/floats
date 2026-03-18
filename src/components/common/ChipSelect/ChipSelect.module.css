@@ -40,6 +40,10 @@
   outline: none;
 }
 
+.Input::placeholder {
+  font-size: var(--font-size-s);
+}
+
 .AvailableValues {
   position: absolute;
   left: 0;
