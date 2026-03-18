@@ -22,7 +22,7 @@
     position: sticky;
     left: 0;
     top: 0;
-    background-color: var(--color-page);
+    background-color: var(--color-body);
   }
 
   th {

@@ -52,7 +52,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
             style: {
               color: 'var(--color-text)',
             },
-            backgroundColor: 'var(--color-page)',
+            backgroundColor: 'var(--color-body)',
           },
           xAxis: {
             labels: {
