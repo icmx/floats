@@ -25,6 +25,12 @@
     --color-page: oklch(98% 0.005 272);
     --color-chip: oklch(90% 0.015 272);
     --color-field: oklch(100% 0 0);
+
+    --color-selection: color-mix(
+      in oklch,
+      var(--color-main) 25%,
+      transparent
+    );
   }
 
   &[data-theme='dark'] {
@@ -36,6 +42,12 @@
     --color-page: oklch(24% 0.012 272);
     --color-chip: oklch(28% 0.02 272);
     --color-field: oklch(20% 0 0);
+
+    --color-selection: color-mix(
+      in oklch,
+      var(--color-main) 25%,
+      transparent
+    );
   }
 }
 
