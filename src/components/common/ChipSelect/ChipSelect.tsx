@@ -47,6 +47,36 @@ export const ChipSelect = <T,>({
       return;
     }
 
+    const viewport = window.visualViewport;
+
+    if (!viewport) {
+      return;
+    }
+
+    let prev = viewport.height;
+
+    const handleResize = () => {
+      const next = viewport.height;
+
+      if (next > prev) {
+        setIsOpen(false);
+      }
+
+      prev = next;
+    };
+
+    viewport.addEventListener('resize', handleResize);
+
+    return () => {
+      viewport.removeEventListener('resize', handleResize);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
