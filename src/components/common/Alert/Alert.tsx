@@ -4,17 +4,10 @@ import type { AlertProps } from './Alert.types';
 import styles from './Alert.module.css';
 
 export const Alert: FunctionComponent<AlertProps> = ({
-  appearance,
+  status,
   children,
 }) => {
-  return (
-    <div
-      className={classNames([
-        styles.Alert,
-        appearance === 'failure' && styles.isFailure,
-      ])}
-    >
-      {children}
-    </div>
-  );
+  const className = classNames([styles.Alert, styles[`is-${status}`]]);
+
+  return <div className={className}>{children}</div>;
 };

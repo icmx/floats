@@ -101,6 +101,7 @@ export const ExplorePage: FunctionComponent = () => {
 
   return (
     <>
+      {/* @todo: move to viewport (group below) */}
       {error && <ErrorAlert error={error} />}
 
       <div className={styles.Group}>

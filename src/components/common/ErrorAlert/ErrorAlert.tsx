@@ -26,10 +26,8 @@ export const ErrorAlert: FunctionComponent<ErrorAlertProps> = ({
   const message = extractMessage(error);
 
   return (
-    <Alert appearance="failure">
-      <p>
-        <code>{message}</code>
-      </p>
+    <Alert status="failure">
+      <p>{message}</p>
     </Alert>
   );
 };

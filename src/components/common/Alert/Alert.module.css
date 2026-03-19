@@ -4,9 +4,12 @@
 
   border: solid 1px var(--color-line);
   border-radius: 12px;
-}
 
-.Alert.isFailure {
-  /* @todo: dedicated color */
-  color: red;
+  &.is-default {
+    color: var(--color-text);
+  }
+
+  &.is-failure {
+    color: var(--color-warn);
+  }
 }
