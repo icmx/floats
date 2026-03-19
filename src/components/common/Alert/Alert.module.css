@@ -1,4 +1,4 @@
-.Callout {
+.Alert {
   margin: 1rem 0;
   padding: 0 1rem;
 
@@ -6,6 +6,7 @@
   border-radius: 12px;
 }
 
-.Callout.isFailure {
+.Alert.isFailure {
+  /* @todo: dedicated color */
   color: red;
 }

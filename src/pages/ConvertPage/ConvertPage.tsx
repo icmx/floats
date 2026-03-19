@@ -1,6 +1,6 @@
 import { type FunctionComponent } from 'react';
 import { Converter } from '../../components/currency/Converter';
-import { ErrorCallout } from '../../components/currency/ErrorCallout';
+import { ErrorAlert } from '../../components/common/ErrorAlert';
 import { Loading } from '../../components/common/Loading';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
@@ -41,7 +41,7 @@ export const ConvertPage: FunctionComponent = () => {
 
       {isLoading && <Loading />}
 
-      {error && <ErrorCallout error={error} />}
+      {error && <ErrorAlert error={error} />}
 
       <form>
         {data.rates.map(({ symbol: [baseCode, quoteCode], rate }) => {

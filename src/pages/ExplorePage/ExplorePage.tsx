@@ -1,5 +1,5 @@
 import { useEffect, useRef, type FunctionComponent } from 'react';
-import { ErrorCallout } from '../../components/currency/ErrorCallout';
+import { ErrorAlert } from '../../components/common/ErrorAlert';
 import {
   DataChart,
   type DataChartHandle,
@@ -23,7 +23,7 @@ import type { Currencies, Currency } from '../../types/currency';
 import styles from './ExplorePage.module.css';
 
 const toChartData = (currencies: Currency[]): DataChartProps => {
-  const data: DataChartProps = { series: []};
+  const data: DataChartProps = { series: [] };
 
   currencies.forEach((currency) => {
     data.series.push({
@@ -101,7 +101,7 @@ export const ExplorePage: FunctionComponent = () => {
 
   return (
     <>
-      {error && <ErrorCallout error={error} />}
+      {error && <ErrorAlert error={error} />}
 
       <div className={styles.Group}>
         <div className={styles.Panel}>

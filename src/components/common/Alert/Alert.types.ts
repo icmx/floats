@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
 
-export type CalloutProps = PropsWithChildren & {
+export type AlertProps = PropsWithChildren & {
   appearance: 'failure';
 };

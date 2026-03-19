@@ -1,16 +1,16 @@
 import type { FunctionComponent } from 'react';
 import { classNames } from '../../../utils/common';
-import type { CalloutProps } from './Callout.types';
-import styles from './Callout.module.css';
+import type { AlertProps } from './Alert.types';
+import styles from './Alert.module.css';
 
-export const Callout: FunctionComponent<CalloutProps> = ({
+export const Alert: FunctionComponent<AlertProps> = ({
   appearance,
   children,
 }) => {
   return (
     <div
       className={classNames([
-        styles.Callout,
+        styles.Alert,
         appearance === 'failure' && styles.isFailure,
       ])}
     >
