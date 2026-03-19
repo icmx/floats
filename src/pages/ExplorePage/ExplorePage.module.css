@@ -2,12 +2,17 @@
   .Group {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 1rem;
 
     height: var(--content-height);
   }
 
   .Panel {
     min-width: 0;
+  }
+
+  /* @warn: Dirty hack to place table with virtual scroll in viewport */
+  .Panel:nth-child(2) {
+    padding-left: 1rem;
+    margin-right: -1rem;
   }
 }
