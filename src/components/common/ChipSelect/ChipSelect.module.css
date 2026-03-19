@@ -7,7 +7,7 @@
   padding: 4px;
 
   border: solid 1px var(--color-line);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
 
   background-color: var(--color-field);
 }

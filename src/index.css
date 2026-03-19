@@ -9,6 +9,7 @@
   --header-height: 2.5rem;
   --content-height: calc(100vh - var(--header-height));
   --border-width: 3px;
+  --border-radius: 0.5rem;
 
   --font-size-l: 1.2rem;
   --font-size-m: 1rem;
