@@ -101,9 +101,9 @@ export const createCrossCurrency = (
     quote.body.at(-1)?.[0] || 0
   );
 
-  const dayMs = 86_400_000;
+  const MS_1_DAY = 86_400_000;
 
-  for (let date = minDate; date <= maxDate; date += dayMs) {
+  for (let date = minDate; date <= maxDate; date += MS_1_DAY) {
     ratesByDates.set(date, EMPTY);
   }
 

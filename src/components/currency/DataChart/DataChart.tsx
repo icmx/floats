@@ -1,17 +1,51 @@
-import { useEffect, useRef, type FunctionComponent } from 'react';
+import {
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  type FunctionComponent,
+} from 'react';
 import Highcharts from 'highcharts/highstock';
-import HighchartsReact, {
-  type HighchartsReactRefObject,
-} from 'highcharts-react-official';
+import HighchartsReact from 'highcharts-react-official';
 import { EXPLORE_FRACTION_DIGITS } from '../../../constants/common';
 import { getSeriesColor } from '../../../utils/currency';
 import type { DataChartProps } from './DataChart.types';
 import styles from './DataChart.module.css';
 
+const MS_3_MONTHS = 7516800000;
+
 export const DataChart: FunctionComponent<DataChartProps> = ({
   series,
+  ref,
 }) => {
-  const chartRef = useRef<HighchartsReactRefObject>(null);
+  const chartRef = useRef<HighchartsReact.RefObject>(null);
+
+  useImperativeHandle(ref, () => {
+    return {
+      scrollToRecent: () => {
+        const chart = chartRef.current?.chart;
+
+        if (!chart) {
+          return;
+        }
+
+        const xAxis = chart.xAxis[0];
+
+        if (!xAxis) {
+          return;
+        }
+
+        const extremes = xAxis.getExtremes();
+
+        const newMax = extremes.dataMax;
+        const newMin = newMax - MS_3_MONTHS;
+
+        const redraw = true;
+        const animation = false;
+
+        xAxis.setExtremes(newMin, newMax, redraw, animation);
+      },
+    };
+  });
 
   useEffect(() => {
     const observer = new ResizeObserver(() => {
@@ -70,6 +104,9 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
           },
 
           rangeSelector: {
+            inputStyle: {
+              color: 'var(--color-link)',
+            },
             selected: 1,
             buttons: [
               {

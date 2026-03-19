@@ -1,12 +1,14 @@
-import { type FunctionComponent } from 'react';
+import { useEffect, useRef, type FunctionComponent } from 'react';
 import { ErrorCallout } from '../../components/currency/ErrorCallout';
 import {
   DataChart,
+  type DataChartHandle,
   type DataChartProps,
 } from '../../components/currency/DataChart';
 import {
   DataTable,
   type DataRow,
+  type DataTableHandle,
   type DataTableProps,
 } from '../../components/currency/DataTable';
 import {
@@ -21,7 +23,7 @@ import type { Currencies, Currency } from '../../types/currency';
 import styles from './ExplorePage.module.css';
 
 const toChartData = (currencies: Currency[]): DataChartProps => {
-  const data: DataChartProps = { series: [] };
+  const data: DataChartProps = { series: []};
 
   currencies.forEach((currency) => {
     data.series.push({
@@ -89,6 +91,14 @@ export const ExplorePage: FunctionComponent = () => {
   const chartData = toChartData(currencies);
   const tableData = toTableData(currencies);
 
+  const chartRef = useRef<DataChartHandle>(null);
+  const tableRef = useRef<DataTableHandle>(null);
+
+  useEffect(() => {
+    chartRef.current?.scrollToRecent();
+    tableRef.current?.scrollToRecent();
+  }, [currencies]);
+
   return (
     <>
       {error && <ErrorCallout error={error} />}
@@ -96,11 +106,11 @@ export const ExplorePage: FunctionComponent = () => {
       <div className={styles.Group}>
         <div className={styles.Panel}>
           <SymbolChips />
-          {chartData.series?.length > 0 && <DataChart {...chartData} />}
+          <DataChart ref={chartRef} {...chartData} />
         </div>
 
         <div className={styles.Panel}>
-          <DataTable {...tableData} />
+          <DataTable ref={tableRef} {...tableData} />
         </div>
       </div>
     </>

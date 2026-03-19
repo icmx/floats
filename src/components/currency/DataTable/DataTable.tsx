@@ -1,10 +1,13 @@
-import { useRef, type FunctionComponent } from 'react';
+import {
+  useImperativeHandle,
+  useRef,
+  type FunctionComponent,
+} from 'react';
 import { classNames } from '../../../utils/common';
 import { getSeriesColor } from '../../../utils/currency';
 import { Bulb } from '../../common/Bulb';
 import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';
-import { useScrollToBottom } from './hooks/useScrollToBottom';
 import { useSelection } from './hooks/useSelection';
 import { useVirtualRowScroll } from './hooks/useVirtualRowScroll';
 import type { DataTableProps } from './DataTable.types';
@@ -13,9 +16,26 @@ import styles from './DataTable.module.css';
 export const DataTable: FunctionComponent<DataTableProps> = ({
   colDefs,
   rows,
+  ref,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLTableRowElement>(null);
+
+  useImperativeHandle(ref, () => {
+    return {
+      scrollToRecent: () => {
+        const container = containerRef.current;
+
+        if (!container) {
+          return;
+        }
+
+        container.scrollTo({
+          top: container.scrollHeight,
+        });
+      },
+    };
+  });
 
   const colSpan = colDefs.length;
   const rowsCount = rows.length;
@@ -34,8 +54,6 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
       containerRef,
       rows,
     });
-
-  useScrollToBottom({ containerRef }, [rows]);
 
   return (
     <div
