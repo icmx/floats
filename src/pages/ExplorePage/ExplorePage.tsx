@@ -1,4 +1,6 @@
 import { useEffect, useRef, type FunctionComponent } from 'react';
+import { Link } from 'react-router';
+import { EmptyAlert } from '../../components/common/EmptyAlert';
 import { ErrorAlert } from '../../components/common/ErrorAlert';
 import {
   DataChart,
@@ -84,12 +86,7 @@ const toTableData = (currencies: Currency[]): DataTableProps => {
 };
 
 export const ExplorePage: FunctionComponent = () => {
-  const { errors, currencies } = useCurrencies();
-
-  const error = errors.at(0) || null;
-
-  const chartData = toChartData(currencies);
-  const tableData = toTableData(currencies);
+  const { currencies, errors } = useCurrencies();
 
   const chartRef = useRef<DataChartHandle>(null);
   const tableRef = useRef<DataTableHandle>(null);
@@ -99,19 +96,41 @@ export const ExplorePage: FunctionComponent = () => {
     tableRef.current?.scrollToRecent();
   }, [currencies]);
 
+  const chartData = toChartData(currencies);
+  const tableData = toTableData(currencies);
+
+  const error = errors.at(0) || null;
+  const empty = !error && currencies.length === 0;
+
+  const shouldShowTable = !error && !empty;
+  const shouldShowChart = !error && !empty;
+
   return (
     <>
-      {/* @todo: move to viewport (group below) */}
-      {error && <ErrorAlert error={error} />}
-
       <div className={styles.Group}>
         <div className={styles.Panel}>
           <SymbolChips />
-          <DataChart ref={chartRef} {...chartData} />
+
+          {error && <ErrorAlert error={error} />}
+
+          {empty && (
+            <EmptyAlert>
+              <p>No symboles are selected to show.</p>
+              <p>
+                Try <Link to={'?by=USDEUR'}>USDEUR</Link> for instance.
+              </p>
+            </EmptyAlert>
+          )}
+
+          {shouldShowChart && (
+            <DataChart ref={chartRef} {...chartData} />
+          )}
         </div>
 
         <div className={styles.Panel}>
-          <DataTable ref={tableRef} {...tableData} />
+          {shouldShowTable && (
+            <DataTable ref={tableRef} {...tableData} />
+          )}
         </div>
       </div>
     </>

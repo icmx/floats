@@ -1,7 +1,9 @@
 import { type FunctionComponent } from 'react';
-import { Converter } from '../../components/currency/Converter';
+import { Link } from 'react-router';
 import { ErrorAlert } from '../../components/common/ErrorAlert';
+import { EmptyAlert } from '../../components/common/EmptyAlert';
 import { Loading } from '../../components/common/Loading';
+import { Converter } from '../../components/currency/Converter';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type { CodeString, Currency } from '../../types/currency';
@@ -30,10 +32,12 @@ const toData = (currencies: Currency[]): Data => {
 };
 
 export const ConvertPage: FunctionComponent = () => {
-  const { errors, currencies, isLoading } = useCurrencies();
+  const { currencies, isLoading, errors } = useCurrencies();
+
+  const data = toData(currencies);
 
   const error = errors.at(0) || null;
-  const data = toData(currencies);
+  const empty = !error && currencies.length === 0;
 
   return (
     <>
@@ -42,6 +46,15 @@ export const ConvertPage: FunctionComponent = () => {
       {isLoading && <Loading />}
 
       {error && <ErrorAlert error={error} />}
+
+      {empty && (
+        <EmptyAlert>
+          <p>No symboles are selected to show.</p>
+          <p>
+            Try <Link to={'?by=USDEUR'}>USDEUR</Link> for instance.
+          </p>
+        </EmptyAlert>
+      )}
 
       <form>
         {data.rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
