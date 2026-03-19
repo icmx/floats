@@ -43,13 +43,9 @@ export const ChipSelect = <T,>({
   }, [options, optionsFilter, inputValue, selectedOptions]);
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
     const viewport = window.visualViewport;
 
-    if (!viewport) {
+    if (!viewport || !isOpen) {
       return;
     }
 
@@ -73,15 +69,14 @@ export const ChipSelect = <T,>({
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) {
+    const container = containerRef.current;
+
+    if (!container || !isOpen) {
       return;
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (!container.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -94,14 +89,16 @@ export const ChipSelect = <T,>({
   }, [isOpen]);
 
   useEffect(() => {
-    if (focusedIndex >= 0 && listRef.current) {
-      const focusedElement = listRef.current.children[
-        focusedIndex
-      ] as HTMLElement;
+    const list = listRef.current;
 
-      if (focusedElement) {
-        focusedElement.scrollIntoView({ block: 'nearest' });
-      }
+    if (!list || focusedIndex === 0) {
+      return;
+    }
+
+    const focusedElement = list.children[focusedIndex] as HTMLElement;
+
+    if (focusedElement) {
+      focusedElement.scrollIntoView({ block: 'nearest' });
     }
   }, [focusedIndex]);
 
