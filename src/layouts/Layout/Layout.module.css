@@ -5,12 +5,13 @@
 
   padding: 0 1rem;
 
-  /* @todo: dedicated color */
-  background-color: var(--color-chip);
+  background-color: var(--color-head);
 }
 
 .LayoutContent {
-  padding: 0 0 0 1rem;
+  padding: 0 1rem;
+
+  overflow-y: auto;
 }
 
 .HeaderGroup {
@@ -28,8 +29,8 @@
 
   text-decoration: none;
 
-  border-top: solid 3px transparent;
-  border-bottom: solid 3px transparent;
+  border-top: solid var(--border-width) transparent;
+  border-bottom: solid var(--border-width) transparent;
 }
 
 .HeaderLink:hover {
@@ -37,5 +38,5 @@
 }
 
 .HeaderLink.isActive {
-  border-bottom: solid var(--color-main) 3px;
+  border-bottom-color: var(--color-main);
 }

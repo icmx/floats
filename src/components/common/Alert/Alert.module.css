@@ -1,17 +1,15 @@
-.Loading {
+.Alert {
   margin: 1rem 0;
   padding: 0 1rem;
 
   border: solid 1px var(--color-line);
   border-radius: var(--border-radius);
-}
 
-.Blinking {
-  animation: blinking 0.5s infinite;
-}
+  &.is-default {
+    color: var(--color-text);
+  }
 
-@keyframes blinking {
-  50% {
-    opacity: 0;
+  &.is-failure {
+    color: var(--color-warn);
   }
 }

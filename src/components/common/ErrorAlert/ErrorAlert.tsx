@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react';
-import { Callout } from '../../common/Callout';
-import type { ErrorCalloutProps } from './ErrorCallout.types';
+import { Alert } from '../../common/Alert';
+import type { ErrorAlertProps } from './ErrorAlert.types';
 
 const FALLBACK_MESSAGE = 'Unknown error happened.';
 
@@ -20,16 +20,14 @@ const extractMessage = (error: unknown): string => {
   return FALLBACK_MESSAGE;
 };
 
-export const ErrorCallout: FunctionComponent<ErrorCalloutProps> = ({
+export const ErrorAlert: FunctionComponent<ErrorAlertProps> = ({
   error,
 }) => {
   const message = extractMessage(error);
 
   return (
-    <Callout appearance="failure">
-      <p>
-        <code>{message}</code>
-      </p>
-    </Callout>
+    <Alert status="failure">
+      <p>{message}</p>
+    </Alert>
   );
 };

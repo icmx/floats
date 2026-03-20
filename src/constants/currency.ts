@@ -153,3 +153,12 @@ export const SYMBOLS = CODES.map((baseCode) => {
     return `${baseCode}${quoteCode}` satisfies SymbolString;
   });
 }).flat();
+
+export const SERIES_COLORS = [
+  'var(--color-series-indigo)',
+  'var(--color-series-green)',
+  'var(--color-series-amber)',
+  'var(--color-series-pink)',
+  'var(--color-series-cyan)',
+  'var(--color-series-orange)',
+];

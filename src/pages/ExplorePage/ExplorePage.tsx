@@ -1,12 +1,16 @@
-import { type FunctionComponent } from 'react';
-import { ErrorCallout } from '../../components/currency/ErrorCallout';
+import { useEffect, useRef, type FunctionComponent } from 'react';
+import { Link } from 'react-router';
+import { EmptyAlert } from '../../components/common/EmptyAlert';
+import { ErrorAlert } from '../../components/common/ErrorAlert';
 import {
   DataChart,
+  type DataChartHandle,
   type DataChartProps,
 } from '../../components/currency/DataChart';
 import {
   DataTable,
   type DataRow,
+  type DataTableHandle,
   type DataTableProps,
 } from '../../components/currency/DataTable';
 import {
@@ -82,25 +86,51 @@ const toTableData = (currencies: Currency[]): DataTableProps => {
 };
 
 export const ExplorePage: FunctionComponent = () => {
-  const { errors, currencies } = useCurrencies();
+  const { currencies, errors } = useCurrencies();
 
-  const error = errors.at(0) || null;
+  const chartRef = useRef<DataChartHandle>(null);
+  const tableRef = useRef<DataTableHandle>(null);
+
+  useEffect(() => {
+    chartRef.current?.scrollToRecent();
+    tableRef.current?.scrollToRecent();
+  }, [currencies]);
 
   const chartData = toChartData(currencies);
   const tableData = toTableData(currencies);
 
+  const error = errors.at(0) || null;
+  const empty = !error && currencies.length === 0;
+
+  const shouldShowTable = !error && !empty;
+  const shouldShowChart = !error && !empty;
+
   return (
     <>
-      {error && <ErrorCallout error={error} />}
-
       <div className={styles.Group}>
         <div className={styles.Panel}>
           <SymbolChips />
-          {chartData.series?.length > 0 && <DataChart {...chartData} />}
+
+          {error && <ErrorAlert error={error} />}
+
+          {empty && (
+            <EmptyAlert>
+              <p>No symboles are selected to show.</p>
+              <p>
+                Try <Link to={'?by=USDEUR'}>USDEUR</Link> for instance.
+              </p>
+            </EmptyAlert>
+          )}
+
+          {shouldShowChart && (
+            <DataChart ref={chartRef} {...chartData} />
+          )}
         </div>
 
         <div className={styles.Panel}>
-          <DataTable {...tableData} />
+          {shouldShowTable && (
+            <DataTable ref={tableRef} {...tableData} />
+          )}
         </div>
       </div>
     </>

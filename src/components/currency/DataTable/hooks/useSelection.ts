@@ -152,7 +152,11 @@ export const useSelection = ({
         for (let ci = from.colIndex; ci <= to.colIndex; ci++) {
           const cell = row[ci];
 
-          line.push(cell.displayValue);
+          // date should be formatted while rates goes raw numbers
+          const value =
+            ci === 0 ? cell.displayValue : `${cell.value || ''}`;
+
+          line.push(value);
         }
 
         lines.push(line);

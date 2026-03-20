@@ -1,8 +1,12 @@
+import type { Ref } from 'react';
 import type { DateNumber, RateNumber } from '../../../types/currency';
 
 export type ColDisplayType = 'date' | 'rate';
 
-export type DataCell<TValue> = { value: TValue; displayValue: string };
+export type DataCell<TValue> = {
+  value: TValue;
+  displayValue: string;
+};
 
 export type DataRow = [DataCell<DateNumber>, ...DataCell<RateNumber>[]];
 
@@ -12,7 +16,12 @@ export type ColDef = {
   label: string;
 };
 
+export type DataTableHandle = {
+  scrollToRecent: () => void;
+};
+
 export type DataTableProps = {
   colDefs: ColDef[];
   rows: DataRow[];
+  ref?: Ref<DataTableHandle>;
 };

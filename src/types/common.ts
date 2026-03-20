@@ -8,4 +8,6 @@ export type QueryParams = {
   by: string[];
 };
 
+export type StatusValue = 'default' | 'failure';
+
 export type ThemeValue = 'system' | 'light' | 'dark';

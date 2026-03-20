@@ -8,27 +8,26 @@ export const SettingsPage: FunctionComponent = () => {
 
   return (
     <>
+      <h2>Theme</h2>
       <form>
-        <div>
-          {THEMES.map((theme) => {
-            const id = `input-theme-${theme.value}`;
+        {THEMES.map((theme) => {
+          const id = `input-theme-${theme.value}`;
 
-            return (
-              <BoxField
-                key={id}
-                id={id}
-                label={theme.children}
-                type="radio"
-                name="theme"
-                checked={theme.value === themeValue}
-                value={theme.value}
-                onChange={() => {
-                  setThemeValue(theme.value);
-                }}
-              />
-            );
-          })}
-        </div>
+          return (
+            <BoxField
+              key={id}
+              id={id}
+              label={theme.children}
+              type="radio"
+              name="theme"
+              checked={theme.value === themeValue}
+              value={theme.value}
+              onChange={() => {
+                setThemeValue(theme.value);
+              }}
+            />
+          );
+        })}
       </form>
     </>
   );
