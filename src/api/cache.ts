@@ -1,29 +1,29 @@
 export class ApiCache<T> {
-  private _entries: Map<string, T>;
+  private _entries: Map<string, Promise<T>>;
 
   constructor() {
     this._entries = new Map();
   }
 
-  get(key: string): T | null {
-    return this._entries.get(key) || null;
+  get(key: string): Promise<T> | null {
+    return this._entries.get(key) ?? null;
   }
 
-  set(key: string, value: T): void {
+  set(key: string, value: Promise<T>): void {
     this._entries.set(key, value);
   }
 
-  async resolve(key: string, onMiss: () => Promise<T>): Promise<T> {
-    const entry = this.get(key);
+  resolve(key: string, onMiss: () => Promise<T>): Promise<T> {
+    const existing = this.get(key);
 
-    if (entry) {
-      return entry;
+    if (existing) {
+      return existing;
     }
 
-    const resolved = await onMiss();
+    const missing = onMiss();
 
-    this.set(key, resolved);
+    this.set(key, missing);
 
-    return resolved;
+    return missing;
   }
 }
