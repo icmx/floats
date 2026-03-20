@@ -8,6 +8,7 @@ import { ConvertPage } from './pages/ConvertPage';
 import { ExplorePage } from './pages/ExplorePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SettingsPage } from './pages/SettingsPage';
+import type { RouteHandle } from './types/common';
 import './index.css';
 
 const root = document.querySelector('#root');
@@ -15,6 +16,20 @@ const root = document.querySelector('#root');
 if (!root) {
   throw new Error('No #root element found');
 }
+
+const createDynamicRouteHandleTitle = (
+  title: string
+): RouteHandle['title'] => {
+  return (queryParams) => {
+    const currencies = queryParams.by.join(', ');
+
+    if (!currencies) {
+      return title;
+    }
+
+    return `${currencies} - ${title}`;
+  };
+};
 
 const router = createBrowserRouter([
   {
@@ -31,14 +46,14 @@ const router = createBrowserRouter([
         path: '/explore',
         element: <ExplorePage />,
         handle: {
-          title: 'Explore',
+          title: createDynamicRouteHandleTitle('Explore'),
         },
       },
       {
         path: '/convert',
         element: <ConvertPage />,
         handle: {
-          title: 'Convert',
+          title: createDynamicRouteHandleTitle('Convert'),
         },
       },
       {
