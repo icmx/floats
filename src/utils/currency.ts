@@ -9,6 +9,7 @@ import type {
   CodeString,
   Currency,
   DateRate,
+  RateNumber,
   SymbolString,
 } from '../types/currency';
 
@@ -86,19 +87,19 @@ export const createCrossCurrency = (
     );
   }
 
-  type Rate = { base: number | null; quote: number | null };
+  type Rate = { base: RateNumber; quote: RateNumber };
 
   const EMPTY: Rate = { base: null, quote: null };
   const ratesByDates = new Map<number, Rate>();
 
   const minDate = Math.max(
-    base.body.at(0)?.[0] || 0,
-    quote.body.at(0)?.[0] || 0
+    base.body.at(0)?.[0] || -Infinity,
+    quote.body.at(0)?.[0] || -Infinity
   );
 
   const maxDate = Math.min(
-    base.body.at(-1)?.[0] || 0,
-    quote.body.at(-1)?.[0] || 0
+    base.body.at(-1)?.[0] || Infinity,
+    quote.body.at(-1)?.[0] || Infinity
   );
 
   const MS_1_DAY = 86_400_000;
