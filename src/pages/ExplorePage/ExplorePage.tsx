@@ -21,7 +21,12 @@ import {
 } from '../../components/currency/DataTable/DataTable.utils';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
-import type { Currencies, Currency } from '../../types/currency';
+import type {
+  Currency,
+  DateNumber,
+  RateNumber,
+  SymbolString,
+} from '../../types/currency';
 import styles from './ExplorePage.module.css';
 
 const toChartData = (currencies: Currency[]): DataChartProps => {
@@ -38,10 +43,10 @@ const toChartData = (currencies: Currency[]): DataChartProps => {
 };
 
 const toTableData = (currencies: Currency[]): DataTableProps => {
-  const head: Currencies['head'] = ['date'];
-  const body: Currencies['body'] = [];
+  const head: ['date', ...SymbolString[]] = ['date'];
+  const body: [DateNumber, ...RateNumber[]][] = [];
 
-  const ratesByDates = new Map<number, (number | null)[]>();
+  const ratesByDates = new Map<DateNumber, RateNumber[]>();
   const SIZE = currencies.length;
 
   currencies.forEach((currency, index) => {

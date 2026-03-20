@@ -79,7 +79,6 @@ export const fetchCurrencyBySymbol = async (
   });
 };
 
-// @todo: should return Currencies (multiple type)
 export const getCurrencies = async (
   symbols: SymbolString[]
 ): Promise<Results<Currency, unknown>> => {
