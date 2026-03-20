@@ -5,6 +5,7 @@ type RouteHandle = {
   title?: string;
 };
 
+// @todo: provide selected currencies
 export const useTitle = (): string => {
   const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
 
@@ -12,6 +13,7 @@ export const useTitle = (): string => {
     return matches
       .map((match) => match.handle?.title || '')
       .filter((entry) => !!entry)
+      .reverse()
       .join(' - ');
   }, [matches]);
 
