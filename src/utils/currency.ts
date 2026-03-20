@@ -13,8 +13,18 @@ import type {
   SymbolString,
 } from '../types/currency';
 
-export const getSeriesColor = (seriesIndex: number): string => {
-  return SERIES_COLORS[seriesIndex % SERIES_COLORS.length];
+export const parseCsv = (csv: string): DateRate[] => {
+  return csv
+    .trim()
+    .split('\n')
+    .map((line) => {
+      const [dateText, rateText] = line.split(',');
+
+      return [
+        new Date(dateText).getTime(),
+        Number.parseFloat(rateText),
+      ];
+    });
 };
 
 export const isSymbolString = (
@@ -180,4 +190,8 @@ export const isPivotCurrency = (currency: Currency): boolean => {
 
 export const isEmptyCurrency = (currency: Currency): boolean => {
   return currency.body.length === 0;
+};
+
+export const getSeriesColor = (seriesIndex: number): string => {
+  return SERIES_COLORS[seriesIndex % SERIES_COLORS.length];
 };
