@@ -17,20 +17,20 @@ import styles from './ChipSelect.module.css';
 export const ChipSelect = <T,>({
   options,
   selectedOptions,
+  optionsFilter = defaultOptionsFilter,
   autoComplete,
   autoCapitalize,
   placeholder,
   spellCheck,
   onChange = () => {},
-  optionsFilter = defaultOptionsFilter,
 }: ChipSelectProps<T>) => {
-  const [inputValue, setInputValue] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+
+  const [inputValue, setInputValue] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
   const filteredOptions = useMemo<ChipSelectOption<T>[]>(() => {
     return optionsFilter(options, inputValue).filter(
@@ -41,6 +41,12 @@ export const ChipSelect = <T,>({
       }
     );
   }, [options, optionsFilter, inputValue, selectedOptions]);
+
+  const restOptionsLength = options.length - filteredOptions.length;
+  const shouldShowRestOptions =
+    restOptionsLength > 0 && restOptionsLength !== options.length;
+
+  const shouldShowNoOptionsAvailable = filteredOptions.length === 0;
 
   useEffect(() => {
     const viewport = window.visualViewport;
@@ -212,32 +218,41 @@ export const ChipSelect = <T,>({
         />
       </div>
       {isOpen && (
-        <ul className={styles.AvailableValues} ref={listRef}>
-          {filteredOptions.map((filteredOption, index) => {
-            const isFocused = index === focusedIndex;
-
-            return (
-              <li
-                key={filteredOption.id}
-                className={classNames([
-                  styles.Option,
-                  isFocused && styles.isFocused,
-                ])}
-                onClick={() => {
-                  handleSelect(filteredOption);
-                }}
-                onMouseEnter={() => {
-                  setFocusedIndex(index);
-                }}
-              >
-                {filteredOption.children}
-              </li>
-            );
-          })}
-          {filteredOptions.length === 0 && (
-            <li className={styles.Option}>No options available.</li>
+        <div className={styles.AvailableValues}>
+          {shouldShowRestOptions && (
+            <div className={styles.Stub}>
+              {restOptionsLength} options available
+            </div>
           )}
-        </ul>
+
+          {shouldShowNoOptionsAvailable && (
+            <div className={styles.Stub}>No options available</div>
+          )}
+
+          <ul className={styles.List} ref={listRef}>
+            {filteredOptions.map((filteredOption, index) => {
+              const isFocused = index === focusedIndex;
+
+              return (
+                <li
+                  key={filteredOption.id}
+                  className={classNames([
+                    styles.Item,
+                    isFocused && styles['is-focused'],
+                  ])}
+                  onClick={() => {
+                    handleSelect(filteredOption);
+                  }}
+                  onMouseEnter={() => {
+                    setFocusedIndex(index);
+                  }}
+                >
+                  {filteredOption.children}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
     </div>
   );

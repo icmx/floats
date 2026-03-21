@@ -8,12 +8,13 @@
 
   --header-height: 2.5rem;
   --content-height: calc(100vh - var(--header-height));
+
   --border-width: 3px;
   --border-radius: 0.5rem;
 
   --font-size-l: 1.2rem;
   --font-size-m: 1rem;
-  --font-size-s: 0.8rem;
+  --font-size-s: 0.85rem;
 
   --color-main: oklch(66% 0.2 250);
   --color-warn: oklch(66% 0.2 25);
@@ -28,6 +29,12 @@
     --color-body: oklch(98% 0.005 272);
     --color-chip: oklch(90% 0.015 272);
     --color-field: oklch(100% 0 0);
+
+    --color-mute: color-mix(
+      in oklch,
+      var(--color-text) 65%,
+      transparent
+    );
 
     --color-selection: color-mix(
       in oklch,
@@ -46,6 +53,12 @@
     --color-body: oklch(24% 0.012 272);
     --color-chip: oklch(28% 0.02 272);
     --color-field: oklch(20% 0 0);
+
+    --color-mute: color-mix(
+      in oklch,
+      var(--color-text) 65%,
+      transparent
+    );
 
     --color-selection: color-mix(
       in oklch,

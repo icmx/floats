@@ -5,6 +5,7 @@ import {
   ChipSelect,
   type ChipSelectOption,
 } from '../../common/ChipSelect';
+import { symbolChipsOptionsFilter } from './SymbolChips.utils';
 
 export const SymbolChips: FunctionComponent = () => {
   const symbolOptions: ChipSelectOption<string>[] = useMemo(() => {
@@ -20,8 +21,10 @@ export const SymbolChips: FunctionComponent = () => {
 
   // should be exactly like that since user CAN enter some "invalid" symbols
   // from query string and still be cool. so user should be able to remove this
-  const { queryParams, setQueryParams } = useQueryParams();
-  const { by } = queryParams;
+  const {
+    queryParams: { by },
+    setQueryParams,
+  } = useQueryParams();
 
   const selectedSymbolOptions = useMemo<
     ChipSelectOption<string>[]
@@ -47,6 +50,7 @@ export const SymbolChips: FunctionComponent = () => {
     <ChipSelect
       options={symbolOptions}
       selectedOptions={selectedSymbolOptions}
+      optionsFilter={symbolChipsOptionsFilter}
       autoComplete="off"
       autoCapitalize="characters"
       placeholder="Type symbols like USDEUR"

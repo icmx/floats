@@ -1,17 +1,19 @@
-import type { ChipSelectOption } from './ChipSelect.types';
+import type {
+  ChipSelectOption,
+  ChipSelectOptionsFilter,
+} from './ChipSelect.types';
 
-export const defaultOptionsFilter = <T>(
+export const defaultOptionsFilter = (<T>(
   options: ChipSelectOption<T>[],
   inputValue: string
 ): ChipSelectOption<T>[] => {
-  const OPTIONS_HARD_LIMIT = 150;
-  const pattern = inputValue.toLowerCase();
+  const pattern = inputValue.trim().toLowerCase();
 
   if (!pattern) {
-    return options.slice(0, OPTIONS_HARD_LIMIT);
+    return [...options];
   }
 
   return options.filter((option) => {
     return option.pattern.includes(pattern);
   });
-};
+}) satisfies ChipSelectOptionsFilter<unknown>;
