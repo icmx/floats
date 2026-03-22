@@ -1,7 +1,6 @@
 import { useEffect, useRef, type FunctionComponent } from 'react';
-import { Link } from 'react-router';
-import { EmptyAlert } from '../../components/common/EmptyAlert';
-import { ErrorAlert } from '../../components/common/ErrorAlert';
+import { Alert } from '../../components/common/Alert';
+import { Loading } from '../../components/common/Loading';
 import {
   DataChart,
   type DataChartHandle,
@@ -19,6 +18,8 @@ import {
   createRateCell,
   createRateColDef,
 } from '../../components/currency/DataTable/DataTable.utils';
+import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
+import { EmptyFragment } from '../../components/currency/EmptyFragment';
 import { SymbolChips } from '../../components/currency/SymbolChips';
 import { useCurrencies } from '../../stores/currenciesStore';
 import type {
@@ -91,24 +92,26 @@ const toTableData = (currencies: Currency[]): DataTableProps => {
 };
 
 export const ExplorePage: FunctionComponent = () => {
-  const { currencies, errors } = useCurrencies();
-
   const chartRef = useRef<DataChartHandle>(null);
   const tableRef = useRef<DataTableHandle>(null);
+
+  const { isLoading, errors, entries } = useCurrencies();
 
   useEffect(() => {
     chartRef.current?.scrollToRecent();
     tableRef.current?.scrollToRecent();
-  }, [currencies]);
+  }, [entries]);
 
-  const chartData = toChartData(currencies);
-  const tableData = toTableData(currencies);
+  const chartData = toChartData(entries);
+  const tableData = toTableData(entries);
 
-  const error = errors.at(0) || null;
-  const empty = !error && currencies.length === 0;
+  const hasErrors = errors.length > 0;
+  const hasEntries = entries.length > 0;
 
-  const shouldShowTable = !error && !empty;
-  const shouldShowChart = !error && !empty;
+  const shouldShowLoading = isLoading && !hasEntries;
+  const shouldShowErrors = hasErrors;
+  const shouldShowEmpty = !isLoading && !hasErrors && !hasEntries;
+  const shouldShowEntries = hasEntries;
 
   return (
     <>
@@ -116,24 +119,27 @@ export const ExplorePage: FunctionComponent = () => {
         <div className={styles.Panel}>
           <SymbolChips />
 
-          {error && <ErrorAlert error={error} />}
+          {shouldShowLoading && <Loading />}
 
-          {empty && (
-            <EmptyAlert>
-              <p>No symboles are selected to show.</p>
-              <p>
-                Try <Link to={'?by=USDEUR'}>USDEUR</Link> for instance.
-              </p>
-            </EmptyAlert>
+          {shouldShowErrors && (
+            <Alert status="failure">
+              <ErrorsFragment errors={errors} />
+            </Alert>
           )}
 
-          {shouldShowChart && (
+          {shouldShowEmpty && (
+            <Alert status="default">
+              <EmptyFragment />
+            </Alert>
+          )}
+
+          {shouldShowEntries && (
             <DataChart ref={chartRef} {...chartData} />
           )}
         </div>
 
         <div className={styles.Panel}>
-          {shouldShowTable && (
+          {shouldShowEntries && (
             <DataTable ref={tableRef} {...tableData} />
           )}
         </div>
