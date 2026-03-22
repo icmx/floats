@@ -10,17 +10,7 @@
   font-size: var(--font-size-s);
 }
 
-.Chip.isSelected {
-  background-color: var(--color-main);
-}
-
-.Chip.isDisabled {
-  opacity: 0.5;
-
-  cursor: not-allowed;
-}
-
-.ChipClickable {
+.ChipSurface {
   display: block;
 
   margin: 0;
