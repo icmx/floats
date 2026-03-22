@@ -13,7 +13,7 @@ const getCommitRef = (): string => {
 };
 
 const getBuildTimestamp = (): string => {
-  const buildTimestamp = __DEFINE_BUILD_TIMESTAMP__;
+  const buildTimestamp = __DEFINE_BUILD_TIMESTAMP__ || Date.now();
 
   return isodatetimeFormatter.format(buildTimestamp);
 };
