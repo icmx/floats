@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/shallow';
-import { getCurrencies } from '../api/client';
-import type { Currency, SymbolString } from '../types/currency';
+import { getCurrencies } from '../../api/client';
+import type { Currency, SymbolString } from '../../types/currency';
+
+export type SymbolsArray = SymbolString[];
 
 export type SymbolsRecord<T> = Partial<Record<SymbolString, T>>;
 
 export const useCurrenciesStore = create<{
   currencies: SymbolsRecord<Currency>;
-  activeSymbols: SymbolString[];
+  activeSymbols: SymbolsArray;
   loadingSymbols: SymbolsRecord<boolean>;
   errorsBySymbol: SymbolsRecord<unknown>;
 }>()(() => {

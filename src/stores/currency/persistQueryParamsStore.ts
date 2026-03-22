@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { useShallow } from 'zustand/shallow';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { QueryParams } from '../types/common';
+import { useShallow } from 'zustand/shallow';
+import type { QueryParams } from '../../types/common';
 
 export const usePersistQueryParamsStore = create<{
   persistQueryParams: QueryParams;

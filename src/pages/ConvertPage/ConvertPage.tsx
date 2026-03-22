@@ -5,7 +5,7 @@ import { Converter } from '../../components/currency/Converter';
 import { EmptyFragment } from '../../components/currency/EmptyFragment';
 import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useCurrencies } from '../../stores/currenciesStore';
+import { useCurrencies } from '../../stores/currency/currenciesStore';
 import type { CodeString, Currency } from '../../types/currency';
 import { extractCurrencyCodes } from '../../utils/currency';
 

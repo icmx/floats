@@ -21,7 +21,7 @@ import {
 import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
 import { EmptyFragment } from '../../components/currency/EmptyFragment';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useCurrencies } from '../../stores/currenciesStore';
+import { useCurrencies } from '../../stores/currency/currenciesStore';
 import type {
   Currency,
   DateNumber,

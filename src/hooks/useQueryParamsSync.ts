@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { loadCurrenciesStore } from '../stores/currenciesStore';
+import { loadCurrenciesStore } from '../stores/currency/currenciesStore';
 import { isSymbolString } from '../utils/currency';
 import { useQueryParams } from './useQueryParams';
 
