@@ -1,6 +1,7 @@
 import { useEffect, useRef, type FunctionComponent } from 'react';
 import { Alert } from '../../components/common/Alert';
 import { Loading } from '../../components/common/Loading';
+import { Timeout } from '../../components/common/Timeout';
 import {
   DataChart,
   type DataChartHandle,
@@ -119,7 +120,11 @@ export const ExplorePage: FunctionComponent = () => {
         <div className={styles.Panel}>
           <SymbolChips />
 
-          {shouldShowLoading && <Loading />}
+          {shouldShowLoading && (
+            <Timeout delay={300}>
+              <Loading />
+            </Timeout>
+          )}
 
           {shouldShowErrors && (
             <Alert status="failure">
