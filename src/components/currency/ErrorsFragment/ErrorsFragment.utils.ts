@@ -19,8 +19,8 @@ export const resolveErrorItems = (errors: unknown[]): ErrorItem[] => {
 
       return FALLBACK_MESSAGE;
     })
-    .map((message) => {
-      const key = crypto.randomUUID();
+    .map((message, index) => {
+      const key = `${index}-${message}`;
 
       return {
         key,
