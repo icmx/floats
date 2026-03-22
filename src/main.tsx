@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Navigate to="/explore" />,
+        element: <Navigate to="/explore" replace={true} />,
       },
       {
         path: '/explore',
