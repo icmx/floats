@@ -20,7 +20,11 @@ export class ApiCache<T> {
       return existing;
     }
 
-    const missing = onMiss();
+    const missing = onMiss().catch((rejected) => {
+      this._entries.delete(key);
+
+      throw rejected;
+    });
 
     this.set(key, missing);
 
