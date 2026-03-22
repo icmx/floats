@@ -1,7 +1,6 @@
 import { type FunctionComponent } from 'react';
 import { Alert } from '../../components/common/Alert';
 import { Loading } from '../../components/common/Loading';
-import { Timeout } from '../../components/common/Timeout';
 import { Converter } from '../../components/currency/Converter';
 import { EmptyFragment } from '../../components/currency/EmptyFragment';
 import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
@@ -49,11 +48,7 @@ export const ConvertPage: FunctionComponent = () => {
     <>
       <SymbolChips />
 
-      {shouldShowLoading && (
-        <Timeout delay={300}>
-          <Loading />
-        </Timeout>
-      )}
+      {shouldShowLoading && <Loading />}
 
       {shouldShowErrors && (
         <Alert status="failure">
