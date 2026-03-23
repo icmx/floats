@@ -3,17 +3,20 @@ import type {
   ChipSelectOptionsFilter,
 } from './ChipSelect.types';
 
-export const defaultOptionsFilter = (<T>(
-  options: ChipSelectOption<T>[],
-  inputValue: string
-): ChipSelectOption<T>[] => {
+export const defaultOptionsFilter: ChipSelectOptionsFilter = (
+  inputValue,
+  options,
+  selectedOptions
+): ChipSelectOption[] => {
   const pattern = inputValue.trim().toLowerCase();
 
-  if (!pattern) {
-    return [...options];
-  }
-
-  return options.filter((option) => {
-    return option.pattern.includes(pattern);
-  });
-}) satisfies ChipSelectOptionsFilter<unknown>;
+  return options
+    .filter((option) => {
+      return option.pattern.startsWith(pattern);
+    })
+    .filter((option) => {
+      return selectedOptions.every(
+        (selectedOption) => selectedOption.key !== option.key
+      );
+    });
+};

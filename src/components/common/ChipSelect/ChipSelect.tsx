@@ -3,6 +3,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type FunctionComponent,
   type KeyboardEvent,
 } from 'react';
 import { classNames } from '../../../utils/common';
@@ -14,7 +15,7 @@ import type {
 import { defaultOptionsFilter } from './ChipSelect.utils';
 import styles from './ChipSelect.module.css';
 
-export const ChipSelect = <T,>({
+export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
   options,
   selectedOptions,
   optionsFilter = defaultOptionsFilter,
@@ -23,7 +24,7 @@ export const ChipSelect = <T,>({
   placeholder,
   spellCheck,
   onChange = () => {},
-}: ChipSelectProps<T>) => {
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -32,15 +33,9 @@ export const ChipSelect = <T,>({
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
-  const filteredOptions = useMemo<ChipSelectOption<T>[]>(() => {
-    return optionsFilter(options, inputValue).filter(
-      (filteredOption) => {
-        return selectedOptions.every(
-          (selectedOption) => selectedOption.id !== filteredOption.id
-        );
-      }
-    );
-  }, [options, optionsFilter, inputValue, selectedOptions]);
+  const filteredOptions = useMemo(() => {
+    return optionsFilter(inputValue, options, selectedOptions);
+  }, [optionsFilter, inputValue, options, selectedOptions]);
 
   const restOptionsLength = options.length - filteredOptions.length;
   const shouldShowRestOptions =
@@ -108,8 +103,10 @@ export const ChipSelect = <T,>({
     }
   }, [focusedIndex]);
 
-  const handleSelect = (option: ChipSelectOption<T>): void => {
-    onChange([...selectedOptions, option]);
+  const handleSelect = (option: ChipSelectOption): void => {
+    onChange(
+      [...selectedOptions, option].map((nextOption) => nextOption.value)
+    );
 
     setInputValue('');
     setIsOpen(false);
@@ -118,11 +115,11 @@ export const ChipSelect = <T,>({
     inputRef.current?.focus();
   };
 
-  const handleRemove = (option: ChipSelectOption<T>): void => {
+  const handleRemove = (option: ChipSelectOption): void => {
     onChange(
-      selectedOptions.filter(
-        (selectedOption) => selectedOption.id !== option.id
-      )
+      selectedOptions
+        .filter((nextOption) => nextOption.key !== option.key)
+        .map((nextOption) => nextOption.value)
     );
   };
 
@@ -188,7 +185,7 @@ export const ChipSelect = <T,>({
         {selectedOptions.map((selectedOption) => {
           return (
             <Chip
-              key={selectedOption.id}
+              key={selectedOption.key}
               onRemove={() => {
                 handleRemove(selectedOption);
               }}
@@ -235,7 +232,7 @@ export const ChipSelect = <T,>({
 
               return (
                 <li
-                  key={filteredOption.id}
+                  key={filteredOption.key}
                   className={classNames([
                     styles.Item,
                     isFocused && styles['is-focused'],
