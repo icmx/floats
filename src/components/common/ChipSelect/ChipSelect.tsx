@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { classNames } from '../../../utils/common';
 import { Chip } from '../Chip';
+import { useClickOutside } from './hooks/useClickOutside';
 import type {
   ChipSelectOption,
   ChipSelectProps,
@@ -69,25 +70,13 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    const container = containerRef.current;
-
-    if (!container || !isOpen) {
-      return;
-    }
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!container.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
+  useClickOutside({
+    containerRef,
+    disabled: !isOpen,
+    onClickOutside: () => {
+      setIsOpen(false);
+    },
+  });
 
   useEffect(() => {
     const list = listRef.current;
