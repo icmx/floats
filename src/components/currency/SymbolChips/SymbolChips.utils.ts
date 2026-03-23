@@ -1,14 +1,6 @@
+import { WELL_KNOWN_SYMBOLS } from '../../../constants/currency';
 import type { SymbolString } from '../../../types/currency';
 import type { ChipSelectOptionsFilter } from '../../common/ChipSelect';
-
-// order matters
-const WELL_KNOWN_SYMBOLS: SymbolString[] = [
-  'EURUSD',
-  'USDJPY',
-  'GBPUSD',
-  'USDCHF',
-  'AUDUSD',
-];
 
 export const symbolChipsOptionsFilter: ChipSelectOptionsFilter = (
   inputValue,
