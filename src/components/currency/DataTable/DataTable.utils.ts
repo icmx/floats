@@ -1,7 +1,7 @@
 import type { DateNumber, RateNumber } from '../../../types/currency';
 import {
-  exploreFormatter,
-  isodateFormatter,
+  formatToExploreNumber,
+  formatToIsodate,
 } from '../../../utils/common';
 import type { ColDef, DataCell } from './DataTable.types';
 
@@ -26,7 +26,7 @@ export const createDateCell = (
 ): DataCell<DateNumber> => {
   return {
     value,
-    displayValue: isodateFormatter.format(value),
+    displayValue: formatToIsodate(value),
   };
 };
 
@@ -35,6 +35,6 @@ export const createRateCell = (
 ): DataCell<RateNumber> => {
   return {
     value,
-    displayValue: value === null ? '' : exploreFormatter.format(value),
+    displayValue: value === null ? '' : formatToExploreNumber(value),
   };
 };
