@@ -1,5 +1,4 @@
 import {
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -9,6 +8,7 @@ import {
 import { classNames } from '../../../utils/common';
 import { Chip } from '../Chip';
 import { useClickOutside } from './hooks/useClickOutside';
+import { useScrollToFocused } from './hooks/useScrollToFocused';
 import { useViewportResize } from './hooks/useViewportResize';
 import type {
   ChipSelectOption,
@@ -60,19 +60,10 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
     },
   });
 
-  useEffect(() => {
-    const list = listRef.current;
-
-    if (!list || focusedIndex === 0) {
-      return;
-    }
-
-    const focusedElement = list.children[focusedIndex] as HTMLElement;
-
-    if (focusedElement) {
-      focusedElement.scrollIntoView({ block: 'nearest' });
-    }
-  }, [focusedIndex]);
+  useScrollToFocused({
+    listRef,
+    focusedIndex,
+  });
 
   const handleSelect = (option: ChipSelectOption): void => {
     onChange(
