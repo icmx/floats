@@ -9,6 +9,7 @@ import {
 import { classNames } from '../../../utils/common';
 import { Chip } from '../Chip';
 import { useClickOutside } from './hooks/useClickOutside';
+import { useViewportResize } from './hooks/useViewportResize';
 import type {
   ChipSelectOption,
   ChipSelectProps,
@@ -44,31 +45,12 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
 
   const shouldShowNoOptionsAvailable = filteredOptions.length === 0;
 
-  useEffect(() => {
-    const viewport = window.visualViewport;
-
-    if (!viewport || !isOpen) {
-      return;
-    }
-
-    let prev = viewport.height;
-
-    const handleResize = () => {
-      const next = viewport.height;
-
-      if (next > prev) {
-        setIsOpen(false);
-      }
-
-      prev = next;
-    };
-
-    viewport.addEventListener('resize', handleResize);
-
-    return () => {
-      viewport.removeEventListener('resize', handleResize);
-    };
-  }, [isOpen]);
+  useViewportResize({
+    disabled: !isOpen,
+    onViewportResize: () => {
+      setIsOpen(false);
+    },
+  });
 
   useClickOutside({
     containerRef,
