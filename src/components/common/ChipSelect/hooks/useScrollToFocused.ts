@@ -5,12 +5,10 @@ export type UseScrollToFocusedOptions = {
   focusedIndex: number;
 };
 
-export type UseScrollToFocusedResult = void;
-
 export const useScrollToFocused = ({
   listRef,
   focusedIndex,
-}: UseScrollToFocusedOptions): UseScrollToFocusedResult => {
+}: UseScrollToFocusedOptions): void => {
   useEffect(() => {
     const list = listRef.current;
 

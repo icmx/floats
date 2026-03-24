@@ -1,20 +1,18 @@
 import { useEffect } from 'react';
 
 export type UseViewportResizeOptions = {
-  disabled: boolean;
+  skip: boolean;
   onViewportResize: (event: Event) => void;
 };
 
-export type UseViewportResizeResult = void;
-
 export const useViewportResize = ({
-  disabled,
+  skip,
   onViewportResize,
-}: UseViewportResizeOptions): UseViewportResizeResult => {
+}: UseViewportResizeOptions): void => {
   useEffect(() => {
     const viewport = window.visualViewport;
 
-    if (!viewport || disabled) {
+    if (!viewport || skip) {
       return;
     }
 
@@ -27,5 +25,5 @@ export const useViewportResize = ({
     return () => {
       viewport.removeEventListener('resize', handleResize);
     };
-  }, [disabled, onViewportResize]);
+  }, [skip, onViewportResize]);
 };

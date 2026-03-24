@@ -1,43 +1,53 @@
 import {
-  useMemo,
   useRef,
-  useState,
   type FunctionComponent,
   type KeyboardEvent,
 } from 'react';
 import { classNames } from '../../../utils/common';
 import { Chip } from '../Chip';
+import { useChipSelect } from './hooks/useChipSelect';
 import { useClickOutside } from './hooks/useClickOutside';
 import { useScrollToFocused } from './hooks/useScrollToFocused';
 import { useViewportResize } from './hooks/useViewportResize';
-import type {
-  ChipSelectOption,
-  ChipSelectProps,
-} from './ChipSelect.types';
-import { defaultOptionsFilter } from './ChipSelect.utils';
+import type { ChipSelectProps } from './ChipSelect.types';
 import styles from './ChipSelect.module.css';
 
 export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
   options,
   selectedOptions,
-  optionsFilter = defaultOptionsFilter,
+  optionsFilter,
   autoComplete,
   autoCapitalize,
   placeholder,
   spellCheck,
-  onChange = () => {},
+  onChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  const [inputValue, setInputValue] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-
-  const filteredOptions = useMemo(() => {
-    return optionsFilter(inputValue, options, selectedOptions);
-  }, [optionsFilter, inputValue, options, selectedOptions]);
+  const {
+    inputValue,
+    isOpen,
+    focusedIndex,
+    filteredOptions,
+    open,
+    close,
+    writeValue,
+    focusNext,
+    focusPrev,
+    focusAt,
+    select,
+    selectFocused,
+    unselect,
+    unselectLatest,
+  } = useChipSelect({
+    inputRef,
+    options,
+    selectedOptions,
+    optionsFilter,
+    onChange,
+  });
 
   const restOptionsLength = options.length - filteredOptions.length;
   const shouldShowRestOptions =
@@ -46,17 +56,17 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
   const shouldShowNoOptionsAvailable = filteredOptions.length === 0;
 
   useViewportResize({
-    disabled: !isOpen,
+    skip: !isOpen,
     onViewportResize: () => {
-      setIsOpen(false);
+      close();
     },
   });
 
   useClickOutside({
     containerRef,
-    disabled: !isOpen,
+    skip: !isOpen,
     onClickOutside: () => {
-      setIsOpen(false);
+      close();
     },
   });
 
@@ -65,72 +75,38 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
     focusedIndex,
   });
 
-  const handleSelect = (option: ChipSelectOption): void => {
-    onChange(
-      [...selectedOptions, option].map((nextOption) => nextOption.value)
-    );
-
-    setInputValue('');
-    setIsOpen(false);
-    setFocusedIndex(-1);
-
-    inputRef.current?.focus();
-  };
-
-  const handleRemove = (option: ChipSelectOption): void => {
-    onChange(
-      selectedOptions
-        .filter((nextOption) => nextOption.key !== option.key)
-        .map((nextOption) => nextOption.value)
-    );
-  };
-
   const handleKeyDown = (
     event: KeyboardEvent<HTMLInputElement>
   ): void => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
-
-      setIsOpen(true);
-      setFocusedIndex((prev) => {
-        return prev < filteredOptions.length - 1 ? prev + 1 : prev;
-      });
+      focusNext();
 
       return;
     }
 
     if (event.key === 'ArrowUp') {
       event.preventDefault();
-
-      setFocusedIndex((prev) => {
-        return prev > 0 ? prev - 1 : 0;
-      });
+      focusPrev();
 
       return;
     }
 
     if (event.key === 'Enter') {
       event.preventDefault();
-
-      if (isOpen === true && filteredOptions[focusedIndex]) {
-        handleSelect(filteredOptions[focusedIndex]);
-      }
+      selectFocused();
 
       return;
     }
 
     if (event.key === 'Escape') {
-      setIsOpen(false);
+      close();
 
       return;
     }
 
-    if (
-      event.key === 'Backspace' &&
-      !inputValue &&
-      selectedOptions.length > 0
-    ) {
-      handleRemove(selectedOptions[selectedOptions.length - 1]);
+    if (event.key === 'Backspace') {
+      unselectLatest();
 
       return;
     }
@@ -149,7 +125,7 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
             <Chip
               key={selectedOption.key}
               onRemove={() => {
-                handleRemove(selectedOption);
+                unselect(selectedOption);
               }}
             >
               {selectedOption.children}
@@ -166,12 +142,10 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
           placeholder={placeholder}
           spellCheck={spellCheck}
           onChange={(event) => {
-            setInputValue(event.target.value);
-            setIsOpen(true);
-            setFocusedIndex(-1);
+            writeValue(event.target.value);
           }}
           onFocus={() => {
-            setIsOpen(true);
+            open();
           }}
           onKeyDown={handleKeyDown}
         />
@@ -200,10 +174,10 @@ export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
                     isFocused && styles['is-focused'],
                   ])}
                   onClick={() => {
-                    handleSelect(filteredOption);
+                    select(filteredOption);
                   }}
                   onMouseEnter={() => {
-                    setFocusedIndex(index);
+                    focusAt(index);
                   }}
                 >
                   {filteredOption.children}

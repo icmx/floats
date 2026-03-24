@@ -2,21 +2,19 @@ import { useEffect, type RefObject } from 'react';
 
 export type UseClickOutsideOptions = {
   containerRef: RefObject<HTMLElement | null>;
-  disabled: boolean;
+  skip: boolean;
   onClickOutside: (event: MouseEvent) => void;
 };
 
-export type UseClickOutsideResult = void;
-
 export const useClickOutside = ({
   containerRef,
-  disabled,
+  skip,
   onClickOutside,
-}: UseClickOutsideOptions): UseClickOutsideResult => {
+}: UseClickOutsideOptions): void => {
   useEffect(() => {
     const container = containerRef.current;
 
-    if (!container || disabled) {
+    if (!container || skip) {
       return;
     }
 
@@ -31,5 +29,5 @@ export const useClickOutside = ({
     return () => {
       document.removeEventListener('mousedown', handleMousedown);
     };
-  }, [containerRef, disabled, onClickOutside]);
+  }, [containerRef, skip, onClickOutside]);
 };
