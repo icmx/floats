@@ -21,7 +21,7 @@ export const useQueryParams = (): UseQueryParams => {
     (nextQueryParams: QueryParams) => {
       const search = buildSearch(nextQueryParams);
 
-      setLocationSearch(search);
+      setLocationSearch(search, { replace: true });
     },
     [setLocationSearch]
   );
