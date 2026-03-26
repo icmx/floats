@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/shallow';
-import { getCurrencies } from '../api/client';
-import type { Currency, SymbolString } from '../types/currency';
+import { getCurrencies } from '../../api/client';
+import type { Currency, SymbolString } from '../../types/currency';
+
+export type SymbolsArray = SymbolString[];
 
 export type SymbolsRecord<T> = Partial<Record<SymbolString, T>>;
 
 export const useCurrenciesStore = create<{
   currencies: SymbolsRecord<Currency>;
-  activeSymbols: SymbolString[];
+  activeSymbols: SymbolsArray;
   loadingSymbols: SymbolsRecord<boolean>;
   errorsBySymbol: SymbolsRecord<unknown>;
 }>()(() => {
@@ -20,7 +22,7 @@ export const useCurrenciesStore = create<{
   };
 });
 
-export const loadCurrenciesToStore = async (
+export const loadCurrenciesStore = async (
   symbols: SymbolString[]
 ): Promise<void> => {
   const state = useCurrenciesStore.getState();
@@ -81,9 +83,8 @@ export const loadCurrenciesToStore = async (
 };
 
 export type UseCurrencies = {
-  currencies: Currency[];
+  entries: Currency[];
   isLoading: boolean;
-  isEmpty: boolean;
   errors: unknown[];
 };
 
@@ -101,25 +102,22 @@ export const useCurrencies = (): UseCurrencies => {
     );
 
   return useMemo(() => {
-    const activeCurrencies = activeSymbols
-      .map((symbol) => currencies[symbol])
+    const entries = activeSymbols
+      .map((activeSymbol) => currencies[activeSymbol])
       .filter((currency): currency is Currency => !!currency);
 
     const isLoading = activeSymbols.some(
-      (symbol) => loadingSymbols[symbol] === true
+      (activeSymbol) => loadingSymbols[activeSymbol] === true
     );
 
-    const isEmpty = activeCurrencies.length === 0;
-
     const errors = activeSymbols
-      .map((symbol) => errorsBySymbol[symbol])
-      .filter(Boolean);
+      .map((activeSymbol) => errorsBySymbol[activeSymbol])
+      .filter((error) => !!error);
 
     return {
-      currencies: activeCurrencies,
+      entries,
       isLoading,
       errors,
-      isEmpty,
     };
   }, [activeSymbols, currencies, loadingSymbols, errorsBySymbol]);
 };

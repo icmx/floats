@@ -10,6 +10,7 @@ import {
   createCrossCurrency,
   createCurrency,
   createPivotCurrency,
+  parseCsv,
   splitSymbolToCodes,
 } from '../utils/currency';
 import { ApiCache } from './cache';
@@ -18,7 +19,7 @@ const cache = new ApiCache<Currency>();
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
-export const fetchCSV = async (url: string): Promise<string> => {
+export const fetchUrl = async (url: string): Promise<string> => {
   const response = await fetch(
     `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}${url}`
   );
@@ -37,19 +38,10 @@ export const fetchCSV = async (url: string): Promise<string> => {
 export const fetchRateTuples = async (
   url: string
 ): Promise<DateRate[]> => {
-  const csv = await fetchCSV(url);
+  const csv = await fetchUrl(url);
+  const data = parseCsv(csv);
 
-  return csv
-    .trim()
-    .split('\n')
-    .map((line) => {
-      const [dateText, rateText] = line.split(',');
-
-      return [
-        new Date(dateText).getTime(),
-        Number.parseFloat(rateText),
-      ];
-    });
+  return data;
 };
 
 export const fetchCurrencyByCode = async (
@@ -87,7 +79,6 @@ export const fetchCurrencyBySymbol = async (
   });
 };
 
-// @todo: should return Currencies (multiple type)
 export const getCurrencies = async (
   symbols: SymbolString[]
 ): Promise<Results<Currency, unknown>> => {

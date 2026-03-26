@@ -1,171 +1,112 @@
 import {
-  useEffect,
-  useMemo,
   useRef,
-  useState,
+  type FunctionComponent,
   type KeyboardEvent,
 } from 'react';
 import { classNames } from '../../../utils/common';
 import { Chip } from '../Chip';
-import type {
-  ChipSelectOption,
-  ChipSelectProps,
-} from './ChipSelect.types';
-import { defaultOptionsFilter } from './ChipSelect.utils';
+import { useChipSelect } from './hooks/useChipSelect';
+import { useClickOutside } from './hooks/useClickOutside';
+import { useScrollToFocused } from './hooks/useScrollToFocused';
+import { useViewportResize } from './hooks/useViewportResize';
+import type { ChipSelectProps } from './ChipSelect.types';
 import styles from './ChipSelect.module.css';
 
-export const ChipSelect = <T,>({
+export const ChipSelect: FunctionComponent<ChipSelectProps> = ({
   options,
   selectedOptions,
+  optionsFilter,
   autoComplete,
   autoCapitalize,
   placeholder,
   spellCheck,
-  onChange = () => {},
-  optionsFilter = defaultOptionsFilter,
-}: ChipSelectProps<T>) => {
-  const [inputValue, setInputValue] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-
+  onChange,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  const filteredOptions = useMemo<ChipSelectOption<T>[]>(() => {
-    return optionsFilter(options, inputValue).filter(
-      (filteredOption) => {
-        return selectedOptions.every(
-          (selectedOption) => selectedOption.id !== filteredOption.id
-        );
-      }
-    );
-  }, [options, optionsFilter, inputValue, selectedOptions]);
+  const {
+    inputValue,
+    isOpen,
+    focusedIndex,
+    filteredOptions,
+    open,
+    close,
+    writeValue,
+    focusNext,
+    focusPrev,
+    focusAt,
+    select,
+    selectFocused,
+    unselect,
+    unselectLatest,
+  } = useChipSelect({
+    inputRef,
+    options,
+    selectedOptions,
+    optionsFilter,
+    onChange,
+  });
 
-  useEffect(() => {
-    const viewport = window.visualViewport;
+  const restOptionsLength = options.length - filteredOptions.length;
+  const shouldShowRestOptions =
+    restOptionsLength > 0 && restOptionsLength !== options.length;
 
-    if (!viewport || !isOpen) {
-      return;
-    }
+  const shouldShowNoOptionsAvailable = filteredOptions.length === 0;
 
-    let prev = viewport.height;
+  useViewportResize({
+    skip: !isOpen,
+    onViewportResize: () => {
+      close();
+    },
+  });
 
-    const handleResize = () => {
-      const next = viewport.height;
+  useClickOutside({
+    containerRef,
+    skip: !isOpen,
+    onClickOutside: () => {
+      close();
+    },
+  });
 
-      if (next > prev) {
-        setIsOpen(false);
-      }
-
-      prev = next;
-    };
-
-    viewport.addEventListener('resize', handleResize);
-
-    return () => {
-      viewport.removeEventListener('resize', handleResize);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-
-    if (!container || !isOpen) {
-      return;
-    }
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!container.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const list = listRef.current;
-
-    if (!list || focusedIndex === 0) {
-      return;
-    }
-
-    const focusedElement = list.children[focusedIndex] as HTMLElement;
-
-    if (focusedElement) {
-      focusedElement.scrollIntoView({ block: 'nearest' });
-    }
-  }, [focusedIndex]);
-
-  const handleSelect = (option: ChipSelectOption<T>): void => {
-    onChange([...selectedOptions, option]);
-
-    setInputValue('');
-    setIsOpen(false);
-    setFocusedIndex(-1);
-
-    inputRef.current?.focus();
-  };
-
-  const handleRemove = (option: ChipSelectOption<T>): void => {
-    onChange(
-      selectedOptions.filter(
-        (selectedOption) => selectedOption.id !== option.id
-      )
-    );
-  };
+  useScrollToFocused({
+    listRef,
+    focusedIndex,
+  });
 
   const handleKeyDown = (
     event: KeyboardEvent<HTMLInputElement>
   ): void => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
-
-      setIsOpen(true);
-      setFocusedIndex((prev) => {
-        return prev < filteredOptions.length - 1 ? prev + 1 : prev;
-      });
+      focusNext();
 
       return;
     }
 
     if (event.key === 'ArrowUp') {
       event.preventDefault();
-
-      setFocusedIndex((prev) => {
-        return prev > 0 ? prev - 1 : 0;
-      });
+      focusPrev();
 
       return;
     }
 
     if (event.key === 'Enter') {
       event.preventDefault();
-
-      if (isOpen === true && filteredOptions[focusedIndex]) {
-        handleSelect(filteredOptions[focusedIndex]);
-      }
+      selectFocused();
 
       return;
     }
 
     if (event.key === 'Escape') {
-      setIsOpen(false);
+      close();
 
       return;
     }
 
-    if (
-      event.key === 'Backspace' &&
-      !inputValue &&
-      selectedOptions.length > 0
-    ) {
-      handleRemove(selectedOptions[selectedOptions.length - 1]);
+    if (event.key === 'Backspace') {
+      unselectLatest();
 
       return;
     }
@@ -182,9 +123,9 @@ export const ChipSelect = <T,>({
         {selectedOptions.map((selectedOption) => {
           return (
             <Chip
-              key={selectedOption.id}
+              key={selectedOption.key}
               onRemove={() => {
-                handleRemove(selectedOption);
+                unselect(selectedOption);
               }}
             >
               {selectedOption.children}
@@ -201,43 +142,50 @@ export const ChipSelect = <T,>({
           placeholder={placeholder}
           spellCheck={spellCheck}
           onChange={(event) => {
-            setInputValue(event.target.value);
-            setIsOpen(true);
-            setFocusedIndex(-1);
+            writeValue(event.target.value);
           }}
           onFocus={() => {
-            setIsOpen(true);
+            open();
           }}
           onKeyDown={handleKeyDown}
         />
       </div>
       {isOpen && (
-        <ul className={styles.AvailableValues} ref={listRef}>
-          {filteredOptions.map((filteredOption, index) => {
-            const isFocused = index === focusedIndex;
-
-            return (
-              <li
-                key={filteredOption.id}
-                className={classNames([
-                  styles.Option,
-                  isFocused && styles.isFocused,
-                ])}
-                onClick={() => {
-                  handleSelect(filteredOption);
-                }}
-                onMouseEnter={() => {
-                  setFocusedIndex(index);
-                }}
-              >
-                {filteredOption.children}
-              </li>
-            );
-          })}
-          {filteredOptions.length === 0 && (
-            <li className={styles.Option}>No options available.</li>
+        <div className={styles.AvailableValues}>
+          {shouldShowRestOptions && (
+            <div className={styles.Stub}>
+              {restOptionsLength} options available
+            </div>
           )}
-        </ul>
+
+          {shouldShowNoOptionsAvailable && (
+            <div className={styles.Stub}>No options available</div>
+          )}
+
+          <ul className={styles.List} ref={listRef}>
+            {filteredOptions.map((filteredOption, index) => {
+              const isFocused = index === focusedIndex;
+
+              return (
+                <li
+                  key={filteredOption.key}
+                  className={classNames([
+                    styles.Item,
+                    isFocused && styles['is-focused'],
+                  ])}
+                  onClick={() => {
+                    select(filteredOption);
+                  }}
+                  onMouseEnter={() => {
+                    focusAt(index);
+                  }}
+                >
+                  {filteredOption.children}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
     </div>
   );

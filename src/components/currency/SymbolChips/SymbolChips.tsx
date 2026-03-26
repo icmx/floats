@@ -4,13 +4,15 @@ import { useQueryParams } from '../../../hooks/useQueryParams';
 import {
   ChipSelect,
   type ChipSelectOption,
+  type ChipSelectProps,
 } from '../../common/ChipSelect';
+import { symbolChipsOptionsFilter } from './SymbolChips.utils';
 
 export const SymbolChips: FunctionComponent = () => {
-  const symbolOptions: ChipSelectOption<string>[] = useMemo(() => {
+  const symbolOptions: ChipSelectOption[] = useMemo(() => {
     return SYMBOLS.map((symbol) => {
       return {
-        id: `symbol-${symbol}`,
+        key: `symbol-${symbol}`,
         value: symbol,
         pattern: symbol.toLowerCase(),
         children: symbol,
@@ -20,15 +22,15 @@ export const SymbolChips: FunctionComponent = () => {
 
   // should be exactly like that since user CAN enter some "invalid" symbols
   // from query string and still be cool. so user should be able to remove this
-  const { queryParams, setQueryParams } = useQueryParams();
-  const { by } = queryParams;
+  const {
+    queryParams: { by },
+    setQueryParams,
+  } = useQueryParams();
 
-  const selectedSymbolOptions = useMemo<
-    ChipSelectOption<string>[]
-  >(() => {
+  const selectedSymbolOptions = useMemo<ChipSelectOption[]>(() => {
     return by.map((symbol) => {
       return {
-        id: `symbol-${symbol}`,
+        key: `symbol-${symbol}`,
         value: symbol,
         pattern: symbol.toLowerCase(),
         children: symbol,
@@ -36,9 +38,11 @@ export const SymbolChips: FunctionComponent = () => {
     });
   }, [by]);
 
-  const handleChange = useCallback(
-    (options: ChipSelectOption<string>[]): void => {
-      setQueryParams({ by: options.map((option) => option.value) });
+  const handleChange = useCallback<
+    Exclude<ChipSelectProps['onChange'], undefined>
+  >(
+    (values) => {
+      setQueryParams({ by: values });
     },
     [setQueryParams]
   );
@@ -47,6 +51,7 @@ export const SymbolChips: FunctionComponent = () => {
     <ChipSelect
       options={symbolOptions}
       selectedOptions={selectedSymbolOptions}
+      optionsFilter={symbolChipsOptionsFilter}
       autoComplete="off"
       autoCapitalize="characters"
       placeholder="Type symbols like USDEUR"

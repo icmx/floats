@@ -1,5 +1,5 @@
 import { useState, type FunctionComponent } from 'react';
-import { convertFormatter } from '../../../utils/common';
+import { formatToConvertNumber } from '../../../utils/common';
 import { LineField } from '../../common/LineField';
 import type { ConverterProps } from './Converter.types';
 import styles from './Converter.module.css';
@@ -24,7 +24,7 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         type="number"
         min={0}
         step={0.01}
-        value={convertFormatter.format(baseValue)}
+        value={formatToConvertNumber(baseValue)}
         onChange={(event) => {
           const nextBaseValue =
             Number.parseFloat(event.target.value) || 0;
@@ -42,7 +42,7 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         type="number"
         min={0}
         step={0.01}
-        value={convertFormatter.format(quoteValue)}
+        value={formatToConvertNumber(quoteValue)}
         onChange={(event) => {
           const nextQuoteValue =
             Number.parseFloat(event.target.value) || 0;

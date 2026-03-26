@@ -46,31 +46,50 @@
 
 .AvailableValues {
   position: absolute;
+
   left: 0;
   right: 0;
   top: 100%;
 
+  margin-top: 2px;
+
+  border: solid 1px var(--color-line);
+  border-radius: var(--border-radius);
+
+  color: var(--color-text);
+  background-color: var(--color-body);
+
+  overflow: hidden;
+
+  z-index: 1000;
+}
+
+.List {
   max-height: 240px;
 
   list-style: none;
   overflow-y: scroll;
 
-  color: var(--color-text);
-  background-color: var(--color-body);
-  border: solid 1px var(--color-line);
-  border-radius: 0.25rem 0 0 0.25rem;
-
-  z-index: 1000;
-
-  margin-top: 4px;
   padding-left: 0;
+
+  margin: 0;
 }
 
-.Option {
-  padding: 6px 4px;
+.Item {
+  padding: 12px 1rem;
   cursor: pointer;
+
+  &.is-focused {
+    color: var(--color-main);
+    background-color: var(--color-selection);
+  }
 }
 
-.Option.isFocused {
-  color: var(--color-main);
+.Stub {
+  padding: 0.5rem 1rem;
+
+  font-size: var(--font-size-s);
+  font-style: italic;
+
+  color: var(--color-mute);
 }

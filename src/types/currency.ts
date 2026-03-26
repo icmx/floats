@@ -10,14 +10,7 @@ export type RateNumber = number | null;
 
 export type DateRate = [DateNumber, RateNumber];
 
-export type DateRates = [DateNumber, ...RateNumber[]];
-
 export type Currency = Readonly<{
   head: ['date', SymbolString];
   body: DateRate[];
-}>;
-
-export type Currencies = Readonly<{
-  head: ['date', ...SymbolString[]];
-  body: DateRates[];
 }>;

@@ -162,3 +162,12 @@ export const SERIES_COLORS = [
   'var(--color-series-cyan)',
   'var(--color-series-orange)',
 ];
+
+// order matters
+export const WELL_KNOWN_SYMBOLS: SymbolString[] = [
+  'EURUSD',
+  'USDJPY',
+  'GBPUSD',
+  'USDCHF',
+  'AUDUSD',
+];

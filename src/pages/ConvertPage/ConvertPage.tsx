@@ -1,23 +1,23 @@
 import { type FunctionComponent } from 'react';
-import { Link } from 'react-router';
-import { ErrorAlert } from '../../components/common/ErrorAlert';
-import { EmptyAlert } from '../../components/common/EmptyAlert';
+import { Alert } from '../../components/common/Alert';
 import { Loading } from '../../components/common/Loading';
 import { Converter } from '../../components/currency/Converter';
+import { EmptyFragment } from '../../components/currency/EmptyFragment';
+import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
 import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useCurrencies } from '../../stores/currenciesStore';
+import { useCurrencies } from '../../stores/currency/currenciesStore';
 import type { CodeString, Currency } from '../../types/currency';
 import { extractCurrencyCodes } from '../../utils/currency';
 
-export type Data = {
+export type ConvertersData = {
   rates: {
     symbol: [CodeString, CodeString];
     rate: number;
   }[];
 };
 
-const toData = (currencies: Currency[]): Data => {
-  const data: Data = {
+const toData = (currencies: Currency[]): ConvertersData => {
+  const data: ConvertersData = {
     rates: currencies.map((currency) => {
       const [baseCode, quoteCode] = extractCurrencyCodes(currency);
 
@@ -32,43 +32,51 @@ const toData = (currencies: Currency[]): Data => {
 };
 
 export const ConvertPage: FunctionComponent = () => {
-  const { currencies, isLoading, errors } = useCurrencies();
+  const { isLoading, errors, entries } = useCurrencies();
 
-  const data = toData(currencies);
+  const data = toData(entries);
 
-  const error = errors.at(0) || null;
-  const empty = !error && currencies.length === 0;
+  const hasErrors = errors.length > 0;
+  const hasEntries = entries.length > 0;
+
+  const shouldShowLoading = isLoading && !hasEntries;
+  const shouldShowErrors = hasErrors;
+  const shouldShowEmpty = !isLoading && !hasErrors && !hasEntries;
+  const shouldShowEntries = hasEntries;
 
   return (
     <>
       <SymbolChips />
 
-      {isLoading && <Loading />}
+      {shouldShowLoading && <Loading />}
 
-      {error && <ErrorAlert error={error} />}
-
-      {empty && (
-        <EmptyAlert>
-          <p>No symboles are selected to show.</p>
-          <p>
-            Try <Link to={'?by=USDEUR'}>USDEUR</Link> for instance.
-          </p>
-        </EmptyAlert>
+      {shouldShowErrors && (
+        <Alert status="failure">
+          <ErrorsFragment errors={errors} />
+        </Alert>
       )}
 
-      <form>
-        {data.rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
-          return (
-            <Converter
-              key={`${baseCode}${quoteCode}`}
-              baseAmount={1}
-              baseCode={baseCode}
-              quoteCode={quoteCode}
-              rate={rate}
-            />
-          );
-        })}
-      </form>
+      {shouldShowEmpty && (
+        <Alert status="default">
+          <EmptyFragment />
+        </Alert>
+      )}
+
+      {shouldShowEntries && (
+        <form>
+          {data.rates.map(({ symbol: [baseCode, quoteCode], rate }) => {
+            return (
+              <Converter
+                key={`${baseCode}${quoteCode}`}
+                baseAmount={1}
+                baseCode={baseCode}
+                quoteCode={quoteCode}
+                rate={rate}
+              />
+            );
+          })}
+        </form>
+      )}
     </>
   );
 };

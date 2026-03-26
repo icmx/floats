@@ -107,26 +107,49 @@ export const join = (value: string[]): string => {
     .join(SEPARATOR);
 };
 
-export const isodateFormatter = {
-  format: (value: string | number): string => {
-    return new Date(value).toISOString().slice(0, 10);
-  },
-};
-
-export const isodatetimeFormatter = {
-  format: (value: string | number): string => {
-    return new Date(value).toJSON().slice(0, 16).replace('T', ' ');
-  },
-};
-
-export const exploreFormatter = new Intl.NumberFormat(LOCALES, {
+const exploreFormatter = new Intl.NumberFormat(LOCALES, {
   maximumFractionDigits: EXPLORE_FRACTION_DIGITS,
   minimumFractionDigits: EXPLORE_FRACTION_DIGITS,
   roundingMode: 'halfEven',
 });
 
-export const convertFormatter = new Intl.NumberFormat(LOCALES, {
+const convertFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: CONVERT_FRACTION_DIGITS,
   minimumFractionDigits: CONVERT_FRACTION_DIGITS,
   roundingMode: 'halfEven',
+  useGrouping: false,
 });
+
+export const formatToIsodate = (dateInit: string | number): string => {
+  return new Date(dateInit).toISOString().slice(0, 10);
+};
+
+export const formatToIsodatetime = (
+  dateInit: string | number
+): string => {
+  return new Date(dateInit).toJSON().slice(0, 16).replace('T', ' ');
+};
+
+export const formatToExploreNumber = (numberInit: number): string => {
+  return exploreFormatter.format(numberInit);
+};
+
+export const formatToConvertNumber = (numberInit: number): string => {
+  const parts = convertFormatter.formatToParts(numberInit);
+
+  return parts.reduce((result, { type, value }) => {
+    if (type === 'integer') {
+      return `${result}${value}`;
+    }
+
+    if (type === 'decimal') {
+      return `${result}.`;
+    }
+
+    if (type === 'fraction') {
+      return `${result}${value}`;
+    }
+
+    return result;
+  }, '');
+};

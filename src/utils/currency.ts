@@ -13,8 +13,18 @@ import type {
   SymbolString,
 } from '../types/currency';
 
-export const getSeriesColor = (seriesIndex: number): string => {
-  return SERIES_COLORS[seriesIndex % SERIES_COLORS.length];
+export const parseCsv = (csv: string): DateRate[] => {
+  return csv
+    .trim()
+    .split('\n')
+    .map((line) => {
+      const [dateText, rateText] = line.split(',');
+
+      return [
+        new Date(dateText).getTime(),
+        Number.parseFloat(rateText),
+      ];
+    });
 };
 
 export const isSymbolString = (
@@ -89,7 +99,10 @@ export const createCrossCurrency = (
 
   type Rate = { base: RateNumber; quote: RateNumber };
 
-  const EMPTY: Rate = { base: null, quote: null };
+  const empty = (): Rate => {
+    return { base: null, quote: null };
+  };
+
   const ratesByDates = new Map<number, Rate>();
 
   const minDate = Math.max(
@@ -105,7 +118,7 @@ export const createCrossCurrency = (
   const MS_1_DAY = 86_400_000;
 
   for (let date = minDate; date <= maxDate; date += MS_1_DAY) {
-    ratesByDates.set(date, EMPTY);
+    ratesByDates.set(date, empty());
   }
 
   base.body
@@ -114,7 +127,7 @@ export const createCrossCurrency = (
     })
     .forEach(([date, rate]) => {
       ratesByDates.set(date, {
-        ...(ratesByDates.get(date) || EMPTY),
+        ...(ratesByDates.get(date) || empty()),
         base: rate,
       });
     });
@@ -125,7 +138,7 @@ export const createCrossCurrency = (
     })
     .forEach(([date, rate]) => {
       ratesByDates.set(date, {
-        ...(ratesByDates.get(date) || EMPTY),
+        ...(ratesByDates.get(date) || empty()),
         quote: rate,
       });
     });
@@ -133,7 +146,7 @@ export const createCrossCurrency = (
   if (isPivotCurrency(base)) {
     Array.from(ratesByDates.entries()).forEach(([date]) => {
       ratesByDates.set(date, {
-        ...(ratesByDates.get(date) || EMPTY),
+        ...(ratesByDates.get(date) || empty()),
         base: 1,
       });
     });
@@ -142,7 +155,7 @@ export const createCrossCurrency = (
   if (isPivotCurrency(quote)) {
     Array.from(ratesByDates.entries()).forEach(([date]) => {
       ratesByDates.set(date, {
-        ...(ratesByDates.get(date) || EMPTY),
+        ...(ratesByDates.get(date) || empty()),
         quote: 1,
       });
     });
@@ -180,4 +193,8 @@ export const isPivotCurrency = (currency: Currency): boolean => {
 
 export const isEmptyCurrency = (currency: Currency): boolean => {
   return currency.body.length === 0;
+};
+
+export const getSeriesColor = (seriesIndex: number): string => {
+  return SERIES_COLORS[seriesIndex % SERIES_COLORS.length];
 };

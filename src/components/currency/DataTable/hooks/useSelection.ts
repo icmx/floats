@@ -132,8 +132,6 @@ export const useSelection = ({
         return;
       }
 
-      event.preventDefault();
-
       const hasModifiers = event.ctrlKey || event.metaKey;
       const hasCKey = event.key.toLowerCase() === 'c';
       const shouldCopy = hasModifiers && hasCKey;
@@ -141,6 +139,8 @@ export const useSelection = ({
       if (!shouldCopy) {
         return;
       }
+
+      event.preventDefault();
 
       const { from, to } = selection;
       const lines: string[][] = [];

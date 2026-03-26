@@ -11,3 +11,7 @@ export type QueryParams = {
 export type StatusValue = 'default' | 'failure';
 
 export type ThemeValue = 'system' | 'light' | 'dark';
+
+export type RouteHandle = {
+  title?: ((queryParams: QueryParams) => string) | string;
+};

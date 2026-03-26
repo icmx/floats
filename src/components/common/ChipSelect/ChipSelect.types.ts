@@ -1,22 +1,25 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
 
-export type ChipSelectOption<T> = {
-  id: string;
-  value: T;
+export type ChipSelectOption = {
+  key: string;
+  value: string;
   pattern: string;
   children: ReactNode;
 };
 
-export type ChipSelectProps<T> = {
-  options: ChipSelectOption<T>[];
-  selectedOptions: ChipSelectOption<T>[];
+export type ChipSelectOptionsFilter = (
+  inputValue: string,
+  options: ChipSelectOption[],
+  selectedOptions: ChipSelectOption[]
+) => ChipSelectOption[];
+
+export type ChipSelectProps = {
+  options: ChipSelectOption[];
+  selectedOptions: ChipSelectOption[];
+  optionsFilter?: ChipSelectOptionsFilter;
   autoComplete?: InputHTMLAttributes<HTMLInputElement>['autoComplete'];
   autoCapitalize?: InputHTMLAttributes<HTMLInputElement>['autoCapitalize'];
   placeholder?: InputHTMLAttributes<HTMLInputElement>['placeholder'];
   spellCheck?: InputHTMLAttributes<HTMLInputElement>['spellCheck'];
-  onChange?: (options: ChipSelectOption<T>[]) => void;
-  optionsFilter?: (
-    options: ChipSelectOption<T>[],
-    inputValue: string
-  ) => ChipSelectOption<T>[];
+  onChange?: (values: string[]) => void;
 };
