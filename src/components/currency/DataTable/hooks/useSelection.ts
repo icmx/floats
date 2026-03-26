@@ -127,16 +127,8 @@ export const useSelection = ({
   }, [containerRef]);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleCopy = (event: ClipboardEvent) => {
       if (!selection) {
-        return;
-      }
-
-      const hasModifiers = event.ctrlKey || event.metaKey;
-      const hasCKey = event.key.toLowerCase() === 'c';
-      const shouldCopy = hasModifiers && hasCKey;
-
-      if (!shouldCopy) {
         return;
       }
 
@@ -166,15 +158,13 @@ export const useSelection = ({
         .map((line) => line.join('\t'))
         .join('\n');
 
-      navigator.clipboard.writeText(text).catch((reason) => {
-        console.error(reason);
-      });
+      event.clipboardData?.setData('text/plain', text);
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('copy', handleCopy);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('copy', handleCopy);
     };
   }, [selection, rows]);
 
