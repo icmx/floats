@@ -19,7 +19,7 @@ const cache = new ApiCache<Currency>();
 
 export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
 
-export const fetchUrl = async (url: string): Promise<string> => {
+export const fetchString = async (url: string): Promise<string> => {
   const response = await fetch(
     `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}${url}`
   );
@@ -38,7 +38,7 @@ export const fetchUrl = async (url: string): Promise<string> => {
 export const fetchRateTuples = async (
   url: string
 ): Promise<DateRate[]> => {
-  const csv = await fetchUrl(url);
+  const csv = await fetchString(url);
   const data = parseCsv(csv);
 
   return data;
