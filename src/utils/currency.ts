@@ -67,8 +67,8 @@ export const parseCsv = (csv: string): DateRate[] => {
     const [dateText, rateText] = line.split(',');
 
     dateRates.push([
-      parseDateValue(dateText),
-      parseRateValue(rateText),
+      parseDateNumber(dateText),
+      parseRateNumber(rateText),
     ]);
   }
 
@@ -76,36 +76,52 @@ export const parseCsv = (csv: string): DateRate[] => {
 };
 
 /**
+ * @todo Document this entry
+ * @todo Test this entry
+ */
+export const toDateNumber = (value: number): DateNumber => {
+  return value as DateNumber;
+};
+
+/**
  * @todo Maybe use just `Date.parse`
  * @todo Document this entry
  * @todo Test this entry
  */
-export const parseDateValue = (value: string): DateNumber => {
-  const year = Number.parseInt(value.slice(0, 4));
-  const month = Number.parseInt(value.slice(5, 7));
-  const day = Number.parseInt(value.slice(8, 10));
+export const parseDateNumber = (text: string): DateNumber => {
+  const year = Number.parseInt(text.slice(0, 4));
+  const month = Number.parseInt(text.slice(5, 7));
+  const day = Number.parseInt(text.slice(8, 10));
 
   const time = Date.UTC(year, month - 1, day);
 
   if (Number.isNaN(time)) {
-    throw new Error(`Invalid date value: "${value}"`);
+    throw new Error(`Invalid date value: "${text}"`);
   }
 
-  return time;
+  return time as DateNumber;
 };
 
 /**
  * @todo Document this entry
  * @todo Test this entry
  */
-export const parseRateValue = (value: string): RateNumber => {
-  const rate = Number.parseFloat(value);
+export const toRateNumber = (value: number | null): RateNumber => {
+  return value as RateNumber;
+};
+
+/**
+ * @todo Document this entry
+ * @todo Test this entry
+ */
+export const parseRateNumber = (text: string): RateNumber => {
+  const rate = Number.parseFloat(text);
 
   if (Number.isNaN(rate)) {
-    throw new Error(`Invalid rate value: "${value}"`);
+    throw new Error(`Invalid rate value: "${text}"`);
   }
 
-  return rate;
+  return rate as RateNumber;
 };
 
 /**
@@ -120,8 +136,8 @@ export const alignDateRates = (dateRates: DateRate[]): DateRate[] => {
   const MS_1_DAY = 86_400_000;
   const result: DateRate[] = [];
 
-  let expectedDate: DateNumber = dateRates[0][0];
-  let lastRate: RateNumber = dateRates[0][1];
+  let expectedDate = dateRates[0][0];
+  let lastRate = dateRates[0][1];
 
   for (const [date, rate] of dateRates) {
     if (expectedDate > date) {
@@ -131,12 +147,12 @@ export const alignDateRates = (dateRates: DateRate[]): DateRate[] => {
     while (expectedDate < date) {
       result.push([expectedDate, lastRate]);
 
-      expectedDate += MS_1_DAY;
+      expectedDate = toDateNumber(expectedDate + MS_1_DAY);
     }
 
     result.push([date, rate]);
 
-    expectedDate += MS_1_DAY;
+    expectedDate = toDateNumber(expectedDate + MS_1_DAY);
     lastRate = rate;
   }
 
@@ -213,9 +229,9 @@ export const createCrossCurrency = (
       head,
       body: base.body.map(([date, rate]) => {
         if (rate) {
-          return [date, 1 / rate];
+          return [date, toRateNumber(1 / rate)];
         } else {
-          return [date, null];
+          return [date, toRateNumber(null)];
         }
       }),
     };
@@ -259,9 +275,9 @@ export const createCrossCurrency = (
     const quoteRate = quote.body[j][1];
 
     if (!baseRate || !quoteRate) {
-      body.push([baseDate, null]);
+      body.push([baseDate, toRateNumber(null)]);
     } else {
-      body.push([baseDate, quoteRate / baseRate]);
+      body.push([baseDate, toRateNumber(quoteRate / baseRate)]);
     }
 
     i++;

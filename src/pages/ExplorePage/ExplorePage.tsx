@@ -79,15 +79,16 @@ const toTableData = (currencies: Currency[]): DataTableProps => {
 
       return createRateColDef(cell);
     }),
-    rows: body.map((row) => {
-      return row.map((cell, index) => {
-        if (index === 0) {
-          return createDateCell(row[0]);
-        }
+    rows: body.map((row): DataRow => {
+      const [dateCell, ...rateCells] = row;
 
-        return createRateCell(cell);
-      });
-    }) as DataRow[],
+      return [
+        createDateCell(dateCell),
+        ...rateCells.map((rateCell) => {
+          return createRateCell(rateCell);
+        }),
+      ];
+    }),
   };
 };
 
