@@ -1,44 +1,27 @@
-import { PIVOT_CURRENCY_CODE } from '../constants/currency';
-import type { Results } from '../types/common';
+import { PIVOT_CURRENCY_CODE } from '../../constants/currency';
+import type { Results } from '../../types/common';
 import type {
-  CodeString,
   Currency,
   DateRate,
+  CodeString,
   SymbolString,
-} from '../types/currency';
+} from '../../types/currency';
 import {
-  createCrossCurrency,
-  createCurrency,
-  createPivotCurrency,
   parseCsv,
+  createPivotCurrency,
+  createCurrency,
   splitSymbolToCodes,
-} from '../utils/currency';
-import { ApiCache } from './cache';
+  createCrossCurrency,
+} from '../../utils/currency';
+import { ApiCache } from '../common/cache';
+import { fetchString } from '../common/client';
 
 const cache = new ApiCache<Currency>();
-
-export const API_BASE_URL = import.meta.env.BUNDLE_API_BASE_URL;
-
-export const fetchString = async (url: string): Promise<string> => {
-  const response = await fetch(
-    `${API_BASE_URL}/${PIVOT_CURRENCY_CODE}${url}`
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      `Unable to fetch "${url}": ${response.status}/${response.statusText}`
-    );
-  }
-
-  const text = await response.text();
-
-  return text;
-};
 
 export const fetchRateTuples = async (
   url: string
 ): Promise<DateRate[]> => {
-  const csv = await fetchString(url);
+  const csv = await fetchString(`${PIVOT_CURRENCY_CODE}/${url}`);
   const data = parseCsv(csv);
 
   return data;
@@ -53,8 +36,8 @@ export const fetchCurrencyByCode = async (
     }
 
     const [data, latestData] = await Promise.all([
-      fetchRateTuples(`/${code}.csv`),
-      fetchRateTuples(`/${code}.latest.csv`),
+      fetchRateTuples(`${code}.csv`),
+      fetchRateTuples(`${code}.latest.csv`),
     ]);
 
     return createCurrency(PIVOT_CURRENCY_CODE, code, [
