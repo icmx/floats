@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/shallow';
-import { getCurrencies } from '../../api/currency/client';
+import { getCurrencies } from '../../features/currency/api/client';
 import type { Currency, SymbolString } from '../../types/currency';
 
 export type SymbolsArray = SymbolString[];
