@@ -10,14 +10,12 @@ import {
   type DataRow,
   type DataTableProps,
   type DataTableHandle,
+  createDateCell,
+  createDateColDef,
+  createRateCell,
+  createRateColDef,
   DataTable,
 } from '../../features/currency/components/DataTable';
-import {
-  createDateColDef,
-  createRateColDef,
-  createDateCell,
-  createRateCell,
-} from '../../features/currency/components/DataTable/DataTable.utils';
 import { EmptyFragment } from '../../features/currency/components/EmptyFragment';
 import { ErrorsFragment } from '../../features/currency/components/ErrorsFragment';
 import { SymbolChips } from '../../features/currency/components/SymbolChips';
