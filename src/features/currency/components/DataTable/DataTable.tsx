@@ -3,9 +3,9 @@ import {
   useRef,
   type FunctionComponent,
 } from 'react';
-import { classNames } from '../../../utils/common';
-import { getSeriesColor } from '../../../utils/currency';
-import { Bulb } from '../../common/Bulb';
+import { Bulb } from '../../../../components/Bulb';
+import { classNames } from '../../../../utils/common';
+import { getSeriesColor } from '../../../../utils/currency';
 import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';
 import { useSelection } from './hooks/useSelection';

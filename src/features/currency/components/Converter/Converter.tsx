@@ -1,6 +1,6 @@
 import { useState, type FunctionComponent } from 'react';
-import { formatToConvertNumber } from '../../../utils/common';
-import { LineField } from '../../common/LineField';
+import { LineField } from '../../../../components/LineField';
+import { formatToConvertNumber } from '../../../../utils/common';
 import type { ConverterProps } from './Converter.types';
 import styles from './Converter.module.css';
 

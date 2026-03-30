@@ -1,5 +1,5 @@
 import { type FunctionComponent } from 'react';
-import { classNames } from '../../../utils/common';
+import { classNames } from '../../utils/common';
 import type { ChipProps } from './Chip.types';
 import styles from './Chip.module.css';
 

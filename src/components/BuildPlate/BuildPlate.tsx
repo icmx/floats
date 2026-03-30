@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import { formatToIsodatetime } from '../../../utils/common';
+import { formatToIsodatetime } from '../../utils/common';
 import styles from './BuildPlate.module.css';
 
 const getCommitRef = (): string => {

@@ -1,10 +1,10 @@
-import { type FunctionComponent } from 'react';
-import { Alert } from '../../components/common/Alert';
-import { Loading } from '../../components/common/Loading';
-import { Converter } from '../../components/currency/Converter';
-import { EmptyFragment } from '../../components/currency/EmptyFragment';
-import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
-import { SymbolChips } from '../../components/currency/SymbolChips';
+import type { FunctionComponent } from 'react';
+import { Alert } from '../../components/Alert';
+import { Loading } from '../../components/Loading';
+import { Converter } from '../../features/currency/components/Converter';
+import { EmptyFragment } from '../../features/currency/components/EmptyFragment';
+import { ErrorsFragment } from '../../features/currency/components/ErrorsFragment';
+import { SymbolChips } from '../../features/currency/components/SymbolChips';
 import { useCurrencies } from '../../stores/currency/currenciesStore';
 import type { CodeString, Currency } from '../../types/currency';
 import { extractCurrencyCodes } from '../../utils/currency';

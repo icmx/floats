@@ -1,5 +1,5 @@
 import { type FunctionComponent } from 'react';
-import { BoxField } from '../../components/common/BoxField';
+import { BoxField } from '../../components/BoxField';
 import { THEMES } from '../../constants/common';
 import { useThemeValue } from '../../stores/common/themeValueStore';
 

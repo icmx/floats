@@ -1,32 +1,32 @@
-import { useEffect, useRef, type FunctionComponent } from 'react';
-import { Alert } from '../../components/common/Alert';
-import { Loading } from '../../components/common/Loading';
+import { type FunctionComponent, useRef, useEffect } from 'react';
+import { Alert } from '../../components/Alert';
+import { Loading } from '../../components/Loading';
 import {
-  DataChart,
   type DataChartHandle,
   type DataChartProps,
-} from '../../components/currency/DataChart';
+  DataChart,
+} from '../../features/currency/components/DataChart';
 import {
-  DataTable,
   type DataRow,
-  type DataTableHandle,
   type DataTableProps,
-} from '../../components/currency/DataTable';
+  type DataTableHandle,
+  DataTable,
+} from '../../features/currency/components/DataTable';
 import {
-  createDateCell,
   createDateColDef,
-  createRateCell,
   createRateColDef,
-} from '../../components/currency/DataTable/DataTable.utils';
-import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
-import { EmptyFragment } from '../../components/currency/EmptyFragment';
-import { SymbolChips } from '../../components/currency/SymbolChips';
+  createDateCell,
+  createRateCell,
+} from '../../features/currency/components/DataTable/DataTable.utils';
+import { EmptyFragment } from '../../features/currency/components/EmptyFragment';
+import { ErrorsFragment } from '../../features/currency/components/ErrorsFragment';
+import { SymbolChips } from '../../features/currency/components/SymbolChips';
 import { useCurrencies } from '../../stores/currency/currenciesStore';
 import type {
   Currency,
+  SymbolString,
   DateNumber,
   RateNumber,
-  SymbolString,
 } from '../../types/currency';
 import styles from './ExplorePage.module.css';
 

@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import { BuildPlate } from '../../components/common/BuildPlate';
+import { BuildPlate } from '../../components/BuildPlate';
 
 export const AboutPage: FunctionComponent = () => {
   return (

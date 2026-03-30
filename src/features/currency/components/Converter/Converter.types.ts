@@ -1,4 +1,4 @@
-import type { CodeString } from '../../../types/currency';
+import type { CodeString } from '../../../../types/currency';
 
 export type ConverterProps = {
   baseAmount: number;

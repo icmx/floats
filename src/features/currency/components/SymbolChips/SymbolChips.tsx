@@ -1,11 +1,11 @@
-import { useCallback, useMemo, type FunctionComponent } from 'react';
-import { SYMBOLS } from '../../../constants/currency';
-import { useQueryParams } from '../../../hooks/useQueryParams';
+import { type FunctionComponent, useMemo, useCallback } from 'react';
 import {
-  ChipSelect,
   type ChipSelectOption,
   type ChipSelectProps,
-} from '../../common/ChipSelect';
+  ChipSelect,
+} from '../../../../components/ChipSelect';
+import { SYMBOLS } from '../../../../constants/currency';
+import { useQueryParams } from '../../../../hooks/useQueryParams';
 import { symbolChipsOptionsFilter } from './SymbolChips.utils';
 
 export const SymbolChips: FunctionComponent = () => {
