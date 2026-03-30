@@ -171,3 +171,7 @@ export const WELL_KNOWN_SYMBOLS: SymbolString[] = [
   'USDCHF',
   'AUDUSD',
 ];
+
+export const EXPLORE_FRACTION_DIGITS = 6;
+
+export const CONVERT_FRACTION_DIGITS = 2;
