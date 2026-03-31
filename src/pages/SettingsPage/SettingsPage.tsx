@@ -3,7 +3,7 @@ import { BoxField } from '../../components/BoxField';
 import { useThemeValue } from '../../stores/themeValueStore';
 import type { ThemeValue } from '../../types';
 
-export const THEMES: { value: ThemeValue; children: ReactNode }[] = [
+const THEMES: { value: ThemeValue; children: ReactNode }[] = [
   { value: 'system', children: 'System' },
   { value: 'light', children: 'Light' },
   { value: 'dark', children: 'Dark' },
