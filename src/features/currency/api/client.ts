@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../../../constants';
+import { API_BASE_URL } from '../../../config/env';
 import type { Results } from '../../../types';
 import { ApiCache } from '../../../utils';
 import { PIVOT_CURRENCY_CODE } from '../constants';

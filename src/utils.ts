@@ -1,4 +1,3 @@
-import { LOCALES } from './constants';
 import {
   EXPLORE_FRACTION_DIGITS,
   CONVERT_FRACTION_DIGITS,
@@ -143,11 +142,14 @@ export const join = (value: string[]): string => {
     .join(SEPARATOR);
 };
 
-const exploreFormatter = new Intl.NumberFormat(LOCALES, {
-  maximumFractionDigits: EXPLORE_FRACTION_DIGITS,
-  minimumFractionDigits: EXPLORE_FRACTION_DIGITS,
-  roundingMode: 'halfEven',
-});
+const exploreFormatter = new Intl.NumberFormat(
+  navigator?.languages || ['en'],
+  {
+    maximumFractionDigits: EXPLORE_FRACTION_DIGITS,
+    minimumFractionDigits: EXPLORE_FRACTION_DIGITS,
+    roundingMode: 'halfEven',
+  }
+);
 
 const convertFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: CONVERT_FRACTION_DIGITS,
