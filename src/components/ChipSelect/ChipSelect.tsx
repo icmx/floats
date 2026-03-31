@@ -3,8 +3,8 @@ import {
   type FunctionComponent,
   type KeyboardEvent,
 } from 'react';
+import { classNames } from '../../lib/classNames';
 import { Chip } from '../Chip';
-import { classNames } from '../../utils';
 import { useChipSelect } from './hooks/useChipSelect';
 import { useClickOutside } from './hooks/useClickOutside';
 import { useScrollToFocused } from './hooks/useScrollToFocused';
