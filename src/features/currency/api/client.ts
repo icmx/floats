@@ -1,6 +1,6 @@
-import { ApiCache } from '../../../api/cache';
-import { fetchString } from '../../../api/client';
+import { API_BASE_URL } from '../../../constants';
 import type { Results } from '../../../types';
+import { ApiCache } from '../../../utils';
 import { PIVOT_CURRENCY_CODE } from '../constants';
 import type {
   Currency,
@@ -17,6 +17,20 @@ import {
 } from '../utils';
 
 const cache = new ApiCache<Currency>();
+
+export const fetchString = async (url: string): Promise<string> => {
+  const response = await fetch(`${API_BASE_URL}/${url}`);
+
+  if (!response.ok) {
+    throw new Error(
+      `Unable to fetch "${url}": ${response.status}/${response.statusText}`
+    );
+  }
+
+  const text = await response.text();
+
+  return text;
+};
 
 export const fetchRateTuples = async (
   url: string
