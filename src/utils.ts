@@ -1,9 +1,9 @@
-import { LOCALES } from '../constants';
+import { LOCALES } from './constants';
 import {
-  CONVERT_FRACTION_DIGITS,
   EXPLORE_FRACTION_DIGITS,
-} from '../features/currency/constants';
-import type { QueryParams } from '../types/common';
+  CONVERT_FRACTION_DIGITS,
+} from './features/currency/constants';
+import type { QueryParams } from './types/common';
 
 export const classNames = (
   init: string | (false | string)[] | Record<string, boolean>

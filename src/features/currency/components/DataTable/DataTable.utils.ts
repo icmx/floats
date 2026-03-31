@@ -5,7 +5,7 @@ import type {
 import {
   formatToIsodate,
   formatToExploreNumber,
-} from '../../../../utils/common';
+} from '../../../../utils';
 import type { ColDef, DataCell } from './DataTable.types';
 
 export const createDateColDef = (): ColDef => {

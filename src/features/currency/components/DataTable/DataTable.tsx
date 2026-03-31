@@ -4,8 +4,8 @@ import {
   type FunctionComponent,
 } from 'react';
 import { Bulb } from '../../../../components/Bulb';
-import { classNames } from '../../../../utils/common';
-import { getSeriesColor } from '../../../../utils/currency';
+import { classNames } from '../../../../utils';
+import { getSeriesColor } from '../../utils';
 import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';
 import { useSelection } from './hooks/useSelection';

@@ -5,9 +5,9 @@ import { Converter } from '../../features/currency/components/Converter';
 import { EmptyFragment } from '../../features/currency/components/EmptyFragment';
 import { ErrorsFragment } from '../../features/currency/components/ErrorsFragment';
 import { SymbolChips } from '../../features/currency/components/SymbolChips';
+import { extractCurrencyCodes } from '../../features/currency/utils';
 import { useCurrencies } from '../../stores/currency/currenciesStore';
 import type { CodeString, Currency } from '../../types/currency';
-import { extractCurrencyCodes } from '../../utils/currency';
 
 export type ConvertersData = {
   rates: {

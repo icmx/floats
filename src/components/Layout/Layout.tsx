@@ -4,7 +4,7 @@ import { useQueryParamsSync } from '../../hooks/useQueryParamsSync';
 import { useRoutesUrls } from '../../hooks/useRoutesUrls';
 import { useThemeValueSync } from '../../hooks/useThemeValueSync';
 import { useTitle } from '../../hooks/useTitle';
-import { classNames } from '../../utils/common';
+import { classNames } from '../../utils';
 import styles from './Layout.module.css';
 
 export const Layout: FunctionComponent = () => {

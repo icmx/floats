@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import { classNames } from '../../utils/common';
+import { classNames } from '../../utils';
 import type { AlertProps } from './Alert.types';
 import styles from './Alert.module.css';
 

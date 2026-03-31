@@ -1,18 +1,18 @@
+import type {
+  DateRate,
+  DateNumber,
+  RateNumber,
+  CodeString,
+  Currency,
+  SymbolString,
+} from '../../types/currency';
 import {
   PIVOT_CURRENCY_CODE,
   SYMBOL_LENGTH,
   SYMBOLS,
   CODE_LENGTH,
   SERIES_COLORS,
-} from '../features/currency/constants';
-import type {
-  CodeString,
-  Currency,
-  DateNumber,
-  DateRate,
-  RateNumber,
-  SymbolString,
-} from '../types/currency';
+} from './constants';
 
 // @todo: this file is too large and must be splitted later by separators
 

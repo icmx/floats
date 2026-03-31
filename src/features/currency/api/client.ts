@@ -7,14 +7,14 @@ import type {
   CodeString,
   SymbolString,
 } from '../../../types/currency';
+import { PIVOT_CURRENCY_CODE } from '../constants';
 import {
   parseCsv,
   createPivotCurrency,
   createCurrency,
   splitSymbolToCodes,
   createCrossCurrency,
-} from '../../../utils/currency';
-import { PIVOT_CURRENCY_CODE } from '../constants';
+} from '../utils';
 
 const cache = new ApiCache<Currency>();
 
@@ -22,8 +22,8 @@ export const fetchRateTuples = async (
   url: string
 ): Promise<DateRate[]> => {
   const csv = await fetchString(`${PIVOT_CURRENCY_CODE}/${url}`);
-  const data = parseCsv(csv);
 
+  const data = parseCsv(csv);
   return data;
 };
 
