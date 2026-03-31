@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '../../../config/env';
+import { Cached } from '../../../lib/cached';
 import type { Results } from '../../../types';
-import { ApiCache } from '../../../utils';
 import { PIVOT_CURRENCY_CODE } from '../constants';
 import type {
   Currency,
@@ -16,7 +16,7 @@ import {
   createCrossCurrency,
 } from '../utils';
 
-const cache = new ApiCache<Currency>();
+const cached = new Cached<Currency>();
 
 export const fetchString = async (url: string): Promise<string> => {
   const response = await fetch(`${API_BASE_URL}/${url}`);
@@ -44,7 +44,7 @@ export const fetchRateTuples = async (
 export const fetchCurrencyByCode = async (
   code: CodeString
 ): Promise<Currency> => {
-  return cache.resolve(code, async () => {
+  return cached.resolve(code, async () => {
     if (code === PIVOT_CURRENCY_CODE) {
       return createPivotCurrency();
     }
@@ -64,7 +64,7 @@ export const fetchCurrencyByCode = async (
 export const fetchCurrencyBySymbol = async (
   symbol: SymbolString
 ): Promise<Currency> => {
-  return cache.resolve(symbol, async () => {
+  return cached.resolve(symbol, async () => {
     const [baseCode, quoteCode] = splitSymbolToCodes(symbol);
 
     const [baseCurrency, quoteCurrency] = await Promise.all([
