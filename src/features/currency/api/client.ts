@@ -1,13 +1,13 @@
 import { ApiCache } from '../../../api/cache';
 import { fetchString } from '../../../api/client';
-import type { Results } from '../../../types/common';
+import type { Results } from '../../../types';
+import { PIVOT_CURRENCY_CODE } from '../constants';
 import type {
   Currency,
   DateRate,
   CodeString,
   SymbolString,
-} from '../../../types/currency';
-import { PIVOT_CURRENCY_CODE } from '../constants';
+} from '../types';
 import {
   parseCsv,
   createPivotCurrency,

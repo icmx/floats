@@ -8,7 +8,7 @@ import { ConvertPage } from './pages/ConvertPage';
 import { ExplorePage } from './pages/ExplorePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SettingsPage } from './pages/SettingsPage';
-import type { RouteHandle } from './types/common';
+import type { RouteHandle } from './types';
 import './index.css';
 
 const root = document.querySelector('#root');

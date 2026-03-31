@@ -1,5 +1,5 @@
-import type { CODES } from '../features/currency/constants';
-import type { Branded } from './common';
+import type { Branded } from '../../types';
+import { CODES } from './constants';
 
 export type CodeString = (typeof CODES)[number];
 

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useThemeValue } from '../stores/common/themeValueStore';
-import type { ThemeValue } from '../types/common';
+import type { ThemeValue } from '../types';
 
 type ResolvedThemeValue = Exclude<ThemeValue, 'system'>;
 

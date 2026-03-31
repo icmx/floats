@@ -1,11 +1,8 @@
-import type {
-  DateNumber,
-  RateNumber,
-} from '../../../../types/currency';
 import {
   formatToIsodate,
   formatToExploreNumber,
 } from '../../../../utils';
+import type { DateNumber, RateNumber } from '../../types';
 import type { ColDef, DataCell } from './DataTable.types';
 
 export const createDateColDef = (): ColDef => {

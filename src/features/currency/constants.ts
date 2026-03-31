@@ -1,4 +1,4 @@
-import type { SymbolString } from '../../types/currency';
+import type { SymbolString } from './types';
 
 export const CODE_LENGTH = 3;
 

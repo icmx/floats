@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { usePersistQueryParams } from '../stores/currency/persistQueryParamsStore';
-import type { QueryParams } from '../types/common';
+import type { QueryParams } from '../types';
 import { parseSearch, buildSearch } from '../utils';
 import { useLocationSearch } from './useLocationSearch';
 

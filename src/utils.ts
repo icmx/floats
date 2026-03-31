@@ -3,7 +3,7 @@ import {
   EXPLORE_FRACTION_DIGITS,
   CONVERT_FRACTION_DIGITS,
 } from './features/currency/constants';
-import type { QueryParams } from './types/common';
+import type { QueryParams } from './types';
 
 export const classNames = (
   init: string | (false | string)[] | Record<string, boolean>

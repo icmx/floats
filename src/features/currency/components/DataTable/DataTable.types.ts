@@ -1,8 +1,5 @@
 import type { Ref } from 'react';
-import type {
-  DateNumber,
-  RateNumber,
-} from '../../../../types/currency';
+import type { DateNumber, RateNumber } from '../../types';
 
 export type ColDisplayType = 'date' | 'rate';
 
