@@ -1,4 +1,4 @@
-import type { CODES } from '../constants/currency';
+import type { CODES } from '../features/currency/constants';
 import type { Branded } from './common';
 
 export type CodeString = (typeof CODES)[number];

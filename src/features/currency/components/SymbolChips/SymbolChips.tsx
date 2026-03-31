@@ -4,8 +4,8 @@ import {
   type ChipSelectProps,
   ChipSelect,
 } from '../../../../components/ChipSelect';
-import { SYMBOLS } from '../../../../constants/currency';
 import { useQueryParams } from '../../../../hooks/useQueryParams';
+import { SYMBOLS } from '../../constants';
 import { symbolChipsOptionsFilter } from './SymbolChips.utils';
 
 export const SymbolChips: FunctionComponent = () => {

@@ -1,6 +1,5 @@
 import { ApiCache } from '../../../api/cache';
 import { fetchString } from '../../../api/client';
-import { PIVOT_CURRENCY_CODE } from '../../../constants/currency';
 import type { Results } from '../../../types/common';
 import type {
   Currency,
@@ -15,6 +14,7 @@ import {
   splitSymbolToCodes,
   createCrossCurrency,
 } from '../../../utils/currency';
+import { PIVOT_CURRENCY_CODE } from '../constants';
 
 const cache = new ApiCache<Currency>();
 

@@ -1,4 +1,4 @@
-import type { ThemeValue } from '../types/common';
+import type { ThemeValue } from './types/common';
 
 export const THEMES: { value: ThemeValue; children: string }[] = [
   { value: 'system', children: 'System' },

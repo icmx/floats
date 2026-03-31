@@ -1,6 +1,6 @@
 import { type FunctionComponent } from 'react';
 import { BoxField } from '../../components/BoxField';
-import { THEMES } from '../../constants/common';
+import { THEMES } from '../../constants';
 import { useThemeValue } from '../../stores/common/themeValueStore';
 
 export const SettingsPage: FunctionComponent = () => {

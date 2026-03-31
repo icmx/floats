@@ -1,8 +1,8 @@
-import { LOCALES } from '../constants/common';
+import { LOCALES } from '../constants';
 import {
-  EXPLORE_FRACTION_DIGITS,
   CONVERT_FRACTION_DIGITS,
-} from '../constants/currency';
+  EXPLORE_FRACTION_DIGITS,
+} from '../features/currency/constants';
 import type { QueryParams } from '../types/common';
 
 export const classNames = (

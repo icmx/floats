@@ -1,6 +1,6 @@
 import type { ChipSelectOptionsFilter } from '../../../../components/ChipSelect';
-import { WELL_KNOWN_SYMBOLS } from '../../../../constants/currency';
 import type { SymbolString } from '../../../../types/currency';
+import { WELL_KNOWN_SYMBOLS } from '../../constants';
 
 export const symbolChipsOptionsFilter: ChipSelectOptionsFilter = (
   inputValue,

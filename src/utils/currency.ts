@@ -1,10 +1,10 @@
 import {
-  CODE_LENGTH,
   PIVOT_CURRENCY_CODE,
-  SERIES_COLORS,
   SYMBOL_LENGTH,
   SYMBOLS,
-} from '../constants/currency';
+  CODE_LENGTH,
+  SERIES_COLORS,
+} from '../features/currency/constants';
 import type {
   CodeString,
   Currency,

@@ -6,8 +6,8 @@ import {
 } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { EXPLORE_FRACTION_DIGITS } from '../../../../constants/currency';
 import { getSeriesColor } from '../../../../utils/currency';
+import { EXPLORE_FRACTION_DIGITS } from '../../constants';
 import type { DataChartProps } from './DataChart.types';
 
 const MS_3_MONTHS = 7516800000;
