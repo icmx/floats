@@ -19,13 +19,13 @@ import {
 import { EmptyFragment } from '../../features/currency/components/EmptyFragment';
 import { ErrorsFragment } from '../../features/currency/components/ErrorsFragment';
 import { SymbolChips } from '../../features/currency/components/SymbolChips';
+import { useCurrencies } from '../../features/currency/stores/currenciesStore';
 import type {
   Currency,
   SymbolString,
   DateNumber,
   RateNumber,
 } from '../../features/currency/types';
-import { useCurrencies } from '../../stores/currency/currenciesStore';
 import styles from './ExplorePage.module.css';
 
 const toChartData = (currencies: Currency[]): DataChartProps => {

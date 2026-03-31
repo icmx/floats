@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { usePersistQueryParams } from '../stores/currency/persistQueryParamsStore';
+import { usePersistQueryParams } from '../features/currency/stores/persistQueryParamsStore';
 import { buildSearch } from '../utils';
 import { useQueryParams } from './useQueryParams';
 

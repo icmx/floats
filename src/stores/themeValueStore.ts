@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import type { ThemeValue } from '../../types';
+import type { ThemeValue } from '../types';
 
 export const useThemeValueStore = create<{
   themeValue: ThemeValue;
