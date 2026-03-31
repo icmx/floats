@@ -1,7 +1,7 @@
 import { type FunctionComponent } from 'react';
 import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
-import { useQueryParamsSync } from '../../hooks/useQueryParamsSync';
-import { useRoutesUrls } from '../../hooks/useRoutesUrls';
+import { useQueryParamsSync } from '../../features/currency/hooks/useQueryParamsSync';
+import { useRoutesUrls } from '../../features/currency/hooks/useRoutesUrls';
 import { useThemeValueSync } from '../../hooks/useThemeValueSync';
 import { useTitle } from '../../hooks/useTitle';
 import { classNames } from '../../utils';

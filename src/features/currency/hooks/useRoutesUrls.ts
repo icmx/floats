@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { usePersistQueryParams } from '../features/currency/stores/persistQueryParamsStore';
-import { buildSearch } from '../utils';
+import { buildSearch } from '../../../utils';
+import { usePersistQueryParams } from '../stores/persistQueryParamsStore';
 import { useQueryParams } from './useQueryParams';
 
 export type UseRoutesUrls = {
