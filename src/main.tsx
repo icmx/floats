@@ -3,12 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { Layout } from './components/Layout';
+import { createDynamicRouteHandleTitle } from './hooks/useTitle';
 import { AboutPage } from './pages/AboutPage';
 import { ConvertPage } from './pages/ConvertPage';
 import { ExplorePage } from './pages/ExplorePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SettingsPage } from './pages/SettingsPage';
-import type { RouteHandle } from './types';
 import './index.css';
 
 const root = document.querySelector('#root');
@@ -16,20 +16,6 @@ const root = document.querySelector('#root');
 if (!root) {
   throw new Error('No #root element found');
 }
-
-const createDynamicRouteHandleTitle = (
-  title: string
-): RouteHandle['title'] => {
-  return (queryParams) => {
-    const currencies = queryParams.by.join(', ');
-
-    if (!currencies) {
-      return title;
-    }
-
-    return `${currencies} - ${title}`;
-  };
-};
 
 const router = createBrowserRouter([
   {

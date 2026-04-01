@@ -1,5 +1,10 @@
-import type { Branded } from '../../types';
+import type { Branded } from '../../types/brands';
 import { CODES } from './constants';
+
+// @todo: make more common and move
+export type QueryParams = {
+  by: string[];
+};
 
 export type CodeString = (typeof CODES)[number];
 

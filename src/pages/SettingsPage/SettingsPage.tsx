@@ -1,7 +1,7 @@
 import { type FunctionComponent, type ReactNode } from 'react';
 import { BoxField } from '../../components/BoxField';
 import { useThemeValue } from '../../stores/themeValueStore';
-import type { ThemeValue } from '../../types';
+import type { ThemeValue } from '../../types/themes';
 
 const THEMES: { value: ThemeValue; children: ReactNode }[] = [
   { value: 'system', children: 'System' },
