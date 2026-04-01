@@ -1,7 +1,5 @@
-import {
-  formatToIsodate,
-  formatToExploreNumber,
-} from '../../../../utils';
+import { formatToIsoDate } from '../../../../lib/format';
+import { formatToExploreNumber } from '../../lib/format';
 import type { DateNumber, RateNumber } from '../../types';
 import type { ColDef, DataCell } from './DataTable.types';
 
@@ -26,7 +24,7 @@ export const createDateCell = (
 ): DataCell<DateNumber> => {
   return {
     value,
-    displayValue: formatToIsodate(value),
+    displayValue: formatToIsoDate(value),
   };
 };
 
