@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
+import { isSymbolString } from '../lib/symbols';
 import { loadCurrenciesStore } from '../stores/currenciesStore';
-import { isSymbolString } from '../utils';
 import { useQueryParams } from './useQueryParams';
 
 export const useQueryParamsSync = (): void => {

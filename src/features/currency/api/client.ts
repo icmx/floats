@@ -2,19 +2,19 @@ import { API_BASE_URL } from '../../../config/env';
 import { Cached } from '../../../lib/cached';
 import type { Results } from '../../../types/results';
 import { PIVOT_CODE } from '../config/codes';
+import {
+  createPivotCurrency,
+  createCurrency,
+  createCrossCurrency,
+} from '../lib/currency';
+import { splitSymbolToCodes } from '../lib/symbols';
+import { parseTicks } from '../lib/ticks';
 import type {
   Currency,
   CodeString,
   SymbolString,
   Tick,
 } from '../types';
-import {
-  parseCsv,
-  createPivotCurrency,
-  createCurrency,
-  splitSymbolToCodes,
-  createCrossCurrency,
-} from '../utils';
 
 const cached = new Cached<Currency>();
 
@@ -35,7 +35,7 @@ export const fetchString = async (url: string): Promise<string> => {
 export const fetchTicks = async (url: string): Promise<Tick[]> => {
   const csv = await fetchString(`${PIVOT_CODE}/${url}`);
 
-  const data = parseCsv(csv);
+  const data = parseTicks(csv);
   return data;
 };
 

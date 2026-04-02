@@ -10,7 +10,7 @@ import type {
   CodeString,
   Currency,
 } from '../../features/currency/types';
-import { extractCurrencyCodes } from '../../features/currency/utils';
+import { getCurrencyCodes } from '../../features/currency/lib/currency';
 
 export type ConvertersData = {
   rates: {
@@ -22,7 +22,7 @@ export type ConvertersData = {
 const toData = (currencies: Currency[]): ConvertersData => {
   const data: ConvertersData = {
     rates: currencies.map((currency) => {
-      const [baseCode, quoteCode] = extractCurrencyCodes(currency);
+      const [baseCode, quoteCode] = getCurrencyCodes(currency);
 
       return {
         symbol: [baseCode, quoteCode],
