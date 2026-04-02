@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useLocationSearch } from '../../../hooks/useLocationSearch';
+import { useLocationSearch } from '@/hooks/useLocationSearch';
 import { parseSearch, buildSearch } from '../lib/search';
 import { usePersistQueryParams } from '../stores/persistQueryParamsStore';
 import type { QueryParams } from '../types';

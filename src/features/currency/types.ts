@@ -1,4 +1,4 @@
-import type { Branded } from '../../types/brands';
+import type { Branded } from '@/types/brands';
 import type { CODES } from './config/codes';
 
 export type CodeString = (typeof CODES)[number];

@@ -1,6 +1,6 @@
-import { API_BASE_URL } from '../../../config/env';
-import { Cached } from '../../../lib/cached';
-import type { Results } from '../../../types/results';
+import { API_BASE_URL } from '@/config/env';
+import { Cached } from '@/lib/cached';
+import type { Results } from '@/types/results';
 import { PIVOT_CODE } from '../config/codes';
 import {
   createPivotCurrency,

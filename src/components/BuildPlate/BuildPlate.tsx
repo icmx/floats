@@ -1,5 +1,5 @@
 import type { FunctionComponent } from 'react';
-import { formatToIsoDateTime } from '../../lib/format';
+import { formatToIsoDateTime } from '@/lib/format';
 import styles from './BuildPlate.module.css';
 
 const getCommitRef = (): string => {

@@ -1,31 +1,31 @@
 import { type FunctionComponent, useRef, useEffect } from 'react';
-import { Alert } from '../../components/Alert';
-import { Loading } from '../../components/Loading';
+import { Alert } from '@/components/Alert';
+import { Loading } from '@/components/Loading';
 import {
-  type DataChartHandle,
   type DataChartProps,
+  type DataChartHandle,
   DataChart,
-} from '../../features/currency/components/DataChart';
+} from '@/features/currency/components/DataChart';
 import {
   type DataRow,
   type DataTableProps,
   type DataTableHandle,
-  createDateCell,
   createDateColDef,
-  createRateCell,
   createRateColDef,
+  createDateCell,
+  createRateCell,
   DataTable,
-} from '../../features/currency/components/DataTable';
-import { EmptyFragment } from '../../features/currency/components/EmptyFragment';
-import { ErrorsFragment } from '../../features/currency/components/ErrorsFragment';
-import { SymbolChips } from '../../features/currency/components/SymbolChips';
-import { useCurrencies } from '../../features/currency/stores/currenciesStore';
+} from '@/features/currency/components/DataTable';
+import { EmptyFragment } from '@/features/currency/components/EmptyFragment';
+import { ErrorsFragment } from '@/features/currency/components/ErrorsFragment';
+import { SymbolChips } from '@/features/currency/components/SymbolChips';
+import { useCurrencies } from '@/features/currency/stores/currenciesStore';
 import type {
   Currency,
   SymbolString,
   DateNumber,
   RateNumber,
-} from '../../features/currency/types';
+} from '@/features/currency/types';
 import styles from './ExplorePage.module.css';
 
 const toChartData = (currencies: Currency[]): DataChartProps => {

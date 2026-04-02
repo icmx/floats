@@ -3,8 +3,8 @@ import {
   useRef,
   type FunctionComponent,
 } from 'react';
-import { Bulb } from '../../../../components/Bulb';
-import { classNames } from '../../../../lib/classNames';
+import { Bulb } from '@/components/Bulb';
+import { classNames } from '@/lib/classNames';
 import { getSeriesColor } from '../../utils';
 import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';

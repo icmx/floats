@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Alert } from '../../components/Alert';
+import { Alert } from '@/components/Alert';
 
 export const NotFoundPage: FunctionComponent = () => {
   const { pathname } = useLocation();

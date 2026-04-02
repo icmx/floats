@@ -3,7 +3,7 @@ import {
   type ChipSelectOption,
   type ChipSelectProps,
   ChipSelect,
-} from '../../../../components/ChipSelect';
+} from '@/components/ChipSelect';
 import { SYMBOLS } from '../../constants';
 import { useQueryParams } from '../../hooks/useQueryParams';
 import { symbolChipsOptionsFilter } from './SymbolChips.utils';

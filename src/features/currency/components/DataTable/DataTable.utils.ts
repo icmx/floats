@@ -1,4 +1,4 @@
-import { formatToIsoDate } from '../../../../lib/format';
+import { formatToIsoDate } from '@/lib/format';
 import { formatToExploreNumber } from '../../lib/format';
 import type { DateNumber, RateNumber } from '../../types';
 import type { ColDef, DataCell } from './DataTable.types';

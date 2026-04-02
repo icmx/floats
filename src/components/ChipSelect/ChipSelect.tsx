@@ -3,7 +3,7 @@ import {
   type FunctionComponent,
   type KeyboardEvent,
 } from 'react';
-import { classNames } from '../../lib/classNames';
+import { classNames } from '@/lib/classNames';
 import { Chip } from '../Chip';
 import { useChipSelect } from './hooks/useChipSelect';
 import { useClickOutside } from './hooks/useClickOutside';

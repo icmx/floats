@@ -1,5 +1,5 @@
 import { useMemo, type FunctionComponent } from 'react';
-import { classNames } from '../../../../../lib/classNames';
+import { classNames } from '@/lib/classNames';
 import type { ColDef, DataRow } from '../DataTable.types';
 import styles from '../DataTable.module.css';
 
