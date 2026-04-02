@@ -1,4 +1,4 @@
-import { PIVOT_CURRENCY_CODE } from './config/codes';
+import { PIVOT_CODE } from './config/codes';
 import {
   SYMBOL_LENGTH,
   SYMBOLS,
@@ -184,7 +184,7 @@ export const createCurrency = (
  * @todo Test this entry
  */
 export const createPivotCurrency = (): Currency => {
-  return createCurrency(PIVOT_CURRENCY_CODE, PIVOT_CURRENCY_CODE, []);
+  return createCurrency(PIVOT_CODE, PIVOT_CODE, []);
 };
 
 /**
@@ -292,9 +292,7 @@ export const createCrossCurrency = (
  * @todo Test this entry
  */
 export const isPivotCurrency = (currency: Currency): boolean => {
-  return (
-    currency.head[1] === `${PIVOT_CURRENCY_CODE}${PIVOT_CURRENCY_CODE}`
-  );
+  return currency.head[1] === `${PIVOT_CODE}${PIVOT_CODE}`;
 };
 
 ////////////////////////////////////////////////////////////////////////

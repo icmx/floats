@@ -1,7 +1,7 @@
-import { CODES, PIVOT_CURRENCY_CODE } from './config/codes';
+import { CODES, PIVOT_CODE } from './config/codes';
 import type { SymbolString } from './types';
 
-export const CODE_LENGTH = PIVOT_CURRENCY_CODE.length;
+export const CODE_LENGTH = PIVOT_CODE.length;
 
 export const SYMBOL_LENGTH = CODE_LENGTH * 2;
 

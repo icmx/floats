@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '../../../config/env';
 import { Cached } from '../../../lib/cached';
 import type { Results } from '../../../types/results';
-import { PIVOT_CURRENCY_CODE } from '../config/codes';
+import { PIVOT_CODE } from '../config/codes';
 import type {
   Currency,
   DateRate,
@@ -35,7 +35,7 @@ export const fetchString = async (url: string): Promise<string> => {
 export const fetchRateTuples = async (
   url: string
 ): Promise<DateRate[]> => {
-  const csv = await fetchString(`${PIVOT_CURRENCY_CODE}/${url}`);
+  const csv = await fetchString(`${PIVOT_CODE}/${url}`);
 
   const data = parseCsv(csv);
   return data;
@@ -45,7 +45,7 @@ export const fetchCurrencyByCode = async (
   code: CodeString
 ): Promise<Currency> => {
   return cached.resolve(code, async () => {
-    if (code === PIVOT_CURRENCY_CODE) {
+    if (code === PIVOT_CODE) {
       return createPivotCurrency();
     }
 
@@ -54,10 +54,7 @@ export const fetchCurrencyByCode = async (
       fetchRateTuples(`${code}.latest.csv`),
     ]);
 
-    return createCurrency(PIVOT_CURRENCY_CODE, code, [
-      ...data,
-      ...latestData,
-    ]);
+    return createCurrency(PIVOT_CODE, code, [...data, ...latestData]);
   });
 };
 
