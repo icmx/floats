@@ -1,10 +1,5 @@
 import type { Branded } from '../../types/brands';
-import { CODES } from './constants';
-
-// @todo: make more common and move
-export type QueryParams = {
-  by: string[];
-};
+import type { CODES } from './config/codes';
 
 export type CodeString = (typeof CODES)[number];
 
@@ -20,3 +15,8 @@ export type Currency = Readonly<{
   head: ['date', SymbolString];
   body: DateRate[];
 }>;
+
+// @todo: make more common and move
+export type QueryParams = {
+  by: string[];
+};

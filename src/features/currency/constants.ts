@@ -1,151 +1,11 @@
+import { CODES, PIVOT_CURRENCY_CODE } from './config/codes';
 import type { SymbolString } from './types';
 
-export const CODE_LENGTH = 3;
+export const CODE_LENGTH = PIVOT_CURRENCY_CODE.length;
 
-export const CODES = [
-  'AED',
-  'AFN',
-  'ALL',
-  'AMD',
-  'AOA',
-  'ARS',
-  'AUD',
-  'AWG',
-  'AZN',
-  'BAM',
-  'BBD',
-  'BDT',
-  'BHD',
-  'BIF',
-  'BMD',
-  'BND',
-  'BOB',
-  'BRL',
-  'BSD',
-  'BTN',
-  'BWP',
-  'BYN',
-  'BZD',
-  'CAD',
-  'CDF',
-  'CHF',
-  'CLP',
-  'CNY',
-  'COP',
-  'CRC',
-  'CUP',
-  'CVE',
-  'CZK',
-  'DJF',
-  'DKK',
-  'DOP',
-  'DZD',
-  'EGP',
-  'ETB',
-  'EUR',
-  'FJD',
-  'GBP',
-  'GEL',
-  'GHS',
-  'GMD',
-  'GNF',
-  'GTQ',
-  'GYD',
-  'HKD',
-  'HNL',
-  'HTG',
-  'HUF',
-  'IDR',
-  'ILS',
-  'INR',
-  'IQD',
-  'IRR',
-  'ISK',
-  'JMD',
-  'JOD',
-  'JPY',
-  'KES',
-  'KGS',
-  'KHR',
-  'KMF',
-  'KRW',
-  'KWD',
-  'KYD',
-  'KZT',
-  'LAK',
-  'LBP',
-  'LKR',
-  'LRD',
-  'LSL',
-  'LYD',
-  'MAD',
-  'MDL',
-  'MGA',
-  'MKD',
-  'MOP',
-  'MRU',
-  'MUR',
-  'MVR',
-  'MWK',
-  'MXN',
-  'MYR',
-  'MZN',
-  'NAD',
-  'NGN',
-  'NIO',
-  'NOK',
-  'NPR',
-  'NZD',
-  'OMR',
-  'PEN',
-  'PGK',
-  'PHP',
-  'PKR',
-  'PLN',
-  'PYG',
-  'QAR',
-  'RON',
-  'RSD',
-  'RUB',
-  'RWF',
-  'SAR',
-  'SBD',
-  'SCR',
-  'SDG',
-  'SEK',
-  'SGD',
-  'SOS',
-  'SRD',
-  'SZL',
-  'THB',
-  'TJS',
-  'TMT',
-  'TND',
-  'TRY',
-  'TTD',
-  'TWD',
-  'TZS',
-  'UAH',
-  'UGX',
-  'USD',
-  'UYU',
-  'UZS',
-  'VES',
-  'VND',
-  'XAF',
-  'XCD',
-  'XOF',
-  'XPF',
-  'YER',
-  'ZAR',
-  'ZMW',
-] as const;
+export const SYMBOL_LENGTH = CODE_LENGTH * 2;
 
-export const PIVOT_CURRENCY_CODE =
-  'EUR' satisfies (typeof CODES)[number];
-
-export const SYMBOL_LENGTH = 6;
-
+// @todo: try to avoid, this is too heavy
 export const SYMBOLS = CODES.map((baseCode) => {
   return CODES.filter((code) => {
     return code !== baseCode;
@@ -153,15 +13,6 @@ export const SYMBOLS = CODES.map((baseCode) => {
     return `${baseCode}${quoteCode}` satisfies SymbolString;
   });
 }).flat();
-
-export const SERIES_COLORS = [
-  'var(--color-series-indigo)',
-  'var(--color-series-green)',
-  'var(--color-series-amber)',
-  'var(--color-series-pink)',
-  'var(--color-series-cyan)',
-  'var(--color-series-orange)',
-];
 
 // order matters
 export const WELL_KNOWN_SYMBOLS: SymbolString[] = [
@@ -175,3 +26,12 @@ export const WELL_KNOWN_SYMBOLS: SymbolString[] = [
 export const EXPLORE_FRACTION_DIGITS = 6;
 
 export const CONVERT_FRACTION_DIGITS = 2;
+
+export const SERIES_COLORS = [
+  'var(--color-series-indigo)',
+  'var(--color-series-green)',
+  'var(--color-series-amber)',
+  'var(--color-series-pink)',
+  'var(--color-series-cyan)',
+  'var(--color-series-orange)',
+];

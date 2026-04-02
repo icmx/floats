@@ -1,5 +1,5 @@
+import { PIVOT_CURRENCY_CODE } from './config/codes';
 import {
-  PIVOT_CURRENCY_CODE,
   SYMBOL_LENGTH,
   SYMBOLS,
   CODE_LENGTH,
