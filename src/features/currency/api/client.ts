@@ -4,9 +4,9 @@ import type { Results } from '../../../types/results';
 import { PIVOT_CODE } from '../config/codes';
 import type {
   Currency,
-  DateRate,
   CodeString,
   SymbolString,
+  Tick,
 } from '../types';
 import {
   parseCsv,
@@ -32,9 +32,7 @@ export const fetchString = async (url: string): Promise<string> => {
   return text;
 };
 
-export const fetchRateTuples = async (
-  url: string
-): Promise<DateRate[]> => {
+export const fetchTicks = async (url: string): Promise<Tick[]> => {
   const csv = await fetchString(`${PIVOT_CODE}/${url}`);
 
   const data = parseCsv(csv);
@@ -49,12 +47,12 @@ export const fetchCurrencyByCode = async (
       return createPivotCurrency();
     }
 
-    const [data, latestData] = await Promise.all([
-      fetchRateTuples(`${code}.csv`),
-      fetchRateTuples(`${code}.latest.csv`),
+    const [ticks, latestTicks] = await Promise.all([
+      fetchTicks(`${code}.csv`),
+      fetchTicks(`${code}.latest.csv`),
     ]);
 
-    return createCurrency(PIVOT_CODE, code, [...data, ...latestData]);
+    return createCurrency(PIVOT_CODE, code, [...ticks, ...latestTicks]);
   });
 };
 

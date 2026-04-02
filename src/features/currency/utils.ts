@@ -6,12 +6,12 @@ import {
   SERIES_COLORS,
 } from './constants';
 import type {
-  DateRate,
   DateNumber,
   RateNumber,
   CodeString,
   Currency,
   SymbolString,
+  Tick,
 } from './types';
 
 // @todo: this file is too large and must be splitted later by separators
@@ -38,7 +38,7 @@ import type {
  */
 
 ////////////////////////////////////////////////////////////////////////
-// DateRate utils:
+// Ticks utils:
 //
 
 /**
@@ -51,13 +51,13 @@ export const PARSABLE_CSV_LINE_PATTERN =
  * @todo Document this entry
  * @todo Test this entry
  */
-export const parseCsv = (csv: string): DateRate[] => {
+export const parseCsv = (csv: string): Tick[] => {
   if (!csv) {
     throw new Error(`Empty CSV text passed: "${csv}"`);
   }
 
   const lines = csv.trim().split('\n');
-  const dateRates: DateRate[] = [];
+  const ticks: Tick[] = [];
 
   for (const line of lines) {
     if (!PARSABLE_CSV_LINE_PATTERN.test(line)) {
@@ -66,13 +66,10 @@ export const parseCsv = (csv: string): DateRate[] => {
 
     const [dateText, rateText] = line.split(',');
 
-    dateRates.push([
-      parseDateNumber(dateText),
-      parseRateNumber(rateText),
-    ]);
+    ticks.push([parseDateNumber(dateText), parseRateNumber(rateText)]);
   }
 
-  return dateRates;
+  return ticks;
 };
 
 /**
@@ -128,18 +125,18 @@ export const parseRateNumber = (text: string): RateNumber => {
  * @todo Document this entry
  * @todo Test this entry
  */
-export const alignDateRates = (dateRates: DateRate[]): DateRate[] => {
-  if (dateRates.length < 2) {
-    return dateRates;
+export const alignTicks = (ticks: Tick[]): Tick[] => {
+  if (ticks.length < 2) {
+    return ticks;
   }
 
   const MS_1_DAY = 86_400_000;
-  const result: DateRate[] = [];
+  const result: Tick[] = [];
 
-  let expectedDate = dateRates[0][0];
-  let lastRate = dateRates[0][1];
+  let expectedDate = ticks[0][0];
+  let lastRate = ticks[0][1];
 
-  for (const [date, rate] of dateRates) {
+  for (const [date, rate] of ticks) {
     if (expectedDate > date) {
       throw new Error(`Invalid order at: ${date}:${rate}`);
     }
@@ -171,11 +168,11 @@ export const alignDateRates = (dateRates: DateRate[]): DateRate[] => {
 export const createCurrency = (
   baseCode: CodeString,
   quoteCode: CodeString,
-  body: DateRate[]
+  body: Tick[]
 ): Currency => {
   return {
     head: ['date', `${baseCode}${quoteCode}`],
-    body: alignDateRates(body),
+    body: alignTicks(body),
   };
 };
 

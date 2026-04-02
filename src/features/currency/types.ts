@@ -9,11 +9,11 @@ export type DateNumber = Branded<number, 'DateNumber'>;
 
 export type RateNumber = Branded<number, 'RateNumber'> | null;
 
-export type DateRate = [DateNumber, RateNumber];
+export type Tick = [DateNumber, RateNumber];
 
 export type Currency = Readonly<{
   head: ['date', SymbolString];
-  body: DateRate[];
+  body: Tick[];
 }>;
 
 // @todo: make more common and move
