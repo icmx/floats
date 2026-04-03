@@ -1,3 +1,6 @@
+/**
+ * @todo Test this entry
+ */
 export class Cached<T> {
   private _entries: Map<string, Promise<T>>;
 

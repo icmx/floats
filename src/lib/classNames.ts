@@ -1,39 +1,45 @@
-// @todo: better init type
-export const classNames = (
-  init: string | (false | string)[] | Record<string, boolean>
-): string => {
+export type ClassNamesInit =
+  | Record<string, boolean | null | undefined>
+  | (string | false | null | undefined)[]
+  | string
+  | null
+  | undefined;
+
+export type ClassNamesResult = string | undefined;
+
+/**
+ * @todo Test this entry
+ */
+export const classNames = (init: ClassNamesInit): ClassNamesResult => {
   if (!init) {
-    return '';
+    return undefined;
   }
 
   if (typeof init === 'string') {
-    return init.trim();
+    return init.trim().replace(/\s+/g, ' ');
   }
 
   if (Array.isArray(init)) {
-    return classNames(
-      init
-        .filter((i): i is string => {
-          return typeof i === 'string' && !!i;
-        })
-        .map((i) => {
-          return i.trim();
-        })
-        .join(' ')
-    );
+    return init
+      .filter((entry): entry is string => {
+        return typeof entry === 'string' && !!entry;
+      })
+      .map((entry) => {
+        return entry.trim().replace(/\s+/g, ' ');
+      })
+      .join(' ');
   }
 
   if (typeof init === 'object') {
-    const keys = Array.from(Object.entries(init))
+    return Array.from(Object.entries(init))
       .filter(([, value]) => {
         return !!value;
       })
       .map(([key]) => {
-        return key;
-      });
-
-    return classNames(keys);
+        return key.trim().replace(/\s+/g, ' ');
+      })
+      .join(' ');
   }
 
-  throw new Error('Unable to process class names');
+  throw new Error(`Invalid class init: ${init}`);
 };

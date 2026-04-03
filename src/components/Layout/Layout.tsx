@@ -16,7 +16,7 @@ export const Layout: FunctionComponent = () => {
 
   const handleClassName = ({
     isActive,
-  }: NavLinkRenderProps): string => {
+  }: NavLinkRenderProps): string | undefined => {
     return classNames({
       [styles.HeaderLink]: true,
       [styles.isActive]: isActive,
