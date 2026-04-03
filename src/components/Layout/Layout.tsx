@@ -1,7 +1,8 @@
 import { type FunctionComponent } from 'react';
 import { NavLink, Outlet, type NavLinkRenderProps } from 'react-router';
+import { PATHS } from '@/config/paths';
 import { useQueryParamsSync } from '@/features/currency/hooks/useQueryParamsSync';
-import { useRoutesUrls } from '@/features/currency/hooks/useRoutesUrls';
+import { useRoutePaths } from '@/features/currency/hooks/useRoutePaths';
 import { useThemeValueSync } from '@/hooks/useThemeValueSync';
 import { useTitle } from '@/hooks/useTitle';
 import { classNames } from '@/lib/classNames';
@@ -12,7 +13,7 @@ export const Layout: FunctionComponent = () => {
   useQueryParamsSync();
 
   const title = useTitle();
-  const urls = useRoutesUrls();
+  const routePaths = useRoutePaths();
 
   const handleClassName = ({
     isActive,
@@ -29,18 +30,24 @@ export const Layout: FunctionComponent = () => {
 
       <header className={styles.LayoutHeader}>
         <div className={styles.HeaderGroup}>
-          <NavLink className={handleClassName} to={urls.explore}>
+          <NavLink className={handleClassName} to={routePaths.explore}>
             Explore
           </NavLink>
-          <NavLink className={handleClassName} to={urls.convert}>
+          <NavLink className={handleClassName} to={routePaths.convert}>
             Convert
           </NavLink>
         </div>
         <div className={styles.HeaderGroup}>
-          <NavLink className={handleClassName} to="/about">
+          <NavLink
+            className={handleClassName}
+            to={PATHS.pages.about.path}
+          >
             About
           </NavLink>
-          <NavLink className={handleClassName} to="/settings">
+          <NavLink
+            className={handleClassName}
+            to={PATHS.pages.settings.path}
+          >
             Settings
           </NavLink>
         </div>

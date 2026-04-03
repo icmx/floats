@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
 import { Layout } from './components/Layout';
+import { PATHS } from './config/paths';
 import { createDynamicRouteHandleTitle } from './hooks/useTitle';
 import { AboutPage } from './pages/AboutPage';
 import { ConvertPage } from './pages/ConvertPage';
@@ -25,32 +26,34 @@ const router = createBrowserRouter([
     },
     children: [
       {
-        path: '/',
-        element: <Navigate to="/explore" replace={true} />,
+        path: PATHS.root.path,
+        element: (
+          <Navigate to={PATHS.pages.explore.path} replace={true} />
+        ),
       },
       {
-        path: '/explore',
+        path: PATHS.pages.explore.path,
         element: <ExplorePage />,
         handle: {
           title: createDynamicRouteHandleTitle('Explore'),
         },
       },
       {
-        path: '/convert',
+        path: PATHS.pages.convert.path,
         element: <ConvertPage />,
         handle: {
           title: createDynamicRouteHandleTitle('Convert'),
         },
       },
       {
-        path: '/about',
+        path: PATHS.pages.about.path,
         element: <AboutPage />,
         handle: {
           title: 'About',
         },
       },
       {
-        path: '/settings',
+        path: PATHS.pages.settings.path,
         element: <SettingsPage />,
         handle: {
           title: 'Settings',
