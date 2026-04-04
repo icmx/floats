@@ -1,8 +1,4 @@
-import {
-  useImperativeHandle,
-  useRef,
-  type FunctionComponent,
-} from 'react';
+import { useImperativeHandle, useRef, type FunctionComponent } from 'react';
 import { Bulb } from '@/components/Bulb';
 import { classNames } from '@/lib/classNames';
 import { getSeriesColor } from '../../utils';
@@ -42,12 +38,11 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
 
   const hasMultipleRateColumns = colSpan > 2; // date + more than 2 rate columns
 
-  const { handleScroll, topSpace, indexes, bottomSpace } =
-    useVirtualRowScroll({
-      containerRef,
-      rowRef,
-      rowsCount,
-    });
+  const { handleScroll, topSpace, indexes, bottomSpace } = useVirtualRowScroll({
+    containerRef,
+    rowRef,
+    rowsCount,
+  });
 
   const { isSelected, handleCellMouseDown, handleCellMouseEnter } =
     useSelection({
@@ -61,19 +56,21 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
       ref={containerRef}
       onScroll={handleScroll}
     >
-      <table>
-        <thead>
+      <table className={styles.DataTable}>
+        <thead className={styles.DataTableHeader}>
           <tr>
             {colDefs.map((colDef, colIndex) => {
-              const shouldShowBulb =
-                hasMultipleRateColumns && colIndex > 0;
+              const shouldShowBulb = hasMultipleRateColumns && colIndex > 0;
 
               const color = getSeriesColor(colIndex - 1);
 
               return (
                 <th
                   key={colDef.key}
-                  className={styles[`is-${colDef.displayType}`]}
+                  className={classNames([
+                    styles.DataTableHeadCell,
+                    styles[`is-${colDef.displayType}`],
+                  ])}
                 >
                   {shouldShowBulb && <Bulb color={color} />}
                   {colDef.label}
@@ -85,9 +82,7 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
         <tbody>
           <XSizingRow colDefs={colDefs} rows={rows} />
 
-          {topSpace > 0 && (
-            <YSpacingRow colSpan={colSpan} height={topSpace} />
-          )}
+          {topSpace > 0 && <YSpacingRow colSpan={colSpan} height={topSpace} />}
 
           {indexes.map((rowIndex) => {
             const row = rows[rowIndex];
@@ -107,10 +102,11 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
                   return (
                     <td
                       key={`cell-${colDef.key}`}
-                      className={classNames({
-                        [styles[`is-${colDef.displayType}`]]: true,
-                        [styles['is-selected']]: selected,
-                      })}
+                      className={classNames([
+                        styles.DataTableDataCell,
+                        styles[`is-${colDef.displayType}`],
+                        selected && styles['is-selected'],
+                      ])}
                       onMouseDown={(event) =>
                         handleCellMouseDown(event, {
                           rowIndex,

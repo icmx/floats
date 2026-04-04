@@ -40,6 +40,7 @@ export const XSizingRow: FunctionComponent<{
           <td
             key={`sizing-${colDef.key}`}
             className={classNames([
+              styles.DataTableDataCell,
               styles[`is-${colDef.displayType}`],
               styles.XSizingCol,
             ])}
