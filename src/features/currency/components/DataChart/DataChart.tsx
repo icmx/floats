@@ -4,8 +4,12 @@ import {
   useRef,
   type FunctionComponent,
 } from 'react';
-import { type HighchartsReactRefObject } from '@highcharts/react';
-import { StockChart } from '@highcharts/react/Stock';
+import {
+  Legend,
+  Tooltip,
+  type HighchartsReactRefObject,
+} from '@highcharts/react';
+import { StockChart, StockSeries } from '@highcharts/react/Stock';
 import { EXPLORE_FRACTION_DIGITS, MS_3_MONTHS } from '../../constants';
 import { getSeriesColor } from '../../utils';
 import type { DataChartProps } from './DataChart.types';
@@ -144,7 +148,6 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
             },
           ],
         },
-
         accessibility: {
           enabled: false,
         },
@@ -155,33 +158,38 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
           itemStyle: {
             color: 'var(--color-text)',
           },
-
-          enabled: !isSingleSeries,
-          verticalAlign: 'top',
-          layout: 'horizontal',
-          align: 'center',
         },
-        series: series.map((value, index) => {
-          const type = isSingleSeries ? 'area' : 'line';
-          const color = getSeriesColor(index);
-
-          return {
-            ...value,
-            type,
-            color,
-            animation: true,
-            tooltip: {
-              valueDecimals: EXPLORE_FRACTION_DIGITS,
-              pointFormat: '{series.name}: {point.y}',
-            },
-          };
-        }),
         plotOptions: {
           area: {
             threshold: null,
           },
         },
       }}
-    />
+    >
+      <Legend
+        enabled={!isSingleSeries}
+        verticalAlign="top"
+        layout="horizontal"
+        align="center"
+      />
+      <Tooltip
+        valueDecimals={EXPLORE_FRACTION_DIGITS}
+        pointFormat="{series.name}: {point.y}"
+      />
+      {series.map((value, index) => {
+        const type = isSingleSeries ? 'area' : 'line';
+        const color = getSeriesColor(index);
+
+        return (
+          <StockSeries
+            type={type}
+            options={{
+              color,
+            }}
+            {...value}
+          />
+        );
+      })}
+    </StockChart>
   );
 };
