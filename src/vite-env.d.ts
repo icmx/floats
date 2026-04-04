@@ -1,6 +1,6 @@
 declare const __DEFINE_COMMIT_REF__: string;
 
-declare const __DEFINE_BUILD_TIMESTAMP__: string;
+declare const __DEFINE_BUILD_TIMESTAMP__: number;
 
 interface ViteTypeOptions {
   strictImportMetaEnv: unknown;

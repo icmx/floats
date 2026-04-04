@@ -10,7 +10,7 @@ export default defineConfig({
   envPrefix: 'BUNDLE_',
   plugins: [react()],
   define: {
-    __DEFINE_COMMIT_REF__: JSON.stringify(process.env.COMMIT_REF || 0),
+    __DEFINE_COMMIT_REF__: JSON.stringify(process.env.COMMIT_REF || ''),
     __DEFINE_BUILD_TIMESTAMP__: JSON.stringify(Date.now()),
   },
   build: {

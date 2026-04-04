@@ -82,9 +82,7 @@ export const useVirtualRowScroll = ({
       return;
     }
 
-    requestAnimationFrame(() => {
-      setScrollTop(container.scrollTop);
-    });
+    setScrollTop(container.scrollTop);
   }, [containerRef]);
 
   const visualCount =

@@ -5,7 +5,6 @@ import { splitSymbolToCodes } from './symbols';
 import { alignTicks } from './ticks';
 
 /**
- * @todo Maybe remove alignment (I'm not sure)
  * @todo Document this entry
  * @todo Test this entry
  */
@@ -29,7 +28,6 @@ export const createPivotCurrency = (): Currency => {
 };
 
 /**
- * @todo Maybe split for utility ffunctions
  * @todo Document this entry
  * @todo Test this entry
  */

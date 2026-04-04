@@ -11,7 +11,7 @@ export const usePersistQueryParamsStore = create<{
     (set) => {
       return {
         persistQueryParams: {
-          by: [] as string[],
+          by: [],
         },
         setPersistQueryParams: (persistQueryParams) => {
           set({ persistQueryParams });
