@@ -4,8 +4,8 @@ import {
   useRef,
   type FunctionComponent,
 } from 'react';
-import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
+import { type HighchartsReactRefObject } from '@highcharts/react';
+import { StockChart } from '@highcharts/react/Stock';
 import { EXPLORE_FRACTION_DIGITS, MS_3_MONTHS } from '../../constants';
 import { getSeriesColor } from '../../utils';
 import type { DataChartProps } from './DataChart.types';
@@ -14,7 +14,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
   series,
   ref,
 }) => {
-  const chartRef = useRef<HighchartsReact.RefObject>(null);
+  const chartRef = useRef<HighchartsReactRefObject>(null);
 
   useImperativeHandle(ref, () => {
     return {
@@ -59,10 +59,8 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
   const isSingleSeries = series.length === 1;
 
   return (
-    <HighchartsReact
+    <StockChart
       ref={chartRef}
-      highcharts={Highcharts}
-      constructorType={'stockChart'}
       containerProps={{
         style: {
           height: '65vh',

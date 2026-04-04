@@ -17,11 +17,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'highcharts-vendor': [
-            'highcharts/highstock',
-            'highcharts-react-official',
-          ],
+          // two separate entries makes smaller chunks for highcharts case
+          'highcharts-vendor': ['@highcharts/react'],
+          'highcharts-stock-vendor': ['@highcharts/react/Stock'],
         },
       },
     },
