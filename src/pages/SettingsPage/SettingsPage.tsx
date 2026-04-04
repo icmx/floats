@@ -10,7 +10,7 @@ const THEMES: { value: ThemeValue; children: ReactNode }[] = [
 ];
 
 export const SettingsPage: FunctionComponent = () => {
-  const [themeValue, setThemeValue] = useThemeValue();
+  const { themeValue, setThemeValue } = useThemeValue();
 
   return (
     <>

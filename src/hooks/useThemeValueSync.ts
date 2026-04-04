@@ -10,9 +10,7 @@ const getMatchingThemeValue = (): ResolvedThemeValue => {
   return matchMedia(QUERY).matches ? 'dark' : 'light';
 };
 
-const resolveThemeValue = (
-  themeValue: ThemeValue
-): ResolvedThemeValue => {
+const resolveThemeValue = (themeValue: ThemeValue): ResolvedThemeValue => {
   if (themeValue !== 'system') {
     return themeValue;
   }
@@ -26,7 +24,7 @@ const applyThemeValue = (themeValue: ThemeValue): void => {
 };
 
 export const useThemeValueSync = (): void => {
-  const [themeValue] = useThemeValue();
+  const { themeValue } = useThemeValue();
 
   useEffect(() => {
     applyThemeValue(resolveThemeValue(themeValue));
