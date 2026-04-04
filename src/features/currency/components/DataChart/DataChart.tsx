@@ -185,6 +185,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
             type={type}
             options={{
               color,
+              showInNavigator: true,
             }}
             {...value}
           />
