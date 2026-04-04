@@ -1,9 +1,6 @@
+import { MS_1_DAY } from '../constants';
 import type { Tick } from '../types';
-import {
-  parseDateNumber,
-  parseRateNumber,
-  toDateNumber,
-} from './numbers';
+import { parseDateNumber, parseRateNumber, toDateNumber } from './numbers';
 
 /**
  * @todo Document this entry
@@ -45,7 +42,6 @@ export const alignTicks = (ticks: Tick[]): Tick[] => {
     return ticks;
   }
 
-  const MS_1_DAY = 86_400_000;
   const result: Tick[] = [];
 
   let expectedDate = ticks[0][0];

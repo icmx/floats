@@ -6,11 +6,9 @@ import {
 } from 'react';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import { EXPLORE_FRACTION_DIGITS } from '../../constants';
+import { EXPLORE_FRACTION_DIGITS, MS_3_MONTHS } from '../../constants';
 import { getSeriesColor } from '../../utils';
 import type { DataChartProps } from './DataChart.types';
-
-const MS_3_MONTHS = 7516800000;
 
 export const DataChart: FunctionComponent<DataChartProps> = ({
   series,
