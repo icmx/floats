@@ -1,12 +1,12 @@
 import {
-  useRef,
-  useState,
-  useCallback,
-  useEffect,
   type MouseEvent as SyntheticMouseEvent,
   type RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
-import type { DataRow } from '../DataTable.types';
+import { type DataRow } from '../DataTable.types';
 
 export type Position = { rowIndex: number; colIndex: number };
 

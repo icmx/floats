@@ -1,5 +1,5 @@
-import type { Branded } from '@/types/brands';
-import type { CODES } from './config/codes';
+import { type Branded } from '@/types/brands';
+import { type CODES } from './config/codes';
 
 export type CodeString = (typeof CODES)[number];
 
@@ -16,7 +16,9 @@ export type Currency = Readonly<{
   body: Tick[];
 }>;
 
-// @todo: make more common and move
+/**
+ * @todo: make more common and move
+ */
 export type QueryParams = {
   by: string[];
 };

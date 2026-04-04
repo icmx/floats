@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState, type RefObject } from 'react';
-import type {
-  ChipSelectOption,
-  ChipSelectOptionsFilter,
+import { type RefObject, useCallback, useMemo, useState } from 'react';
+import {
+  type ChipSelectOption,
+  type ChipSelectOptionsFilter,
 } from '../ChipSelect.types';
 import { defaultOptionsFilter } from '../ChipSelect.utils';
 

@@ -1,5 +1,5 @@
-import type { Ref } from 'react';
-import type { DateNumber, RateNumber } from '../../types';
+import { type Ref } from 'react';
+import { type DateNumber, type RateNumber } from '../../types';
 
 export type ColDisplayType = 'date' | 'rate';
 

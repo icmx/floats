@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '@/config/env';
 import { Cached } from '@/lib/cached';
-import type { Results } from '@/types/results';
+import { type Results } from '@/types/results';
 import { PIVOT_CODE } from '../config/codes';
 import {
   createPivotCurrency,
@@ -9,11 +9,11 @@ import {
 } from '../lib/currency';
 import { splitSymbolToCodes } from '../lib/symbols';
 import { parseTicks } from '../lib/ticks';
-import type {
-  Currency,
-  CodeString,
-  SymbolString,
-  Tick,
+import {
+  type Currency,
+  type CodeString,
+  type SymbolString,
+  type Tick,
 } from '../types';
 
 const cached = new Cached<Currency>();

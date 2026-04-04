@@ -1,5 +1,5 @@
 import { CODES, PIVOT_CODE } from './config/codes';
-import type { SymbolString } from './types';
+import { type SymbolString } from './types';
 
 export const CODE_LENGTH = PIVOT_CODE.length;
 

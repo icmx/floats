@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { classNames } from '@/lib/classNames';
 import styles from '../DataTable.module.css';
 
@@ -10,7 +10,10 @@ export const YSpacingRow: FunctionComponent<{
     <tr style={{ height }}>
       <td
         colSpan={colSpan}
-        className={classNames([styles.DataTableDataCell, styles.YSpacingCol])}
+        className={classNames([
+          styles.DataTableDataCell,
+          styles.YSpacingCol,
+        ])}
       ></td>
     </tr>
   );

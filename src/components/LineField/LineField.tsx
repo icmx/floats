@@ -1,5 +1,5 @@
-import type { FunctionComponent } from 'react';
-import type { LineFieldProps } from './LineField.types';
+import { type FunctionComponent } from 'react';
+import { type LineFieldProps } from './LineField.types';
 import styles from './LineField.module.css';
 
 export const LineField: FunctionComponent<LineFieldProps> = ({

@@ -1,6 +1,6 @@
 import { useMemo, type FunctionComponent } from 'react';
 import { classNames } from '@/lib/classNames';
-import type { ColDef, DataRow } from '../DataTable.types';
+import { type ColDef, type DataRow } from '../DataTable.types';
 import styles from '../DataTable.module.css';
 
 export const XSizingRow: FunctionComponent<{

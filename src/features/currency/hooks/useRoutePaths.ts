@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
+import { PATHS } from '@/config/paths';
 import { buildSearch } from '../lib/search';
 import { usePersistQueryParams } from '../stores/persistQueryParamsStore';
 import { useQueryParams } from './useQueryParams';
-import { PATHS } from '@/config/paths';
 
 export type UseRoutePaths = {
   explore: string;

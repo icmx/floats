@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { Alert } from '@/components/Alert';
 import { Loading } from '@/components/Loading';
 import { Converter } from '@/features/currency/components/Converter';
@@ -7,7 +7,10 @@ import { ErrorsFragment } from '@/features/currency/components/ErrorsFragment';
 import { SymbolChips } from '@/features/currency/components/SymbolChips';
 import { getCurrencyCodes } from '@/features/currency/lib/currency';
 import { useCurrencies } from '@/features/currency/stores/currenciesStore';
-import type { CodeString, Currency } from '@/features/currency/types';
+import {
+  type CodeString,
+  type Currency,
+} from '@/features/currency/types';
 
 export type ConvertersData = {
   rates: {

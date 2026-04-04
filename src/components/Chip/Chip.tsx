@@ -1,6 +1,6 @@
 import { type FunctionComponent } from 'react';
 import { classNames } from '@/lib/classNames';
-import type { ChipProps } from './Chip.types';
+import { type ChipProps } from './Chip.types';
 import styles from './Chip.module.css';
 
 export const Chip: FunctionComponent<ChipProps> = ({

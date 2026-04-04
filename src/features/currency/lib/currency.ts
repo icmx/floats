@@ -1,5 +1,5 @@
 import { PIVOT_CODE } from '../config/codes';
-import type { CodeString, Currency, Tick } from '../types';
+import { type CodeString, type Currency, type Tick } from '../types';
 import { toRateNumber } from './numbers';
 import { splitSymbolToCodes } from './symbols';
 import { alignTicks } from './ticks';

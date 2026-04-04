@@ -1,4 +1,4 @@
-import type { DateNumber, RateNumber } from '../types';
+import { type DateNumber, type RateNumber } from '../types';
 
 /**
  * @todo Document this entry

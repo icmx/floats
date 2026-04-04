@@ -1,4 +1,4 @@
-import type { QueryParams } from '../types';
+import { type QueryParams } from '../types';
 
 // @todo: make this code more common and reusable
 

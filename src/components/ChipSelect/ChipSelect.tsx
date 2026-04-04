@@ -1,7 +1,7 @@
 import {
-  useRef,
   type FunctionComponent,
   type KeyboardEvent,
+  useRef,
 } from 'react';
 import { classNames } from '@/lib/classNames';
 import { Chip } from '../Chip';
@@ -9,7 +9,7 @@ import { useChipSelect } from './hooks/useChipSelect';
 import { useClickOutside } from './hooks/useClickOutside';
 import { useScrollToFocused } from './hooks/useScrollToFocused';
 import { useViewportResize } from './hooks/useViewportResize';
-import type { ChipSelectProps } from './ChipSelect.types';
+import { type ChipSelectProps } from './ChipSelect.types';
 import styles from './ChipSelect.module.css';
 
 export const ChipSelect: FunctionComponent<ChipSelectProps> = ({

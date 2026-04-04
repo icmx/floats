@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from 'react';
+import { type InputHTMLAttributes, type ReactNode } from 'react';
 
 export type LineFieldProps = {
   id: string;

@@ -1,5 +1,5 @@
-import type { FunctionComponent } from 'react';
-import type { BoxFieldProps } from './BoxField.types';
+import { type FunctionComponent } from 'react';
+import { type BoxFieldProps } from './BoxField.types';
 import styles from './BoxField.module.css';
 
 export const BoxField: FunctionComponent<BoxFieldProps> = ({

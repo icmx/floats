@@ -1,6 +1,10 @@
 import { MS_1_DAY } from '../constants';
-import type { Tick } from '../types';
-import { parseDateNumber, parseRateNumber, toDateNumber } from './numbers';
+import { type Tick } from '../types';
+import {
+  parseDateNumber,
+  parseRateNumber,
+  toDateNumber,
+} from './numbers';
 
 /**
  * @todo Document this entry

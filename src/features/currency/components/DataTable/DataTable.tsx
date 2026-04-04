@@ -1,4 +1,8 @@
-import { useImperativeHandle, useRef, type FunctionComponent } from 'react';
+import {
+  type FunctionComponent,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { Bulb } from '@/components/Bulb';
 import { classNames } from '@/lib/classNames';
 import { getSeriesColor } from '../../utils';
@@ -6,7 +10,7 @@ import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';
 import { useSelection } from './hooks/useSelection';
 import { useVirtualRowScroll } from './hooks/useVirtualRowScroll';
-import type { DataTableProps } from './DataTable.types';
+import { type DataTableProps } from './DataTable.types';
 import styles from './DataTable.module.css';
 
 export const DataTable: FunctionComponent<DataTableProps> = ({
@@ -38,11 +42,12 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
 
   const hasMultipleRateColumns = colSpan > 2; // date + more than 2 rate columns
 
-  const { handleScroll, topSpace, indexes, bottomSpace } = useVirtualRowScroll({
-    containerRef,
-    rowRef,
-    rowsCount,
-  });
+  const { handleScroll, topSpace, indexes, bottomSpace } =
+    useVirtualRowScroll({
+      containerRef,
+      rowRef,
+      rowsCount,
+    });
 
   const { isSelected, handleCellMouseDown, handleCellMouseEnter } =
     useSelection({
@@ -60,7 +65,8 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
         <thead className={styles.DataTableHeader}>
           <tr>
             {colDefs.map((colDef, colIndex) => {
-              const shouldShowBulb = hasMultipleRateColumns && colIndex > 0;
+              const shouldShowBulb =
+                hasMultipleRateColumns && colIndex > 0;
 
               const color = getSeriesColor(colIndex - 1);
 
@@ -82,7 +88,9 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
         <tbody>
           <XSizingRow colDefs={colDefs} rows={rows} />
 
-          {topSpace > 0 && <YSpacingRow colSpan={colSpan} height={topSpace} />}
+          {topSpace > 0 && (
+            <YSpacingRow colSpan={colSpan} height={topSpace} />
+          )}
 
           {indexes.map((rowIndex) => {
             const row = rows[rowIndex];

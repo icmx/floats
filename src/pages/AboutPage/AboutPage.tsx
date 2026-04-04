@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { BuildPlate } from '@/components/BuildPlate';
 
 export const AboutPage: FunctionComponent = () => {

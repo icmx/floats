@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import {
+  type NavigateOptions,
   useLocation,
   useNavigate,
-  type NavigateOptions,
 } from 'react-router';
 
 export type UseLocationSearch = [

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useThemeValue } from '../stores/themeValueStore';
-import type { ThemeValue } from '../types/themes';
+import { type ThemeValue } from '../types/themes';
 
 type ResolvedThemeValue = Exclude<ThemeValue, 'system'>;
 
@@ -10,7 +10,9 @@ const getMatchingThemeValue = (): ResolvedThemeValue => {
   return matchMedia(QUERY).matches ? 'dark' : 'light';
 };
 
-const resolveThemeValue = (themeValue: ThemeValue): ResolvedThemeValue => {
+const resolveThemeValue = (
+  themeValue: ThemeValue
+): ResolvedThemeValue => {
   if (themeValue !== 'system') {
     return themeValue;
   }

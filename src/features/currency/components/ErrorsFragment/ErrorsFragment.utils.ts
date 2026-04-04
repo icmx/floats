@@ -1,4 +1,4 @@
-import type { ErrorItem } from './ErrorsFragment.types';
+import { type ErrorItem } from './ErrorsFragment.types';
 
 export const FALLBACK_MESSAGE = 'Unknown error happened.';
 

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useMatches, type UIMatch } from 'react-router';
+import { type UIMatch, useMatches } from 'react-router';
 import { useQueryParams } from '../features/currency/hooks/useQueryParams';
-import type { QueryParams } from '../features/currency/types';
+import { type QueryParams } from '../features/currency/types';
 
 export type RouteHandle = {
   title?: ((queryParams: QueryParams) => string) | string;

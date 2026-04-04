@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { Link } from 'react-router';
 
 export const EmptyFragment: FunctionComponent = () => {

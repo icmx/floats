@@ -1,18 +1,18 @@
 import {
+  type FunctionComponent,
   useEffect,
   useImperativeHandle,
   useRef,
-  type FunctionComponent,
 } from 'react';
 import {
+  type HighchartsReactRefObject,
   Legend,
   Tooltip,
-  type HighchartsReactRefObject,
 } from '@highcharts/react';
 import { StockChart, StockSeries } from '@highcharts/react/Stock';
 import { EXPLORE_FRACTION_DIGITS, MS_3_MONTHS } from '../../constants';
 import { getSeriesColor } from '../../utils';
-import type { DataChartProps } from './DataChart.types';
+import { type DataChartProps } from './DataChart.types';
 
 export const DataChart: FunctionComponent<DataChartProps> = ({
   series,

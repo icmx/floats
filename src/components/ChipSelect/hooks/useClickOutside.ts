@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, type RefObject } from 'react';
+import { type RefObject, useEffect, useEffectEvent } from 'react';
 
 export type UseClickOutsideOptions = {
   containerRef: RefObject<HTMLElement | null>;

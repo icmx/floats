@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { formatToIsoDateTime } from '@/lib/format';
 import styles from './BuildPlate.module.css';
 

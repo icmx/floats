@@ -20,11 +20,11 @@ import { EmptyFragment } from '@/features/currency/components/EmptyFragment';
 import { ErrorsFragment } from '@/features/currency/components/ErrorsFragment';
 import { SymbolChips } from '@/features/currency/components/SymbolChips';
 import { useCurrencies } from '@/features/currency/stores/currenciesStore';
-import type {
-  Currency,
-  SymbolString,
-  DateNumber,
-  RateNumber,
+import {
+  type Currency,
+  type DateNumber,
+  type RateNumber,
+  type SymbolString,
 } from '@/features/currency/types';
 import styles from './ExplorePage.module.css';
 

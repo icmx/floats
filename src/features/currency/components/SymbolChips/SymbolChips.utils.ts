@@ -1,6 +1,6 @@
-import type { ChipSelectOptionsFilter } from '@/components/ChipSelect';
+import { type ChipSelectOptionsFilter } from '@/components/ChipSelect';
 import { WELL_KNOWN_SYMBOLS } from '../../constants';
-import type { SymbolString } from '../../types';
+import { type SymbolString } from '../../types';
 
 export const symbolChipsOptionsFilter: ChipSelectOptionsFilter = (
   inputValue,

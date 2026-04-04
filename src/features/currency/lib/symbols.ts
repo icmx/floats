@@ -1,5 +1,5 @@
 import { SYMBOL_LENGTH, SYMBOLS, CODE_LENGTH } from '../constants';
-import type { SymbolString, CodeString } from '../types';
+import { type SymbolString, type CodeString } from '../types';
 
 /**
  * @todo Document this entry

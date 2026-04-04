@@ -1,4 +1,4 @@
-import type { FunctionComponent } from 'react';
+import { type FunctionComponent } from 'react';
 import { Link, useLocation } from 'react-router';
 import { Alert } from '@/components/Alert';
 import { PATHS } from '@/config/paths';

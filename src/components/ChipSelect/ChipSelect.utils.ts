@@ -1,6 +1,6 @@
-import type {
-  ChipSelectOption,
-  ChipSelectOptionsFilter,
+import {
+  type ChipSelectOption,
+  type ChipSelectOptionsFilter,
 } from './ChipSelect.types';
 
 export const defaultOptionsFilter: ChipSelectOptionsFilter = (

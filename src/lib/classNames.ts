@@ -8,6 +8,7 @@ export type ClassNamesInit =
 export type ClassNamesResult = string | undefined;
 
 /**
+ * @todo Remove object init (used only unce)
  * @todo Test this entry
  */
 export const classNames = (init: ClassNamesInit): ClassNamesResult => {

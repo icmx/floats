@@ -1,5 +1,5 @@
-import type { FunctionComponent } from 'react';
-import type { ErrorsFragmentProps } from './ErrorsFragment.types';
+import { type FunctionComponent } from 'react';
+import { type ErrorsFragmentProps } from './ErrorsFragment.types';
 import { resolveErrorItems } from './ErrorsFragment.utils';
 
 export const ErrorsFragment: FunctionComponent<ErrorsFragmentProps> = ({
