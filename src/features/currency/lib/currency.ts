@@ -23,7 +23,7 @@ export const createCurrency = (
 /**
  * Creates an empty Currency that is intended to be a pivot structure.
  *
- * This structure have pivot for both base and quote codes, and is used for internal cross-rate calculations.
+ * This structure has pivot for both base and quote codes, and is used for internal cross-rate calculations.
  *
  * Current pivot currency code is **EUR**.
  */
@@ -35,7 +35,7 @@ export const createPivotCurrency = (): Currency => {
  * Creates a derived Currency from base and quote Currencies by calculating a cross-rate (see docs for cross-rating).
  *
  * @throws When base and quote currencies have different base codes (e.g. EURCNY-USDCHF: EUR is not USD)
- * @throws When base and quote currencies have no intersections (i.e. their Ticks arrays has no items with the same DateNumbers)
+ * @throws When base and quote currencies are non-intersecting (i.e. their Ticks arrays has no items with the same DateNumbers)
  *
  * @todo Describe cross-rating in docs
  */
@@ -98,7 +98,7 @@ export const createCrossCurrency = (
     const baseSymbol = base.head[1];
     const quoteSymbol = quote.head[1];
 
-    throw new Error(`Not intersected: ${baseSymbol}/${quoteSymbol}`);
+    throw new Error(`No intersection: ${baseSymbol}/${quoteSymbol}`);
   }
 
   let i = 0;
