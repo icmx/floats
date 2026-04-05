@@ -7,25 +7,35 @@ import {
 } from './numbers';
 
 /**
- * @todo Document this entry
+ * RegExp pattern of line that is:
+ *
+ * 1. Can be found in Well-formed CSV, and
+ * 2. Can be parsed into a single Tick
+ *
+ * **Note:** This pattern can't guarantee a valid Tick result, so please do not use it by itself
  */
-export const PARSABLE_CSV_LINE_PATTERN =
+export const PARSABLE_LINE_PATTERN =
   /^\d{4}-\d{2}-\d{2},\d{1,16}(\.\d{1,16})?$/;
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Parses an array of Ticks from CSV text.
+ *
+ * @param text Well-formed CSV text (see docs for Well-formed CSV format definition)
+ * @returns Array of Ticks in original order (i.e. correct chronological order not guaranteed)
+ *
+ * @throws When empty text is passed
+ * @throws When any line of text is not parsable to a Tick
  */
-export const parseTicks = (csv: string): Tick[] => {
-  if (!csv) {
-    throw new Error(`Empty CSV text passed: "${csv}"`);
+export const parseTicks = (text: string): Tick[] => {
+  if (!text) {
+    throw new Error(`Empty CSV text passed: "${text}"`);
   }
 
-  const lines = csv.trim().split('\n');
+  const lines = text.trim().split('\n');
   const ticks: Tick[] = [];
 
   for (const line of lines) {
-    if (!PARSABLE_CSV_LINE_PATTERN.test(line)) {
+    if (!PARSABLE_LINE_PATTERN.test(line)) {
       throw new Error(`Invalid line: "${line}"`);
     }
 
@@ -38,8 +48,19 @@ export const parseTicks = (csv: string): Tick[] => {
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Aligns an array of Ticks:
+ *
+ * 1. Ensures their chronological order with only unique dates
+ * 2. Adds extra Ticks for missing days (in between existing Ticks)
+ * 3. Fills missing rates by using nearest previous existing rate available
+ *
+ * **Note:** result array length may be greater than source due to (2).
+ *
+ * @param ticks Array of Ticks, possibly misaligned
+ * @returns new aligned array of Ticks
+ *
+ * @throws When any Tick is not in chronological order (i.e. past date goes after future)
+ * @throws When any Tick has the same date as previous (i.e. equal dates are forbidden)
  */
 export const alignTicks = (ticks: Tick[]): Tick[] => {
   if (ticks.length < 2) {

@@ -9,6 +9,9 @@ export type DateNumber = Branded<number, 'DateNumber'>;
 
 export type RateNumber = Branded<number, 'RateNumber'> | null;
 
+/**
+ * A currency rate for a single date (day).
+ */
 export type Tick = [DateNumber, RateNumber];
 
 export type Currency = Readonly<{
