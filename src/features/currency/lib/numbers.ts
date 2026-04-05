@@ -1,50 +1,47 @@
 import { type DateNumber, type RateNumber } from '../types';
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Casts a plain number value into a branded DateNumber.
+ *
+ * Internally does nothing, used only to cast a type.
  */
 export const toDateNumber = (value: number): DateNumber => {
   return value as DateNumber;
 };
 
 /**
- * @todo Maybe use just `Date.parse`
- * @todo Document this entry
- * @todo Test this entry
+ * Parses a DateNumber from ISO 8601 date text (`YYYY-MM-DD` form).
+ *
+ * **Note:** this function does not validate the date value and assumes a parsable text. It is intended to be used only while Ticks parsing internally.
+ *
+ * @todo Maybe use just `Date.parse` internally
  */
 export const parseDateNumber = (text: string): DateNumber => {
   const year = Number.parseInt(text.slice(0, 4));
   const month = Number.parseInt(text.slice(5, 7));
   const day = Number.parseInt(text.slice(8, 10));
 
-  const time = Date.UTC(year, month - 1, day);
+  const date = Date.UTC(year, month - 1, day);
 
-  if (Number.isNaN(time)) {
-    throw new Error(`Invalid date value: "${text}"`);
-  }
-
-  return time as DateNumber;
+  return date as DateNumber;
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Casts a plain number/null value into a branded RateNumber.
+ *
+ * Internally does nothing, used only to cast a type.
  */
 export const toRateNumber = (value: number | null): RateNumber => {
   return value as RateNumber;
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Parses a RateNumber from a text representing numeric value.
+ *
+ * **Note:** this function does not validate the rate value and assumes a parsable text. It is intended to be used only while Ticks parsing internally.
  */
 export const parseRateNumber = (text: string): RateNumber => {
   const rate = Number.parseFloat(text);
-
-  if (Number.isNaN(rate)) {
-    throw new Error(`Invalid rate value: "${text}"`);
-  }
 
   return rate as RateNumber;
 };
