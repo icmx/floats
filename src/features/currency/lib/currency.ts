@@ -5,31 +5,39 @@ import { splitSymbolToCodes } from './symbols';
 import { alignTicks } from './ticks';
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Creates a Currency exchange rate structure from existing values.
+ *
+ * This function guarantees that created Currency's Ticks are well-aligned, i.e. goes chronologically, has no missing days or missing rates in between.
  */
 export const createCurrency = (
   baseCode: CodeString,
   quoteCode: CodeString,
-  body: Tick[]
+  ticks: Tick[]
 ): Currency => {
   return {
     head: ['date', `${baseCode}${quoteCode}`],
-    body: alignTicks(body),
+    body: alignTicks(ticks),
   };
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Creates an empty Currency that is intended to be a pivot structure.
+ *
+ * This structure have pivot for both base and quote codes, and is used for internal cross-rate calculations.
+ *
+ * Current pivot currency code is **EUR**.
  */
 export const createPivotCurrency = (): Currency => {
   return createCurrency(PIVOT_CODE, PIVOT_CODE, []);
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Creates a derived Currency from base and quote Currencies by calculating a cross-rate (see docs for cross-rating).
+ *
+ * @throws When base and quote currencies have different base codes (e.g. EURCNY-USDCHF: EUR is not USD)
+ * @throws When base and quote currencies have no intersections (i.e. their Ticks arrays has no items with the same DateNumbers)
+ *
+ * @todo Describe cross-rating in docs
  */
 export const createCrossCurrency = (
   base: Currency,
@@ -127,16 +135,21 @@ export const createCrossCurrency = (
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Returns `true` if Currency is a pivot one, and is suitable for internal cross-rate calculations.
+ *
+ * Current pivot currency code is **EUR**.
  */
 export const isPivotCurrency = (currency: Currency): boolean => {
-  return currency.head[1] === `${PIVOT_CODE}${PIVOT_CODE}`;
+  const hasPivotCodes =
+    currency.head[1] === `${PIVOT_CODE}${PIVOT_CODE}`;
+
+  const isEmpty = currency.body.length === 0;
+
+  return hasPivotCodes && isEmpty;
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Extracts both base and quote codes from a Currency structure.
  */
 export const getCurrencyCodes = (
   currency: Currency

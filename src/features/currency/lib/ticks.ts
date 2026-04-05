@@ -25,6 +25,8 @@ export const PARSABLE_LINE_PATTERN =
  *
  * @throws When empty text is passed
  * @throws When any line of text is not parsable to a Tick
+ *
+ * @todo Describe Well-formed CSV in docs
  */
 export const parseTicks = (text: string): Tick[] => {
   if (!text) {
