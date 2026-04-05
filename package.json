@@ -10,8 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "highcharts": "^12.5.0",
-    "highcharts-react-official": "^3.2.3",
+    "@highcharts/react": "^4.2.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router": "^7.11.0",
@@ -19,7 +18,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.12.0",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",

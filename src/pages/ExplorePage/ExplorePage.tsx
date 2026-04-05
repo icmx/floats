@@ -1,33 +1,31 @@
-import { useEffect, useRef, type FunctionComponent } from 'react';
-import { Alert } from '../../components/common/Alert';
-import { Loading } from '../../components/common/Loading';
+import { type FunctionComponent, useRef, useEffect } from 'react';
+import { Alert } from '@/components/Alert';
+import { Loading } from '@/components/Loading';
 import {
-  DataChart,
-  type DataChartHandle,
   type DataChartProps,
-} from '../../components/currency/DataChart';
+  type DataChartHandle,
+  DataChart,
+} from '@/features/currency/components/DataChart';
 import {
-  DataTable,
   type DataRow,
-  type DataTableHandle,
   type DataTableProps,
-} from '../../components/currency/DataTable';
-import {
-  createDateCell,
+  type DataTableHandle,
   createDateColDef,
-  createRateCell,
   createRateColDef,
-} from '../../components/currency/DataTable/DataTable.utils';
-import { ErrorsFragment } from '../../components/currency/ErrorsFragment';
-import { EmptyFragment } from '../../components/currency/EmptyFragment';
-import { SymbolChips } from '../../components/currency/SymbolChips';
-import { useCurrencies } from '../../stores/currency/currenciesStore';
-import type {
-  Currency,
-  DateNumber,
-  RateNumber,
-  SymbolString,
-} from '../../types/currency';
+  createDateCell,
+  createRateCell,
+  DataTable,
+} from '@/features/currency/components/DataTable';
+import { EmptyFragment } from '@/features/currency/components/EmptyFragment';
+import { ErrorsFragment } from '@/features/currency/components/ErrorsFragment';
+import { SymbolChips } from '@/features/currency/components/SymbolChips';
+import { useCurrencies } from '@/features/currency/stores/currenciesStore';
+import {
+  type Currency,
+  type DateNumber,
+  type RateNumber,
+  type SymbolString,
+} from '@/features/currency/types';
 import styles from './ExplorePage.module.css';
 
 const toChartData = (currencies: Currency[]): DataChartProps => {
@@ -79,15 +77,16 @@ const toTableData = (currencies: Currency[]): DataTableProps => {
 
       return createRateColDef(cell);
     }),
-    rows: body.map((row) => {
-      return row.map((cell, index) => {
-        if (index === 0) {
-          return createDateCell(row[0]);
-        }
+    rows: body.map((row): DataRow => {
+      const [dateCell, ...rateCells] = row;
 
-        return createRateCell(cell);
-      });
-    }) as DataRow[],
+      return [
+        createDateCell(dateCell),
+        ...rateCells.map((rateCell) => {
+          return createRateCell(rateCell);
+        }),
+      ];
+    }),
   };
 };
 

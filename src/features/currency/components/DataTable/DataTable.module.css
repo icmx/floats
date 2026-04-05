@@ -1,0 +1,91 @@
+.DataTableContainer {
+  overflow-y: scroll;
+}
+
+@media (width > 720px) {
+  .DataTableContainer {
+    height: var(--content-height);
+  }
+}
+
+.DataTable {
+  margin: 1rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  width: 100%;
+  table-layout: fixed;
+}
+
+@media (width > 720px) {
+  .DataTable {
+    width: unset;
+    table-layout: auto;
+  }
+}
+
+.DataTableHeader {
+  position: sticky;
+  left: 0;
+  top: 0;
+  background-color: var(--color-body);
+}
+
+.DataTableHeadCell {
+  padding: 6px 12px;
+
+  border-top: solid 1px transparent;
+  border-bottom: solid 1px var(--color-line);
+
+  text-wrap: nowrap;
+}
+
+.DataTableDataCell {
+  padding: 6px 12px;
+
+  border-top: solid 1px transparent;
+  border-bottom: solid 1px var(--color-line);
+
+  text-wrap: nowrap;
+}
+
+.DataTableHeadCell.is-date {
+  text-align: left;
+}
+
+.DataTableHeadCell.is-rate {
+  text-align: right;
+}
+
+.DataTableDataCell.is-date {
+  text-align: left;
+}
+
+.DataTableDataCell.is-rate {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.DataTableDataCell.is-selected {
+  background-color: var(--color-selection);
+}
+
+.XSizingRow {
+  height: 0;
+  visibility: hidden;
+}
+
+.XSizingCol {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border: none;
+  overflow: hidden;
+  text-wrap: nowrap;
+  line-height: 0;
+}
+
+.YSpacingCol {
+  padding: 0;
+  border: none;
+}

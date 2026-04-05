@@ -2,13 +2,14 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { RouterProvider } from 'react-router/dom';
-import { Layout } from './layouts/Layout';
+import { Layout } from './components/Layout';
+import { PATHS } from './config/paths';
+import { createDynamicRouteHandleTitle } from './hooks/useTitle';
 import { AboutPage } from './pages/AboutPage';
 import { ConvertPage } from './pages/ConvertPage';
 import { ExplorePage } from './pages/ExplorePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SettingsPage } from './pages/SettingsPage';
-import type { RouteHandle } from './types/common';
 import './index.css';
 
 const root = document.querySelector('#root');
@@ -16,20 +17,6 @@ const root = document.querySelector('#root');
 if (!root) {
   throw new Error('No #root element found');
 }
-
-const createDynamicRouteHandleTitle = (
-  title: string
-): RouteHandle['title'] => {
-  return (queryParams) => {
-    const currencies = queryParams.by.join(', ');
-
-    if (!currencies) {
-      return title;
-    }
-
-    return `${currencies} - ${title}`;
-  };
-};
 
 const router = createBrowserRouter([
   {
@@ -39,32 +26,34 @@ const router = createBrowserRouter([
     },
     children: [
       {
-        path: '/',
-        element: <Navigate to="/explore" replace={true} />,
+        path: PATHS.root.path,
+        element: (
+          <Navigate to={PATHS.pages.explore.path} replace={true} />
+        ),
       },
       {
-        path: '/explore',
+        path: PATHS.pages.explore.path,
         element: <ExplorePage />,
         handle: {
           title: createDynamicRouteHandleTitle('Explore'),
         },
       },
       {
-        path: '/convert',
+        path: PATHS.pages.convert.path,
         element: <ConvertPage />,
         handle: {
           title: createDynamicRouteHandleTitle('Convert'),
         },
       },
       {
-        path: '/about',
+        path: PATHS.pages.about.path,
         element: <AboutPage />,
         handle: {
           title: 'About',
         },
       },
       {
-        path: '/settings',
+        path: PATHS.pages.settings.path,
         element: <SettingsPage />,
         handle: {
           title: 'Settings',

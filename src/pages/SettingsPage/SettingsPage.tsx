@@ -1,10 +1,16 @@
-import { type FunctionComponent } from 'react';
-import { BoxField } from '../../components/common/BoxField';
-import { THEMES } from '../../constants/common';
-import { useThemeValue } from '../../stores/common/themeValueStore';
+import { type FunctionComponent, type ReactNode } from 'react';
+import { BoxField } from '@/components/BoxField';
+import { useThemeValue } from '@/stores/themeValueStore';
+import { type ThemeValue } from '@/types/themes';
+
+const THEMES: { value: ThemeValue; children: ReactNode }[] = [
+  { value: 'system', children: 'System' },
+  { value: 'light', children: 'Light' },
+  { value: 'dark', children: 'Dark' },
+];
 
 export const SettingsPage: FunctionComponent = () => {
-  const [themeValue, setThemeValue] = useThemeValue();
+  const { themeValue, setThemeValue } = useThemeValue();
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useThemeValue } from '../stores/common/themeValueStore';
-import type { ThemeValue } from '../types/common';
+import { useThemeValue } from '../stores/themeValueStore';
+import { type ThemeValue } from '../types/themes';
 
 type ResolvedThemeValue = Exclude<ThemeValue, 'system'>;
 
@@ -26,7 +26,7 @@ const applyThemeValue = (themeValue: ThemeValue): void => {
 };
 
 export const useThemeValueSync = (): void => {
-  const [themeValue] = useThemeValue();
+  const { themeValue } = useThemeValue();
 
   useEffect(() => {
     applyThemeValue(resolveThemeValue(themeValue));
