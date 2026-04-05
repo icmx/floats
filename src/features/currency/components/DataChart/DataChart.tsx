@@ -10,8 +10,9 @@ import {
   Tooltip,
 } from '@highcharts/react';
 import { StockChart, StockSeries } from '@highcharts/react/Stock';
+import { EXCHANGE_CURRENCY_NUMBER_FRACTION_DIGITS } from '@/lib/format';
 import { getSeriesColor } from '@/lib/series';
-import { EXPLORE_FRACTION_DIGITS, MS_3_MONTHS } from '../../constants';
+import { MS_3_MONTHS } from '../../constants';
 import { type DataChartProps } from './DataChart.types';
 
 export const DataChart: FunctionComponent<DataChartProps> = ({
@@ -173,7 +174,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
         align="center"
       />
       <Tooltip
-        valueDecimals={EXPLORE_FRACTION_DIGITS}
+        valueDecimals={EXCHANGE_CURRENCY_NUMBER_FRACTION_DIGITS}
         pointFormat="{series.name}: {point.y}"
       />
       {series.map((value, index) => {

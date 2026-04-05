@@ -1,6 +1,6 @@
 import { useState, type FunctionComponent } from 'react';
 import { LineField } from '@/components/LineField';
-import { formatToConvertNumber } from '../../lib/format';
+import { formatToRealCurrencyNumber } from '@/lib/format';
 import { type ConverterProps } from './Converter.types';
 import styles from './Converter.module.css';
 
@@ -24,7 +24,7 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         type="number"
         min={0}
         step={0.01}
-        value={formatToConvertNumber(baseValue)}
+        value={formatToRealCurrencyNumber(baseValue)}
         onChange={(event) => {
           const nextBaseValue =
             Number.parseFloat(event.target.value) || 0;
@@ -42,7 +42,7 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         type="number"
         min={0}
         step={0.01}
-        value={formatToConvertNumber(quoteValue)}
+        value={formatToRealCurrencyNumber(quoteValue)}
         onChange={(event) => {
           const nextQuoteValue =
             Number.parseFloat(event.target.value) || 0;

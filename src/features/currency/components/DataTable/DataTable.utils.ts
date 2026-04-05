@@ -1,5 +1,7 @@
-import { formatToIsoDate } from '@/lib/format';
-import { formatToExploreNumber } from '../../lib/format';
+import {
+  formatToExchangeCurrencyNumber,
+  formatToIsoDate,
+} from '@/lib/format';
 import { type DateNumber, type RateNumber } from '../../types';
 import { type ColDef, type DataCell } from './DataTable.types';
 
@@ -33,6 +35,7 @@ export const createRateCell = (
 ): DataCell<RateNumber> => {
   return {
     value,
-    displayValue: value === null ? '' : formatToExploreNumber(value),
+    displayValue:
+      value === null ? '' : formatToExchangeCurrencyNumber(value),
   };
 };
