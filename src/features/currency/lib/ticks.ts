@@ -29,12 +29,12 @@ export const PARSABLE_LINE_PATTERN =
  * @todo Describe Well-formed CSV in docs
  */
 export const parseTicks = (text: string): Tick[] => {
-  if (!text) {
-    throw new Error(`Empty CSV text passed: "${text}"`);
-  }
-
   const lines = text.trim().split('\n');
   const ticks: Tick[] = [];
+
+  if (lines.length === 0) {
+    throw new Error(`Empty CSV text passed: "${text}"`);
+  }
 
   for (const line of lines) {
     if (!PARSABLE_LINE_PATTERN.test(line)) {
