@@ -1,4 +1,4 @@
-import { useState, type FunctionComponent } from 'react';
+import { useEffect, useState, type FunctionComponent } from 'react';
 import { LineField } from '@/components/LineField';
 import { formatToRealCurrencyNumber } from '@/lib/format';
 import { type ConverterProps } from './Converter.types';
@@ -11,7 +11,11 @@ export const Converter: FunctionComponent<ConverterProps> = ({
   rate,
 }) => {
   const [baseValue, setBaseValue] = useState(baseAmount);
-  const [quoteValue, setQuoteValue] = useState(baseAmount * rate);
+  const quoteValue = baseValue * rate;
+
+  useEffect(() => {
+    setBaseValue(baseAmount);
+  }, [baseAmount]);
 
   const baseId = `input-base-${baseCode}`;
   const quoteId = `input-quote-${quoteCode}`;
@@ -26,13 +30,9 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         step={0.01}
         value={formatToRealCurrencyNumber(baseValue)}
         onChange={(event) => {
-          const nextBaseValue =
-            Number.parseFloat(event.target.value) || 0;
+          const value = Number.parseFloat(event.target.value) || 0;
 
-          const nextQuoteValue = nextBaseValue * rate;
-
-          setBaseValue(nextBaseValue);
-          setQuoteValue(nextQuoteValue);
+          setBaseValue(Math.max(0, value));
         }}
       />
 
@@ -44,13 +44,10 @@ export const Converter: FunctionComponent<ConverterProps> = ({
         step={0.01}
         value={formatToRealCurrencyNumber(quoteValue)}
         onChange={(event) => {
-          const nextQuoteValue =
-            Number.parseFloat(event.target.value) || 0;
+          const value = Number.parseFloat(event.target.value) || 0;
+          const nextBaseValue = rate > 0 ? value / rate : 0;
 
-          const nextBaseValue = nextQuoteValue / rate;
-
-          setBaseValue(nextBaseValue);
-          setQuoteValue(nextQuoteValue);
+          setBaseValue(Math.max(0, nextBaseValue));
         }}
       />
     </div>

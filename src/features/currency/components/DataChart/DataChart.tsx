@@ -183,6 +183,7 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
 
         return (
           <StockSeries
+            key={value.name}
             type={type}
             options={{
               color,
