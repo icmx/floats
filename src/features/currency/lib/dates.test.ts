@@ -16,7 +16,7 @@ const createDateNumber = (
 };
 
 describe('DATE_TEXT_LENGTH', () => {
-  it('must have an ISO 8601 YYYY-MM-DD format length value', () => {
+  it('should have an ISO 8601 YYYY-MM-DD format length value', () => {
     const format = 'YYYY-MM-DD';
 
     expect(DATE_TEXT_LENGTH).toBe(format.length);
