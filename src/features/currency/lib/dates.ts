@@ -6,7 +6,7 @@ import type { DateNumber } from '../types';
  *
  * Currently `10` characters since it's ISO 8601 date.
  */
-export const DATE_TEXT_LENGTH = 'YYYY-MM-DD'.length;
+export const DATE_TEXT_LENGTH = 10;
 
 /**
  * Creates a new DateNumber that is one day later than source.
