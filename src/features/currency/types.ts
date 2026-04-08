@@ -2,12 +2,12 @@ import { type Branded } from '@/types/brands';
 import { type CODES } from './config/codes';
 
 /**
- * Unix epoch integer milliseconds timestamp. Represents the start of day (00:00:00 UTC).
+ * Unix epoch milliseconds timestamp (non-negative integer). Represents the start of day (00:00:00 UTC).
  */
 export type DateNumber = Branded<number, 'DateNumber'>;
 
 /**
- * Currency exchange rate number (precision may vary) if available.
+ * Currency exchange rate (non-negative float) or null if unknown.
  */
 export type RateNumber = Branded<number, 'RateNumber'> | null;
 

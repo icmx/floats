@@ -1,6 +1,14 @@
 import { PIVOT_CODE } from '../config/codes';
-import { type CodeString, type Currency, type Tick } from '../types';
-import { toRateNumber } from './numbers';
+import {
+  type CodeString,
+  type Currency,
+  type RateNumber,
+  type Tick,
+} from '../types';
+import {
+  createDivisionRateNumber,
+  createUnknownRateNumber,
+} from './rates';
 import { splitSymbolToCodes } from './symbols';
 import { alignTicks } from './ticks';
 
@@ -76,9 +84,12 @@ export const createCrossCurrency = (
       head,
       body: base.body.map(([date, rate]) => {
         if (rate) {
-          return [date, toRateNumber(1 / rate)];
+          return [
+            date,
+            createDivisionRateNumber(1 as RateNumber, rate),
+          ];
         } else {
-          return [date, toRateNumber(null)];
+          return [date, createUnknownRateNumber()];
         }
       }),
     };
@@ -121,10 +132,13 @@ export const createCrossCurrency = (
     const [baseDate, baseRate] = base.body[i];
     const quoteRate = quote.body[j][1];
 
-    if (!baseRate || !quoteRate) {
-      body.push([baseDate, toRateNumber(null)]);
+    if (baseRate && quoteRate) {
+      body.push([
+        baseDate,
+        createDivisionRateNumber(quoteRate, baseRate),
+      ]);
     } else {
-      body.push([baseDate, toRateNumber(quoteRate / baseRate)]);
+      body.push([baseDate, createUnknownRateNumber()]);
     }
 
     i++;

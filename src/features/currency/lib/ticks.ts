@@ -1,21 +1,55 @@
-import { MS_1_DAY } from '../constants';
 import { type Tick } from '../types';
 import {
+  addDayToDateNumber,
+  DATE_TEXT_LENGTH,
   parseDateNumber,
-  parseRateNumber,
-  toDateNumber,
-} from './numbers';
+} from './dates';
+import { parseRateNumber, RATE_TEXT_MIN_LENGTH } from './rates';
 
 /**
- * RegExp pattern of line that is:
+ * Exact length of separator in Tick CSV text line.
  *
- * 1. Can be found in Well-formed CSV, and
- * 2. Can be parsed into a single Tick
- *
- * **Note:** This pattern can't guarantee a valid Tick result, so please do not use it by itself
+ * Currently `1` since it's a single comma `,` character.
  */
-export const PARSABLE_LINE_PATTERN =
-  /^\d{4}-\d{2}-\d{2},\d{1,16}(\.\d{1,16})?$/;
+const TICK_SEPARATOR_LENGTH = 1;
+
+/**
+ * Minimum length of Tick CSV text line to be correctly parsed (potentially).
+ */
+const TICK_LINE_MIN_LENGTH =
+  DATE_TEXT_LENGTH + TICK_SEPARATOR_LENGTH + RATE_TEXT_MIN_LENGTH;
+
+/**
+ * Parses a single tick from CSV text line.
+ *
+ * @param text single line of Well-formed CSV text
+ * @returns parsed Tick tuple
+ *
+ * @throws When invalid or too short text is passed
+ * @throws When DateNumber value cannot be parsed
+ * @throws When RateNumber value cannot be parsed
+ */
+export const parseTick = (text: string): Tick => {
+  const line = text.trim();
+
+  if (line.length < TICK_LINE_MIN_LENGTH) {
+    throw new Error(`Invalid CSV line: "${line}"`);
+  }
+
+  const dateStart = 0;
+  const dateEnd = DATE_TEXT_LENGTH;
+
+  const dateText = line.slice(dateStart, dateEnd);
+  const dateNumber = parseDateNumber(dateText);
+
+  const rateStart = DATE_TEXT_LENGTH + TICK_SEPARATOR_LENGTH;
+  const rateEnd = line.length;
+
+  const rateText = line.slice(rateStart, rateEnd);
+  const rateNumber = parseRateNumber(rateText);
+
+  return [dateNumber, rateNumber];
+};
 
 /**
  * Parses an array of Ticks from CSV text.
@@ -37,13 +71,9 @@ export const parseTicks = (text: string): Tick[] => {
   }
 
   for (const line of lines) {
-    if (!PARSABLE_LINE_PATTERN.test(line)) {
-      throw new Error(`Invalid line: "${line}"`);
-    }
+    const tick = parseTick(line);
 
-    const [dateText, rateText] = line.split(',');
-
-    ticks.push([parseDateNumber(dateText), parseRateNumber(rateText)]);
+    ticks.push(tick);
   }
 
   return ticks;
@@ -82,12 +112,12 @@ export const alignTicks = (ticks: Tick[]): Tick[] => {
     while (expectedDate < date) {
       result.push([expectedDate, lastRate]);
 
-      expectedDate = toDateNumber(expectedDate + MS_1_DAY);
+      expectedDate = addDayToDateNumber(expectedDate);
     }
 
     result.push([date, rate]);
 
-    expectedDate = toDateNumber(expectedDate + MS_1_DAY);
+    expectedDate = addDayToDateNumber(expectedDate);
     lastRate = rate;
   }
 
