@@ -231,6 +231,20 @@ describe('alignTicks', () => {
     expect(result[2][0]).toBe(createDateNumber(2020, 2, 1));
   });
 
+  it('should allow null rates', () => {
+    const source: Tick[] = [
+      createTick([2020, 1, 1], 1.0),
+      createTick([2020, 1, 2], null),
+      createTick([2020, 1, 3], null),
+    ];
+
+    const result = alignTicks(source);
+
+    expect(result).toHaveLength(3);
+    expect(result[0][1]).toBe(1.0);
+    expect(result[2][1]).toBe(null);
+  });
+
   it('should throw for ticks not in chronological order', () => {
     const source: Tick[] = [
       createTick([2020, 1, 5], 1.0),
