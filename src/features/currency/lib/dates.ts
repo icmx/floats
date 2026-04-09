@@ -1,5 +1,5 @@
 import { MS_1_DAY } from '../constants';
-import type { DateNumber } from '../types';
+import { type DateNumber } from '../types';
 
 /**
  * Exact length of date value in text.

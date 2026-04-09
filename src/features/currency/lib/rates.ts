@@ -1,4 +1,4 @@
-import type { RateNumber } from '../types';
+import { type RateNumber } from '../types';
 
 /**
  * Minimum length of rate value in text.

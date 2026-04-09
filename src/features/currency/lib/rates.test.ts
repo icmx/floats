@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { RateNumber } from '../types';
+import { type RateNumber } from '../types';
 import {
   createDivisionRateNumber,
   createUnknownRateNumber,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DateNumber, RateNumber, Tick } from '../types';
+import { type DateNumber, type RateNumber, type Tick } from '../types';
 import { DATE_TEXT_LENGTH } from './dates';
 import { RATE_TEXT_MIN_LENGTH } from './rates';
 import {
