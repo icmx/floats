@@ -28,6 +28,8 @@ export const isSymbolString = (
 
 /**
  * Split currency Symbol string into a tuple of currency pair Codes (like `USDEUR` become `USD` and `EUR`).
+ *
+ * **Note:** this function does not perform any validation since expects only valid input.
  */
 export const splitSymbolToCodes = (
   symbol: SymbolString
