@@ -11,12 +11,12 @@ import { parseRateNumber, RATE_TEXT_MIN_LENGTH } from './rates';
  *
  * Currently `1` since it's a single comma `,` character.
  */
-const TICK_SEPARATOR_LENGTH = 1;
+export const TICK_SEPARATOR_LENGTH = 1;
 
 /**
  * Minimum length of Tick CSV text line to be correctly parsed (potentially).
  */
-const TICK_LINE_MIN_LENGTH =
+export const TICK_LINE_MIN_LENGTH =
   DATE_TEXT_LENGTH + TICK_SEPARATOR_LENGTH + RATE_TEXT_MIN_LENGTH;
 
 /**
@@ -96,7 +96,7 @@ export const parseTicks = (text: string): Tick[] => {
  */
 export const alignTicks = (ticks: Tick[]): Tick[] => {
   if (ticks.length < 2) {
-    return ticks;
+    return [...ticks];
   }
 
   const result: Tick[] = [];
