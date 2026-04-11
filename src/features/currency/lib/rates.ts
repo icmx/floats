@@ -9,6 +9,8 @@ export const RATE_TEXT_MIN_LENGTH = 1;
 
 /**
  * Creates unknown (not available) RateNumber which is `null`.
+ *
+ * This function is used to maintain consistent calculations code.
  */
 export const createUnknownRateNumber = (): RateNumber => {
   return null as RateNumber;

@@ -17,17 +17,17 @@ export type RateNumber = Branded<number, 'RateNumber'> | null;
 export type Tick = [DateNumber, RateNumber];
 
 /**
- * Currency three-letter code like `USD` or `EUR`.
+ * Currency three-letter code like USD or EUR.
  */
 export type CodeString = (typeof CODES)[number];
 
 /**
- * Currency pair six-letter code like `EURUSD` or `USDJPY`.
+ * Currency pair six-letter code like EURUSD or USDJPY.
  *
  * - **Base code** is from the left
  * - **Quote code** is from the right
  *
- * Base/Quote means "how much of Quote will I get for 1 Base?"
+ * Base/Quote means "how much of Quote will I get for 1 Base"
  */
 export type SymbolString = `${CodeString}${CodeString}`;
 

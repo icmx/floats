@@ -153,7 +153,7 @@ describe('alignTicks', () => {
 
     expect(result[0][1]).toBe(1.5);
 
-    expect(source).toEqual(result); // sate structure
+    expect(source).toEqual(result); // same structure
     expect(source).not.toBe(result); // different ref
   });
 
@@ -170,7 +170,7 @@ describe('alignTicks', () => {
     expect(result[1][1]).toBe(1.02);
     expect(result[2][1]).toBe(1.03);
 
-    expect(source).toEqual(result); // sate structure
+    expect(source).toEqual(result); // same structure
     expect(source).not.toBe(result); // different ref
   });
 

@@ -56,6 +56,9 @@ export const formatToExchangeCurrencyNumber = (
  * Uses bankers rounding internally (`halfEven` mode).
  *
  * Returns strictly in `0.00` format, i.e. uses only digits and period for decimal separator.
+ *
+ * @deprecated This actually a wrong use. This was made for Converter to format input to 0.00 form. While it works, this should be implemented as a function that returns a number (similar to toFixed)
+ * @todo Avoid this function
  */
 export const formatToRealCurrencyNumber = (
   numberInit: number

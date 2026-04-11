@@ -15,7 +15,7 @@ import { alignTicks } from './ticks';
 /**
  * Creates a Currency exchange rate structure from existing values.
  *
- * This function guarantees that created Currency's Ticks are well-aligned, i.e. goes chronologically, has no missing days or missing rates in between.
+ * This function guarantees that created Currency's Ticks are aligned, i.e. goes chronologically, has no missing days or missing rates in between.
  */
 export const createCurrency = (
   baseCode: CodeString,
@@ -46,6 +46,8 @@ export const createPivotCurrency = (): Currency => {
  * @throws When base and quote currencies are non-intersecting (i.e. their Ticks arrays has no items with the same DateNumbers)
  *
  * @todo Describe cross-rating in docs
+ * @todo (maybe) Split pivot derivations into separate functions and test separately
+ * @todo (maybe) Add extra RateNumber function to invert 1 / x
  */
 export const createCrossCurrency = (
   base: Currency,

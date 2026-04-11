@@ -1,5 +1,5 @@
 /**
- * Currency three-letter codes like `USD` or `EUR` as in ISO 4217.
+ * Currency three-letter codes like USD or EUR as in ISO 4217.
  *
  * While technically these codes are a constant array, this should be considered as a configuration item that potentially may come from external source (like environment value or from an API)
  */
