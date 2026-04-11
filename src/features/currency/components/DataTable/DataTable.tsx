@@ -5,7 +5,7 @@ import {
 } from 'react';
 import { Bulb } from '@/components/Bulb';
 import { classNames } from '@/lib/classNames';
-import { getSeriesColor } from '../../utils';
+import { getSeriesColor } from '@/lib/series';
 import { XSizingRow } from './components/XSizingRow';
 import { YSpacingRow } from './components/YSpacingRow';
 import { useSelection } from './hooks/useSelection';

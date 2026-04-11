@@ -1,3 +1,8 @@
+/**
+ * Currency three-letter codes like USD or EUR as in ISO 4217.
+ *
+ * While technically these codes are a constant array, this should be considered as a configuration item that potentially may come from external source (like environment value or from an API)
+ */
 export const CODES = [
   'AED',
   'AFN',
@@ -137,4 +142,7 @@ export const CODES = [
   'ZMW',
 ] as const;
 
+/**
+ * Code of pivot currency. This currency is considered as base currency for cross-rate calculations.
+ */
 export const PIVOT_CODE = 'EUR' satisfies (typeof CODES)[number];

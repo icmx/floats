@@ -1,35 +1,53 @@
 import { PIVOT_CODE } from '../config/codes';
-import { type CodeString, type Currency, type Tick } from '../types';
-import { toRateNumber } from './numbers';
+import {
+  type CodeString,
+  type Currency,
+  type RateNumber,
+  type Tick,
+} from '../types';
+import {
+  createDivisionRateNumber,
+  createUnknownRateNumber,
+} from './rates';
 import { splitSymbolToCodes } from './symbols';
 import { alignTicks } from './ticks';
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Creates a Currency exchange rate structure from existing values.
+ *
+ * This function guarantees that created Currency's Ticks are aligned, i.e. goes chronologically, has no missing days or missing rates in between.
  */
 export const createCurrency = (
   baseCode: CodeString,
   quoteCode: CodeString,
-  body: Tick[]
+  ticks: Tick[]
 ): Currency => {
   return {
     head: ['date', `${baseCode}${quoteCode}`],
-    body: alignTicks(body),
+    body: alignTicks(ticks),
   };
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Creates an empty Currency that is intended to be a pivot structure.
+ *
+ * This structure has pivot for both base and quote codes, and is used for internal cross-rate calculations.
+ *
+ * Current pivot currency code is **EUR**.
  */
 export const createPivotCurrency = (): Currency => {
   return createCurrency(PIVOT_CODE, PIVOT_CODE, []);
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Creates a derived Currency from base and quote Currencies by calculating a cross-rate (see docs for cross-rating).
+ *
+ * @throws When base and quote currencies have different base codes (e.g. EURCNY-USDCHF: EUR is not USD)
+ * @throws When base and quote currencies are non-intersecting (i.e. their Ticks arrays has no items with the same DateNumbers)
+ *
+ * @todo Describe cross-rating in docs
+ * @todo (maybe) Split pivot derivations into separate functions and test separately
+ * @todo (maybe) Add extra RateNumber function to invert 1 / x
  */
 export const createCrossCurrency = (
   base: Currency,
@@ -68,9 +86,12 @@ export const createCrossCurrency = (
       head,
       body: base.body.map(([date, rate]) => {
         if (rate) {
-          return [date, toRateNumber(1 / rate)];
+          return [
+            date,
+            createDivisionRateNumber(1 as RateNumber, rate),
+          ];
         } else {
-          return [date, toRateNumber(null)];
+          return [date, createUnknownRateNumber()];
         }
       }),
     };
@@ -90,7 +111,7 @@ export const createCrossCurrency = (
     const baseSymbol = base.head[1];
     const quoteSymbol = quote.head[1];
 
-    throw new Error(`Not intersected: ${baseSymbol}/${quoteSymbol}`);
+    throw new Error(`No intersection: ${baseSymbol}/${quoteSymbol}`);
   }
 
   let i = 0;
@@ -113,10 +134,13 @@ export const createCrossCurrency = (
     const [baseDate, baseRate] = base.body[i];
     const quoteRate = quote.body[j][1];
 
-    if (!baseRate || !quoteRate) {
-      body.push([baseDate, toRateNumber(null)]);
+    if (baseRate && quoteRate) {
+      body.push([
+        baseDate,
+        createDivisionRateNumber(quoteRate, baseRate),
+      ]);
     } else {
-      body.push([baseDate, toRateNumber(quoteRate / baseRate)]);
+      body.push([baseDate, createUnknownRateNumber()]);
     }
 
     i++;
@@ -127,16 +151,21 @@ export const createCrossCurrency = (
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Returns `true` if Currency is a pivot one, and is suitable for internal cross-rate calculations.
+ *
+ * Current pivot currency code is **EUR**.
  */
 export const isPivotCurrency = (currency: Currency): boolean => {
-  return currency.head[1] === `${PIVOT_CODE}${PIVOT_CODE}`;
+  const hasPivotCodes =
+    currency.head[1] === `${PIVOT_CODE}${PIVOT_CODE}`;
+
+  const isEmpty = currency.body.length === 0;
+
+  return hasPivotCodes && isEmpty;
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Extracts both base and quote codes from a Currency structure.
  */
 export const getCurrencyCodes = (
   currency: Currency

@@ -34,8 +34,8 @@ export const fetchString = async (url: string): Promise<string> => {
 
 export const fetchTicks = async (url: string): Promise<Tick[]> => {
   const csv = await fetchString(`${PIVOT_CODE}/${url}`);
-
   const data = parseTicks(csv);
+
   return data;
 };
 

@@ -26,16 +26,3 @@ export const WELL_KNOWN_SYMBOLS: SymbolString[] = [
 export const MS_1_DAY = 86_400_000;
 
 export const MS_3_MONTHS = 7_516_800_000;
-
-export const EXPLORE_FRACTION_DIGITS = 6;
-
-export const CONVERT_FRACTION_DIGITS = 2;
-
-export const SERIES_COLORS = [
-  'var(--color-series-indigo)',
-  'var(--color-series-green)',
-  'var(--color-series-amber)',
-  'var(--color-series-pink)',
-  'var(--color-series-cyan)',
-  'var(--color-series-orange)',
-];

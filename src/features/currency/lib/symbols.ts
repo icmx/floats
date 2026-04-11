@@ -2,8 +2,9 @@ import { SYMBOL_LENGTH, SYMBOLS, CODE_LENGTH } from '../constants';
 import { type SymbolString, type CodeString } from '../types';
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Returns `true` if source is a valid currency Symbol string (like `USDEUR`).
+ *
+ * Otherwise returns `false`.
  */
 export const isSymbolString = (
   source: unknown
@@ -26,8 +27,9 @@ export const isSymbolString = (
 };
 
 /**
- * @todo Document this entry
- * @todo Test this entry
+ * Split currency Symbol string into a tuple of currency pair Codes (like `USDEUR` become `USD` and `EUR`).
+ *
+ * **Note:** this function does not perform any validation since expects only valid typed input.
  */
 export const splitSymbolToCodes = (
   symbol: SymbolString
