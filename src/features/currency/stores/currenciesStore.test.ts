@@ -6,12 +6,14 @@ import {
   it,
   vi,
 } from 'vitest';
+import { renderHook } from '@testing-library/react';
 import { type Results } from '@/types/results';
 import { getCurrencies } from '../api/client';
 import { createCurrency } from '../lib/currency';
 import { type Currency } from '../types';
 import {
   loadCurrenciesStore,
+  useCurrencies,
   useCurrenciesStore,
 } from './currenciesStore';
 
@@ -202,5 +204,15 @@ describe('loadCurrenciesStore', () => {
 
     expect(state.errorsBySymbol['EURUSD']).toBeUndefined();
     expect(state.currencies['EURUSD']).toBeDefined();
+  });
+});
+
+describe('useCurrencies', () => {
+  it('returns empty state initially', () => {
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.entries).toEqual([]);
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.errors).toEqual([]);
   });
 });
