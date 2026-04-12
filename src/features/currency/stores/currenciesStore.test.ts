@@ -6,7 +6,7 @@ import {
   it,
   vi,
 } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { type Results } from '@/types/results';
 import { getCurrencies } from '../api/client';
 import { createCurrency } from '../lib/currency';
@@ -208,11 +208,129 @@ describe('loadCurrenciesStore', () => {
 });
 
 describe('useCurrencies', () => {
-  it('returns empty state initially', () => {
+  it('should return empty state initially', () => {
     const { result } = renderHook(() => useCurrencies());
 
     expect(result.current.entries).toEqual([]);
     expect(result.current.isLoading).toBe(false);
     expect(result.current.errors).toEqual([]);
+  });
+
+  it('should return entries matching activeSymbols', () => {
+    const eurUsd = createCurrency('EUR', 'USD', []);
+    const usdJpy = createCurrency('USD', 'JPY', []);
+
+    useCurrenciesStore.setState({
+      currencies: {
+        ['EURUSD']: eurUsd,
+        ['USDJPY']: usdJpy,
+      },
+      activeSymbols: ['EURUSD', 'USDJPY'],
+    });
+
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.entries).toEqual([eurUsd, usdJpy]);
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.errors).toEqual([]);
+  });
+
+  it('should return isLoading when any active symbol is loading', () => {
+    useCurrenciesStore.setState({
+      activeSymbols: ['EURUSD', 'USDJPY'],
+      loadingSymbols: {
+        ['EURUSD']: false,
+        ['USDJPY']: true,
+      },
+    });
+
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.isLoading).toBe(true);
+  });
+
+  it('should set isLoading to false when no active symbol is loading', () => {
+    useCurrenciesStore.setState({
+      activeSymbols: ['EURUSD'],
+      loadingSymbols: {
+        ['EURUSD']: false,
+      },
+    });
+
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.isLoading).toBe(false);
+  });
+
+  it('should return errors for active symbols only', () => {
+    const error1 = new Error('Error mock 1');
+    const error2 = new Error('Error mock 2');
+
+    useCurrenciesStore.setState({
+      activeSymbols: ['EURUSD', 'GBPUSD'],
+      errorsBySymbol: {
+        ['EURUSD']: error1,
+        ['GBPUSD']: error2,
+        ['USDJPY']: new Error('Error mock 3'), // should ignore inactive symbol
+      },
+    });
+
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.errors).toEqual([error1, error2]);
+  });
+
+  it('should exclude symbols from entries which are not yet loaded', () => {
+    const currency = createCurrency('EUR', 'USD', []);
+
+    useCurrenciesStore.setState({
+      currencies: { ['EURUSD']: currency },
+      activeSymbols: ['EURUSD', 'USDJPY'],
+      loadingSymbols: { ['USDJPY']: true },
+    });
+
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.entries).toEqual([currency]);
+    expect(result.current.isLoading).toBe(true);
+  });
+
+  it('should react on store changes', async () => {
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.entries).toEqual([]);
+
+    const currency = createCurrency('EUR', 'USD', []);
+
+    useCurrenciesStore.setState({
+      currencies: { ['EURUSD']: currency },
+      activeSymbols: ['EURUSD'],
+      loadingSymbols: { ['EURUSD']: false },
+    });
+
+    // slowdown here for await
+    await waitFor(() => {
+      expect(result.current.entries).toEqual([currency]);
+      expect(result.current.isLoading).toBe(false);
+    });
+  });
+
+  it('should keep entry order based on activeSymbols', () => {
+    const eurUsd = createCurrency('EUR', 'USD', []);
+    const usdJpy = createCurrency('USD', 'JPY', []);
+    const gbpUsd = createCurrency('GBP', 'USD', []);
+
+    useCurrenciesStore.setState({
+      currencies: {
+        ['EURUSD']: eurUsd,
+        ['USDJPY']: usdJpy,
+        ['GBPUSD']: gbpUsd,
+      },
+      activeSymbols: ['GBPUSD', 'USDJPY', 'EURUSD'],
+    });
+
+    const { result } = renderHook(() => useCurrencies());
+
+    expect(result.current.entries).toEqual([gbpUsd, usdJpy, eurUsd]);
   });
 });
