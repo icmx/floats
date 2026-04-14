@@ -1,4 +1,4 @@
-import { type RefObject, type MouseEvent } from 'react';
+import { type RefObject } from 'react';
 import { describe, expect, it } from 'vitest';
 import { act, fireEvent, renderHook } from '@testing-library/react';
 import { type DateNumber, type RateNumber } from '../../../types';
@@ -151,16 +151,6 @@ describe('useSelection hook itself', () => {
     ];
   };
 
-  /**
-   * @deprecated Mouse events should be avoided for selection (it must be isolated)
-   */
-  const createClickEvent = (): MouseEvent => {
-    return {
-      button: 0,
-      preventDefault: () => {},
-    } as unknown as React.MouseEvent;
-  };
-
   it('should start without selection', () => {
     const containerRef = createContainerRef();
     const rows = createDataRows();
@@ -176,7 +166,7 @@ describe('useSelection hook itself', () => {
     ).toBe(false);
   });
 
-  it('should select a single cell on mousedown (left button)', () => {
+  it('should select a single cell on touch', () => {
     const containerRef = createContainerRef();
     const rows = createDataRows();
 
@@ -184,10 +174,8 @@ describe('useSelection hook itself', () => {
       useSelection({ containerRef, rows })
     );
 
-    const clickEvent = createClickEvent();
-
     act(() => {
-      result.current.handleCellMouseDown(clickEvent, {
+      result.current.handleCellTouch({
         rowIndex: 0,
         colIndex: 1,
       });
@@ -207,7 +195,7 @@ describe('useSelection hook itself', () => {
     ).toBe(false);
   });
 
-  it('should expand selection on mouse enter while dragging', () => {
+  it('should expand selection on enter while dragging', () => {
     const containerRef = createContainerRef();
     const rows = createDataRows();
 
@@ -215,17 +203,15 @@ describe('useSelection hook itself', () => {
       useSelection({ containerRef, rows })
     );
 
-    const clickEvent = createClickEvent();
-
     act(() => {
-      result.current.handleCellMouseDown(clickEvent, {
+      result.current.handleCellTouch({
         rowIndex: 0,
         colIndex: 0,
       });
     });
 
     act(() => {
-      result.current.handleCellMouseEnter({ rowIndex: 1, colIndex: 2 });
+      result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
     });
 
     expect(result.current.selection).toEqual({
@@ -246,7 +232,7 @@ describe('useSelection hook itself', () => {
     ).toBe(true);
   });
 
-  it('should not expand selection on mouse enter when not dragging', () => {
+  it('should not expand selection on enter when not dragging', () => {
     const containerRef = createContainerRef();
     const rows = createDataRows();
 
@@ -255,14 +241,14 @@ describe('useSelection hook itself', () => {
     );
 
     act(() => {
-      result.current.handleCellMouseEnter({ rowIndex: 1, colIndex: 2 });
+      result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
     });
 
     expect(result.current.selection).toBeNull();
   });
 
-  // @todo: mouse event dependency must be avoided
-  it('should stop expanding after mouseup', () => {
+  // @todo: (maybe) Direct mouse event must be avoided due to hook isolation reasons
+  it('should stop expanding after release', () => {
     const containerRef = createContainerRef();
     const rows = createDataRows();
 
@@ -270,32 +256,30 @@ describe('useSelection hook itself', () => {
       useSelection({ containerRef, rows })
     );
 
-    const clickEvent = createClickEvent();
-
     act(() => {
-      result.current.handleCellMouseDown(clickEvent, {
+      result.current.handleCellTouch({
         rowIndex: 0,
         colIndex: 0,
       });
     });
 
     act(() => {
-      fireEvent.mouseUp(document);
+      fireEvent.mouseUp(document); // avoid this direct mouse event
     });
 
     act(() => {
-      result.current.handleCellMouseEnter({ rowIndex: 1, colIndex: 2 });
+      result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
     });
 
-    // selection should remain the single cell from the mousedown
+    // selection should remain the single cell from touch
     expect(result.current.selection).toEqual({
       from: { rowIndex: 0, colIndex: 0 },
       to: { rowIndex: 0, colIndex: 0 },
     });
   });
 
-  // @todo: mouse event dependency must be avoided
-  it('should clear selection on mousedown outside the container', () => {
+  // @todo: (maybe) Direct mouse event must be avoided due to hook isolation reasons
+  it('should clear selection on event outside the container', () => {
     const containerRef = createContainerRef();
     const rows = createDataRows();
 
@@ -303,10 +287,8 @@ describe('useSelection hook itself', () => {
       useSelection({ containerRef, rows })
     );
 
-    const clickEvent = createClickEvent();
-
     act(() => {
-      result.current.handleCellMouseDown(clickEvent, {
+      result.current.handleCellTouch({
         rowIndex: 0,
         colIndex: 1,
       });
@@ -315,6 +297,8 @@ describe('useSelection hook itself', () => {
     expect(result.current.selection).not.toBeNull();
 
     act(() => {
+      // avoid this direct mouse event -v
+
       const outsideDivElement = document.createElement('div');
 
       document.body.appendChild(outsideDivElement);

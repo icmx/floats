@@ -49,11 +49,12 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
       rowsCount,
     });
 
-  const { isSelected, handleCellMouseDown, handleCellMouseEnter } =
-    useSelection({
+  const { isSelected, handleCellTouch, handleCellEnter } = useSelection(
+    {
       containerRef,
       rows,
-    });
+    }
+  );
 
   return (
     <div
@@ -115,14 +116,20 @@ export const DataTable: FunctionComponent<DataTableProps> = ({
                         styles[`is-${colDef.displayType}`],
                         selected && styles['is-selected'],
                       ])}
-                      onMouseDown={(event) =>
-                        handleCellMouseDown(event, {
+                      onMouseDown={(event) => {
+                        if (event.button !== 0) {
+                          return;
+                        }
+
+                        event.preventDefault();
+
+                        handleCellTouch({
                           rowIndex,
                           colIndex,
-                        })
-                      }
+                        });
+                      }}
                       onMouseEnter={() =>
-                        handleCellMouseEnter({ rowIndex, colIndex })
+                        handleCellEnter({ rowIndex, colIndex })
                       }
                     >
                       {cell.displayValue}
