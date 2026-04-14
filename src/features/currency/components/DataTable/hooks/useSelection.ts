@@ -56,6 +56,10 @@ export type UseSelectionOptions = {
 export type UseSelectionResult = {
   selection: Selection | null;
   isSelected: (position: Position) => boolean;
+
+  /**
+   * @todo remove mouse event dependency!
+   */
   handleCellMouseDown: (
     event: SyntheticMouseEvent,
     position: Position
