@@ -1,6 +1,11 @@
 import { type RefObject } from 'react';
-import { describe, expect, it } from 'vitest';
-import { act, fireEvent, renderHook } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  act,
+  createEvent,
+  fireEvent,
+  renderHook,
+} from '@testing-library/react';
 import { type DateNumber, type RateNumber } from '../../../types';
 import { type DataRow } from '../DataTable.types';
 import {
@@ -108,6 +113,10 @@ describe('utility functions', () => {
 });
 
 describe('useSelection hook itself', () => {
+  afterEach(() => {
+    document.body.replaceChildren(); // cleanup for containers
+  });
+
   const createContainerRef = (): RefObject<HTMLElement | null> => {
     const div = document.createElement('div');
     document.body.appendChild(div);
@@ -151,161 +160,233 @@ describe('useSelection hook itself', () => {
     ];
   };
 
-  it('should start without selection', () => {
-    const containerRef = createContainerRef();
-    const rows = createDataRows();
+  describe('selection behaviour', () => {
+    it('should start without selection', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
 
-    const { result } = renderHook(() =>
-      useSelection({ containerRef, rows })
-    );
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
 
-    expect(result.current.selection).toBeNull();
+      expect(result.current.selection).toBeNull();
 
-    expect(
-      result.current.isSelected({ rowIndex: 0, colIndex: 0 })
-    ).toBe(false);
-  });
+      expect(
+        result.current.isSelected({ rowIndex: 0, colIndex: 0 })
+      ).toBe(false);
+    });
 
-  it('should select a single cell on touch', () => {
-    const containerRef = createContainerRef();
-    const rows = createDataRows();
+    it('should select a single cell on touch', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
 
-    const { result } = renderHook(() =>
-      useSelection({ containerRef, rows })
-    );
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
 
-    act(() => {
-      result.current.handleCellTouch({
-        rowIndex: 0,
-        colIndex: 1,
+      act(() => {
+        result.current.handleCellTouch({
+          rowIndex: 0,
+          colIndex: 1,
+        });
+      });
+
+      expect(result.current.selection).toEqual({
+        from: { rowIndex: 0, colIndex: 1 },
+        to: { rowIndex: 0, colIndex: 1 },
+      });
+
+      expect(
+        result.current.isSelected({ rowIndex: 0, colIndex: 1 })
+      ).toBe(true);
+
+      expect(
+        result.current.isSelected({ rowIndex: 0, colIndex: 0 })
+      ).toBe(false);
+    });
+
+    it('should expand selection on enter while dragging', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
+
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
+
+      act(() => {
+        result.current.handleCellTouch({
+          rowIndex: 0,
+          colIndex: 0,
+        });
+      });
+
+      act(() => {
+        result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
+      });
+
+      expect(result.current.selection).toEqual({
+        from: { rowIndex: 0, colIndex: 0 },
+        to: { rowIndex: 1, colIndex: 2 },
+      });
+
+      expect(
+        result.current.isSelected({ rowIndex: 0, colIndex: 0 })
+      ).toBe(true);
+
+      expect(
+        result.current.isSelected({ rowIndex: 1, colIndex: 1 })
+      ).toBe(true);
+
+      expect(
+        result.current.isSelected({ rowIndex: 1, colIndex: 2 })
+      ).toBe(true);
+    });
+
+    it('should not expand selection on enter when not dragging', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
+
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
+
+      act(() => {
+        result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
+      });
+
+      expect(result.current.selection).toBeNull();
+    });
+
+    // @todo: (maybe) Direct mouse event must be avoided due to hook isolation reasons
+    it('should stop expanding after release', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
+
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
+
+      act(() => {
+        result.current.handleCellTouch({
+          rowIndex: 0,
+          colIndex: 0,
+        });
+      });
+
+      act(() => {
+        fireEvent.mouseUp(document); // avoid this direct mouse event
+      });
+
+      act(() => {
+        result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
+      });
+
+      // selection should remain the single cell from touch
+      expect(result.current.selection).toEqual({
+        from: { rowIndex: 0, colIndex: 0 },
+        to: { rowIndex: 0, colIndex: 0 },
       });
     });
 
-    expect(result.current.selection).toEqual({
-      from: { rowIndex: 0, colIndex: 1 },
-      to: { rowIndex: 0, colIndex: 1 },
-    });
+    // @todo: (maybe) Direct mouse event must be avoided due to hook isolation reasons
+    it('should clear selection on event outside the container', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
 
-    expect(
-      result.current.isSelected({ rowIndex: 0, colIndex: 1 })
-    ).toBe(true);
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
 
-    expect(
-      result.current.isSelected({ rowIndex: 0, colIndex: 0 })
-    ).toBe(false);
-  });
-
-  it('should expand selection on enter while dragging', () => {
-    const containerRef = createContainerRef();
-    const rows = createDataRows();
-
-    const { result } = renderHook(() =>
-      useSelection({ containerRef, rows })
-    );
-
-    act(() => {
-      result.current.handleCellTouch({
-        rowIndex: 0,
-        colIndex: 0,
+      act(() => {
+        result.current.handleCellTouch({
+          rowIndex: 0,
+          colIndex: 1,
+        });
       });
-    });
 
-    act(() => {
-      result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
-    });
+      expect(result.current.selection).not.toBeNull();
 
-    expect(result.current.selection).toEqual({
-      from: { rowIndex: 0, colIndex: 0 },
-      to: { rowIndex: 1, colIndex: 2 },
-    });
+      act(() => {
+        // avoid this direct mouse event -v
 
-    expect(
-      result.current.isSelected({ rowIndex: 0, colIndex: 0 })
-    ).toBe(true);
+        const outsideDivElement = document.createElement('div');
 
-    expect(
-      result.current.isSelected({ rowIndex: 1, colIndex: 1 })
-    ).toBe(true);
+        document.body.appendChild(outsideDivElement);
 
-    expect(
-      result.current.isSelected({ rowIndex: 1, colIndex: 2 })
-    ).toBe(true);
-  });
-
-  it('should not expand selection on enter when not dragging', () => {
-    const containerRef = createContainerRef();
-    const rows = createDataRows();
-
-    const { result } = renderHook(() =>
-      useSelection({ containerRef, rows })
-    );
-
-    act(() => {
-      result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
-    });
-
-    expect(result.current.selection).toBeNull();
-  });
-
-  // @todo: (maybe) Direct mouse event must be avoided due to hook isolation reasons
-  it('should stop expanding after release', () => {
-    const containerRef = createContainerRef();
-    const rows = createDataRows();
-
-    const { result } = renderHook(() =>
-      useSelection({ containerRef, rows })
-    );
-
-    act(() => {
-      result.current.handleCellTouch({
-        rowIndex: 0,
-        colIndex: 0,
+        fireEvent.mouseDown(outsideDivElement);
       });
-    });
 
-    act(() => {
-      fireEvent.mouseUp(document); // avoid this direct mouse event
-    });
-
-    act(() => {
-      result.current.handleCellEnter({ rowIndex: 1, colIndex: 2 });
-    });
-
-    // selection should remain the single cell from touch
-    expect(result.current.selection).toEqual({
-      from: { rowIndex: 0, colIndex: 0 },
-      to: { rowIndex: 0, colIndex: 0 },
+      expect(result.current.selection).toBeNull();
     });
   });
 
-  // @todo: (maybe) Direct mouse event must be avoided due to hook isolation reasons
-  it('should clear selection on event outside the container', () => {
-    const containerRef = createContainerRef();
-    const rows = createDataRows();
+  // @todo: (maybe) Use user-event (npm install --save-dev @testing-library/user-event)
+  // It allows to write more declarative and clear cases here and not to mock clipboard in this way
+  describe('copying behaviour', () => {
+    it('should copy selected data to clipboard ', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
 
-    const { result } = renderHook(() =>
-      useSelection({ containerRef, rows })
-    );
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
 
-    act(() => {
-      result.current.handleCellTouch({
-        rowIndex: 0,
-        colIndex: 1,
+      // select from (0, 0) to (1, 2)
+      act(() => {
+        result.current.handleCellTouch({
+          rowIndex: 0,
+          colIndex: 0,
+        });
       });
+
+      act(() => {
+        result.current.handleCellEnter({
+          rowIndex: 1,
+          colIndex: 2,
+        });
+      });
+
+      let copiedText = '';
+
+      const copyEvent = createEvent.copy(document, {
+        clipboardData: {
+          setData: (_: string, data: string) => {
+            copiedText = data;
+          },
+        },
+      });
+
+      act(() => {
+        fireEvent(document, copyEvent);
+      });
+
+      const expectedText = [
+        '2020-01-01\t1.1\t1.2',
+        '2020-01-02\t3.4321\t',
+      ].join('\n');
+
+      expect(copiedText).toBe(expectedText);
     });
 
-    expect(result.current.selection).not.toBeNull();
+    it('should not interfere with copy when nothing is selected', () => {
+      const containerRef = createContainerRef();
+      const rows = createDataRows();
 
-    act(() => {
-      // avoid this direct mouse event -v
+      const { result } = renderHook(() =>
+        useSelection({ containerRef, rows })
+      );
 
-      const outsideDivElement = document.createElement('div');
+      expect(result.current.selection).toBeNull();
 
-      document.body.appendChild(outsideDivElement);
+      const copyEvent = createEvent.copy(document);
 
-      fireEvent.mouseDown(outsideDivElement);
+      copyEvent.preventDefault = vi.fn();
+
+      act(() => {
+        fireEvent(document, copyEvent);
+      });
+
+      expect(copyEvent.preventDefault).toHaveBeenCalled();
     });
-
-    expect(result.current.selection).toBeNull();
   });
 });
