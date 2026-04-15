@@ -5,8 +5,8 @@ import {
   type RefObject,
 } from 'react';
 
-export const VIRTUAL_ROW_SCROLL_INITIAL_ROW_HEIGHT = 32;
 export const VIRTUAL_ROW_SCROLL_OVERSCAN_ROWS = 16;
+export const VIRTUAL_ROW_SCROLL_INITIAL_ROW_HEIGHT = 32;
 
 export type UseVirtualRowScrollOptions = {
   containerRef: RefObject<HTMLElement | null>;
@@ -26,6 +26,8 @@ export const useVirtualRowScroll = ({
   rowRef,
   rowsCount,
 }: UseVirtualRowScrollOptions): UseVirtualRowScrollResult => {
+  const overscan = VIRTUAL_ROW_SCROLL_OVERSCAN_ROWS;
+
   const [rowHeight, setRowHeight] = useState(
     VIRTUAL_ROW_SCROLL_INITIAL_ROW_HEIGHT
   );
@@ -86,13 +88,10 @@ export const useVirtualRowScroll = ({
   }, [containerRef]);
 
   const visualCount =
-    Math.ceil(viewportHeight / rowHeight) +
-    2 * VIRTUAL_ROW_SCROLL_OVERSCAN_ROWS;
+    Math.ceil(viewportHeight / rowHeight) + 2 * overscan;
 
   const startIndexFrom = 0;
-  const startIndexTo =
-    Math.floor(scrollTop / rowHeight) -
-    VIRTUAL_ROW_SCROLL_OVERSCAN_ROWS;
+  const startIndexTo = Math.floor(scrollTop / rowHeight) - overscan;
   const startIndex = Math.max(startIndexFrom, startIndexTo);
 
   const endIndexFrom = startIndex + visualCount;
