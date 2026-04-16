@@ -1,4 +1,4 @@
-# floats [![Netlify Status](https://api.netlify.com/api/v1/badges/e18aea20-0ce0-4783-b0e1-5fc8e7a5c774/deploy-status)](https://floats-icmx.netlify.app/)
+# Floats [![Netlify Status](https://api.netlify.com/api/v1/badges/e18aea20-0ce0-4783-b0e1-5fc8e7a5c774/deploy-status)](https://floats-icmx.netlify.app/)
 
 Currency explorer app built with React.
 
@@ -9,11 +9,14 @@ Currency explorer app built with React.
 
 ## Development
 
-It uses standard Vite template (React + TS) without any extra features. Available commands:
+It uses standard Vite template (React + TS). Available commands:
 
 - `npm run dev`
 - `npm run lint`
 - `npm run build`
 - `npm run test`
 
-See more: [vite.dev](https://vite.dev/)
+See more:
+
+- [vite.dev](https://vite.dev/)
+- [vitest.dev](https://vitest.dev/)
