@@ -1,3 +1,5 @@
+/// <reference types="vitest/config" />
+
 import { defineConfig } from 'vite';
 import path from 'node:path';
 import react from '@vitejs/plugin-react';
@@ -13,6 +15,11 @@ export default defineConfig({
     __DEFINE_COMMIT_REF__: JSON.stringify(process.env.COMMIT_REF || ''),
     __DEFINE_BUILD_TIMESTAMP__: JSON.stringify(Date.now()),
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   build: {
     rollupOptions: {
       output: {
@@ -24,9 +31,7 @@ export default defineConfig({
       },
     },
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+  test: {
+    environment: 'jsdom',
   },
 });

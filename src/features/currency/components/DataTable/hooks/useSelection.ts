@@ -1,5 +1,4 @@
 import {
-  type MouseEvent as SyntheticMouseEvent,
   type RefObject,
   useCallback,
   useEffect,
@@ -56,11 +55,8 @@ export type UseSelectionOptions = {
 export type UseSelectionResult = {
   selection: Selection | null;
   isSelected: (position: Position) => boolean;
-  handleCellMouseDown: (
-    event: SyntheticMouseEvent,
-    position: Position
-  ) => void;
-  handleCellMouseEnter: (position: Position) => void;
+  handleCellTouch: (position: Position) => void;
+  handleCellEnter: (position: Position) => void;
 };
 
 export const useSelection = ({
@@ -71,22 +67,13 @@ export const useSelection = ({
 
   const [selection, setSelection] = useState<Selection | null>(null);
 
-  const handleCellMouseDown = useCallback(
-    (event: SyntheticMouseEvent, position: Position) => {
-      if (event.button !== 0) {
-        return;
-      }
+  const handleCellTouch = useCallback((position: Position) => {
+    anchorRef.current = position;
 
-      event.preventDefault();
+    setSelection({ from: position, to: position });
+  }, []);
 
-      anchorRef.current = position;
-
-      setSelection({ from: position, to: position });
-    },
-    []
-  );
-
-  const handleCellMouseEnter = useCallback((position: Position) => {
+  const handleCellEnter = useCallback((position: Position) => {
     if (!anchorRef.current) {
       return;
     }
@@ -178,7 +165,7 @@ export const useSelection = ({
   return {
     selection,
     isSelected,
-    handleCellMouseDown,
-    handleCellMouseEnter,
+    handleCellTouch,
+    handleCellEnter,
   };
 };

@@ -1,6 +1,5 @@
 import {
   type FunctionComponent,
-  useEffect,
   useImperativeHandle,
   useRef,
 } from 'react';
@@ -48,18 +47,6 @@ export const DataChart: FunctionComponent<DataChartProps> = ({
       },
     };
   });
-
-  useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      chartRef.current?.chart?.reflow();
-    });
-
-    observer.observe(document.body);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
 
   const isSingleSeries = series.length === 1;
 
