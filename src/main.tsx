@@ -22,7 +22,7 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     handle: {
-      title: 'floats',
+      title: 'Floats',
     },
     children: [
       {
