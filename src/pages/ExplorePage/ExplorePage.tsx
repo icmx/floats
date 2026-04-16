@@ -60,9 +60,13 @@ const toTableData = (currencies: Currency[]): DataTableProps => {
     });
   });
 
-  Array.from(ratesByDates.entries()).forEach(([date, rates]) => {
-    body.push([date, ...rates]);
-  });
+  Array.from(ratesByDates.entries())
+    .sort(([prev], [next]) => {
+      return prev - next;
+    })
+    .forEach(([date, rates]) => {
+      body.push([date, ...rates]);
+    });
 
   return {
     colDefs: head.map((cell, index) => {
