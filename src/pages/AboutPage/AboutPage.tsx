@@ -6,7 +6,10 @@ export const AboutPage: FunctionComponent = () => {
     <>
       <section>
         <h2>Floats</h2>
-        <p>(WIP) Currency explorer app built with React.</p>
+        <p>
+          Currency analysis tool for exploring exchange rates, comparing
+          multiple pairs, and viewing historical trends over time.
+        </p>
         <p>
           <BuildPlate />
         </p>
