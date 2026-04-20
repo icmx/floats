@@ -39,9 +39,10 @@ I specifically made this project as a tool, not a product. There are no extra di
 - Custom complex UI components:
   - Chip-based multiselect with autocomplete
   - Data table with virtual scrolling, cells range selection and clipboard integration
+  - *Why custom:* this is intentional for learning depth ([described here](./docs/DECISIONS.md#why-own-implementation-for--))
 - FOUC-free theme switching (no light theme flash on reload)
 
-*See also:* [Architecture design decisions](./docs/DECISIONS.md).
+*See also: architecture [decisions](./docs/DECISIONS.md) and [specification](./docs/SPECS.md).*
 
 ## Built With
 
