@@ -3,9 +3,9 @@
 
 Currency analysis tool for exploring exchange rates, comparing multiple pairs, and viewing historical trends over time.
 
-**[Check it here](https://floats-icmx.netlify.app/explore?by=USDEUR,GBPEUR)** — full-featured live demo
+**[Check it here](https://floats-icmx.netlify.app/explore?by=USDEUR,GBPEUR)** — full-featured live demo, deployed on Netlify
 
-[![Screenshot of Floats main view](./docs/demo.png)](./docs/demo.png)
+[![Screenshot of Floats main view](./docs/assets/demo.png)](./docs/assets/demo.png)
 
 ## About
 
