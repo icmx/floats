@@ -1,4 +1,5 @@
-# Floats [![Deploy status badge on Netlify](https://api.netlify.com/api/v1/badges/e18aea20-0ce0-4783-b0e1-5fc8e7a5c774/deploy-status)](https://floats-icmx.netlify.app/)
+# Floats ![React badge](https://img.shields.io/badge/react-087EA4?style=flat&logo=react&labelColor=23272f) [![Netlify deploy status badge](https://api.netlify.com/api/v1/badges/e18aea20-0ce0-4783-b0e1-5fc8e7a5c774/deploy-status)](https://floats-icmx.netlify.app/)
+
 
 Currency analysis tool for exploring exchange rates, comparing multiple pairs, and viewing historical trends over time.
 
@@ -39,6 +40,8 @@ I specifically made this project as a tool, not a product. There are no extra di
   - Chip-based multiselect with autocomplete
   - Data table with virtual scrolling, cells range selection and clipboard integration
 - FOUC-free theme switching (no light theme flash on reload)
+
+*See also:* [Architecture design decisions](./docs/DECISIONS.md).
 
 ## Built With
 
