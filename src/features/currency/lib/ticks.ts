@@ -22,12 +22,14 @@ export const TICK_LINE_MIN_LENGTH =
 /**
  * Parses a single tick from CSV text line.
  *
- * @param text single line of Well-formed CSV text
+ * @param text single line of CSV text (see docs for CSV format definition)
  * @returns parsed Tick tuple
  *
  * @throws When invalid or too short text is passed
  * @throws When DateNumber value cannot be parsed
  * @throws When RateNumber value cannot be parsed
+ *
+ * @see {@link https://github.com/icmx/floats/blob/develop/docs/SPECS.md#general-contract|General Contract (Specification)}
  */
 export const parseTick = (text: string): Tick => {
   const line = text.trim();
@@ -54,13 +56,13 @@ export const parseTick = (text: string): Tick => {
 /**
  * Parses an array of Ticks from CSV text.
  *
- * @param text Well-formed CSV text (see docs for Well-formed CSV format definition)
+ * @param text CSV text (see docs for CSV format definition)
  * @returns Array of Ticks in original order (i.e. correct chronological order not guaranteed)
  *
  * @throws When empty text is passed
  * @throws When any line of text is not parsable to a Tick
  *
- * @todo Describe Well-formed CSV in docs
+ * @see {@link https://github.com/icmx/floats/blob/develop/docs/SPECS.md#general-contract|General Contract (Specification)}
  */
 export const parseTicks = (text: string): Tick[] => {
   const lines = text.trim().split('\n');

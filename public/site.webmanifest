@@ -1,7 +1,7 @@
 {
   "name": "Floats",
   "short_name": "Floats",
-  "description": "Currency explorer",
+  "description": "Currency analysis tool for exploring exchange rates, comparing multiple pairs, and viewing historical trends over time",
   "theme_color": "#1d1f25",
   "background_color": "#1d1f25",
   "display": "standalone",
